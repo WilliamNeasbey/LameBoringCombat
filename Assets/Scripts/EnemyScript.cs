@@ -12,7 +12,7 @@ public class EnemyScript : MonoBehaviour
     }
     public void GetHit()
     {
-        anim.SetTrigger("hit");
+        anim.SetTrigger("Hit");
         
     }
 }

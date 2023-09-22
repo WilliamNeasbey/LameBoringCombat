@@ -24,6 +24,7 @@ public class TacticalMode : MonoBehaviour
     private CharacterMovement movement;
     private Animator anim;
     public WeaponCollision weapon;
+    public GameObject WeaponObject;
 
     [Header("Time Stats")]
     public float slowMotionTime = .005f;
@@ -116,7 +117,7 @@ public class TacticalMode : MonoBehaviour
         }
     }
 
-    public void SpinAttack()
+    public void LightningKicks()
     {
         ModifyATB(-100);
 
@@ -127,7 +128,7 @@ public class TacticalMode : MonoBehaviour
         MoveTowardsTarget(targets[targetIndex]);
 
         //Animation
-        anim.SetTrigger("ability");
+        anim.SetTrigger("LightningKicks");
 
         //Polish
         PlayVFX(abilityVFX, false);
@@ -306,6 +307,16 @@ public class TacticalMode : MonoBehaviour
     public void DirLeft()
     {
         VFXDir = 5;
+    }
+    public void HitEvent()
+    {
+        VFXDir = 5;
+        WeaponObject.SetActive(true);
+    }
+    public void HitDisable()
+    {
+       
+        WeaponObject.SetActive(false);
     }
 
     public void CancelAction()

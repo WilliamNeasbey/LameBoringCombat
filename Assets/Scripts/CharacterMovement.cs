@@ -49,7 +49,7 @@ public class CharacterMovement : MonoBehaviour
 		if (gameScript.usingAbility)
 			return;
 		InputMagnitude();
-
+		
 		isGrounded = controller.isGrounded;
 		if (isGrounded)
 		{
@@ -62,7 +62,7 @@ public class CharacterMovement : MonoBehaviour
 		moveVector = new Vector3(0, verticalVel * .2f * Time.deltaTime, 0);
 
 		controller.Move(moveVector);
-
+		
 
 	}
 
