@@ -92,6 +92,23 @@ public class UIManager : MonoBehaviour
         aimCanvas.alpha = on ? 1 : 0;
 
         commandsGroup.gameObject.SetActive(!on);
+
+        if (gameScript != null)
+        {
+            int targetIndex = gameScript.targetIndex;
+
+            if (targetIndex >= 0 && targetIndex < gameScript.targets.Count)
+            {
+                Transform target = gameScript.targets[targetIndex];
+
+                if (target != null)
+                {
+                    Vector3 targetPosition = target.position + Vector3.up;
+                    aimCanvas.transform.position = Camera.main.WorldToScreenPoint(targetPosition);
+                }
+            }
+        }
+
         targetGroup.GetComponent<CanvasGroup>().DOFade(on ? 1 : 0, .1f).SetUpdate(true);
         targetGroup.GetComponent<CanvasGroup>().interactable = on;
 
@@ -99,11 +116,22 @@ public class UIManager : MonoBehaviour
         {
             for (int i = 0; i < targetGroup.childCount; i++)
             {
-                if (gameScript.targets.Count - 1 >= i)
+                if (gameScript != null && gameScript.targets.Count - 1 >= i)
                 {
-                    targetGroup.GetChild(i).GetComponent<CanvasGroup>().alpha = 1;
-                    targetGroup.GetChild(i).GetComponent<CanvasGroup>().interactable = true;
-                    targetGroup.GetChild(i).GetComponentInChildren<TextMeshProUGUI>().text = gameScript.targets[i].name;
+                    Transform target = gameScript.targets[i];
+                    if (target != null)
+                    {
+                        targetGroup.GetChild(i).GetComponent<CanvasGroup>().alpha = 1;
+                        targetGroup.GetChild(i).GetComponent<CanvasGroup>().interactable = true;
+                        targetGroup.GetChild(i).GetComponentInChildren<TextMeshProUGUI>().text = target.name;
+                    }
+                    else
+                    {
+                        // Handle the case where the target is null or destroyed
+                        // You might want to remove the target from the list or take other appropriate action
+                        targetGroup.GetChild(i).GetComponent<CanvasGroup>().alpha = 0;
+                        targetGroup.GetChild(i).GetComponent<CanvasGroup>().interactable = false;
+                    }
                 }
                 else
                 {
@@ -114,6 +142,7 @@ public class UIManager : MonoBehaviour
         }
         EventSystem.current.SetSelectedGameObject(on ? targetGroup.GetChild(0).gameObject : commandsGroup.GetChild(0).gameObject);
     }
+
 
 
 
