@@ -13,6 +13,7 @@ public class UIManager : MonoBehaviour
     public Image test;
     public CanvasGroup tacticalCanvas;
     public CanvasGroup attackCanvas;
+    public CanvasGroup attackCanvas2;
 
     public Transform commandsGroup;
     public Transform targetGroup;
@@ -75,6 +76,7 @@ public class UIManager : MonoBehaviour
         tacticalCanvas.DOFade(on ? 1 : 0, .15f).SetUpdate(true);
         tacticalCanvas.interactable = on;
         attackCanvas.DOFade(on ? 0 : 1, .15f).SetUpdate(true);
+        attackCanvas2.DOFade(on ? 0 : 1, .15f).SetUpdate(true);
         attackCanvas.interactable = !on;
 
         EventSystem.current.SetSelectedGameObject(null);

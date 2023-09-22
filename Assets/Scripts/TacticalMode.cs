@@ -136,7 +136,7 @@ public class TacticalMode : MonoBehaviour
 
     public void LightningKicks()
     {
-        ModifyATB(-100);
+        ModifyATB(-200);
 
         StartCoroutine(AbilityCooldown());
 
