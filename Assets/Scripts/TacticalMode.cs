@@ -182,7 +182,7 @@ public class TacticalMode : MonoBehaviour
         return Vector3.MoveTowards(position, transform.position, 1.2f);
     }
 
-    public void HitTarget(Transform x)
+    public void HitTarget(Transform target)
     {
         OnModificationATB.Invoke();
 
@@ -194,11 +194,30 @@ public class TacticalMode : MonoBehaviour
 
         LightColor(swordLight, sparkColor, .1f);
 
-        if (x.GetComponent<EnemyScript>() != null)
+        if (target.GetComponent<EnemyScript>() != null)
         {
-            x.GetComponent<EnemyScript>().GetHit();
+            target.GetComponent<EnemyScript>().GetHit();
+
+            // Debug logs to check health and removal
+            Debug.Log("Enemy Health: " + target.GetComponent<EnemyScript>().health);
+
+            // Check if the enemy is dead (health <= 0)
+            if (target.GetComponent<EnemyScript>().health <= 0)
+            {
+                // Remove the enemy from the targets list
+                if (targets.Contains(target))
+                {
+                    targets.Remove(target);
+                    Debug.Log("Enemy Removed from Targets List");
+                }
+
+                // Destroy the enemy GameObject
+                Destroy(target.gameObject);
+                Debug.Log("Enemy Destroyed");
+            }
         }
     }
+
 
     public void ModifyATB(float amount)
     {
@@ -257,9 +276,31 @@ public class TacticalMode : MonoBehaviour
 
     public void SelectTarget(int index)
     {
-        targetIndex = index;
-        aimObject.DOLookAt(targets[targetIndex].position, .3f).SetUpdate(true);
+        if (index >= 0 && index < targets.Count)
+        {
+            Transform target = targets[index];
+
+            // Check if the target is not null and not destroyed
+            if (target != null)
+            {
+                targetIndex = index;
+                aimObject.DOLookAt(target.position, 0.3f).SetUpdate(true);
+            }
+            else
+            {
+                // Handle the case where the target is null or destroyed
+                // For example, you can print a debug message
+                Debug.LogWarning("Target at index " + index + " is null or destroyed.");
+            }
+        }
+        else
+        {
+            // Handle the case where the index is out of range
+            // For example, you can print a debug message
+            Debug.LogWarning("Invalid target index: " + index);
+        }
     }
+
 
     public void SetAimCamera(bool on)
     {
@@ -331,10 +372,20 @@ public class TacticalMode : MonoBehaviour
     int NearestTargetToCenter()
     {
         float[] distances = new float[targets.Count];
+        Vector2 screenCenter = new Vector2(Screen.width / 2, Screen.height / 2);
 
         for (int i = 0; i < targets.Count; i++)
         {
-            distances[i] = Vector2.Distance(Camera.main.WorldToScreenPoint(targets[i].position), new Vector2(Screen.width / 2, Screen.height / 2));
+            // Check if the target is null before accessing its position
+            if (targets[i] != null)
+            {
+                distances[i] = Vector2.Distance(Camera.main.WorldToScreenPoint(targets[i].position), screenCenter);
+            }
+            else
+            {
+                // Handle the case where the target is null (destroyed)
+                distances[i] = float.MaxValue; // Set a very large distance
+            }
         }
 
         float minDistance = Mathf.Min(distances);
@@ -347,6 +398,7 @@ public class TacticalMode : MonoBehaviour
         }
         return index;
     }
+
 
     public void LightColor(Light l, Color x, float time)
     {

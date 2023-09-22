@@ -35,11 +35,19 @@ public class UIManager : MonoBehaviour
 
     private void Update()
     {
-        if (aimAtTarget)
+        if (aimAtTarget && gameScript != null && gameScript.targets.Count > gameScript.targetIndex)
         {
-            aimCanvas.transform.position = Camera.main.WorldToScreenPoint(gameScript.targets[gameScript.targetIndex].position + Vector3.up);
+            Transform target = gameScript.targets[gameScript.targetIndex];
+
+            // Check if the target and its position are valid
+            if (target != null)
+            {
+                Vector3 targetPosition = target.position + Vector3.up;
+                aimCanvas.transform.position = Camera.main.WorldToScreenPoint(targetPosition);
+            }
         }
     }
+
 
     public void AttackAction()
     {
@@ -49,7 +57,7 @@ public class UIManager : MonoBehaviour
     public void UpdateSlider()
     {
         atbSlider.DOComplete();
-        atbSlider.DOValue(gameScript.atbSlider,.15f);
+        atbSlider.DOValue(gameScript.atbSlider, .15f);
 
         atbCompleteLeft.DOFade(gameScript.atbSlider >= 100 ? 1 : 0, .2f);
         atbCompleteRight.DOFade(gameScript.atbSlider >= 200 ? 1 : 0, .2f);
@@ -64,7 +72,7 @@ public class UIManager : MonoBehaviour
 
         EventSystem.current.SetSelectedGameObject(null);
 
-        if(on == true)
+        if (on == true)
         {
             EventSystem.current.SetSelectedGameObject(tacticalCanvas.transform.GetChild(0).GetChild(0).gameObject);
         }
@@ -91,7 +99,7 @@ public class UIManager : MonoBehaviour
         {
             for (int i = 0; i < targetGroup.childCount; i++)
             {
-                if(gameScript.targets.Count - 1 >= i)
+                if (gameScript.targets.Count - 1 >= i)
                 {
                     targetGroup.GetChild(i).GetComponent<CanvasGroup>().alpha = 1;
                     targetGroup.GetChild(i).GetComponent<CanvasGroup>().interactable = true;
