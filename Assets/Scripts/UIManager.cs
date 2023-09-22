@@ -35,7 +35,7 @@ public class UIManager : MonoBehaviour
 
     private void Update()
     {
-        if (aimAtTarget && gameScript != null && gameScript.targets.Count > gameScript.targetIndex)
+        if (gameScript != null && gameScript.targets.Count > gameScript.targetIndex)
         {
             Transform target = gameScript.targets[gameScript.targetIndex];
 
@@ -45,8 +45,15 @@ public class UIManager : MonoBehaviour
                 Vector3 targetPosition = target.position + Vector3.up;
                 aimCanvas.transform.position = Camera.main.WorldToScreenPoint(targetPosition);
             }
+            else
+            {
+                // Handle the case where the target is null or destroyed
+                // You might want to remove the target from the list or take other appropriate action
+                aimCanvas.alpha = 0; // Hide the aim icon
+            }
         }
     }
+
 
 
     public void AttackAction()
@@ -95,14 +102,13 @@ public class UIManager : MonoBehaviour
 
         if (gameScript != null)
         {
-            int targetIndex = gameScript.targetIndex;
-
-            if (targetIndex >= 0 && targetIndex < gameScript.targets.Count)
+            if (gameScript.lockedTargetIndex >= 0 && gameScript.lockedTargetIndex < gameScript.targets.Count)
             {
-                Transform target = gameScript.targets[targetIndex];
+                Transform target = gameScript.targets[gameScript.lockedTargetIndex];
 
                 if (target != null)
                 {
+                    // Update the aim icon's position to be above the locked target
                     Vector3 targetPosition = target.position + Vector3.up;
                     aimCanvas.transform.position = Camera.main.WorldToScreenPoint(targetPosition);
                 }

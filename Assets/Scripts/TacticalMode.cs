@@ -25,6 +25,11 @@ public class TacticalMode : MonoBehaviour
     private Animator anim;
     public WeaponCollision weapon;
     public GameObject WeaponObject;
+    public Transform playerCharacter;
+    public Transform playerTransform;
+    private Quaternion originalCharacterRotation;
+    public float rotationSpeed = 5.0f; // Adjust the rotation speed as needed
+
 
     [Header("Time Stats")]
     public float slowMotionTime = .005f;
@@ -49,6 +54,7 @@ public class TacticalMode : MonoBehaviour
     public List<Transform> targets;
     public int targetIndex;
     public Transform aimObject;
+    public int lockedTargetIndex = -1;
 
     [Space]
     [Header("VFX")]
@@ -68,6 +74,7 @@ public class TacticalMode : MonoBehaviour
     [Header("Cameras")]
     public GameObject gameCam;
     public CinemachineVirtualCamera targetCam;
+    private bool isLockedOn = false;
 
     [Space]
 
@@ -79,6 +86,7 @@ public class TacticalMode : MonoBehaviour
 
     private void Start()
     {
+        originalCharacterRotation = playerCharacter.rotation;
         weapon.onHit.AddListener((target) => HitTarget(target));
         movement = GetComponent<CharacterMovement>();
         anim = GetComponent<Animator>();
@@ -87,10 +95,15 @@ public class TacticalMode : MonoBehaviour
 
     void Update()
     {
-        if (targets.Count > 0 && !tacticalMode && !usingAbility)
+        if (isLockedOn)
         {
-            targetIndex = NearestTargetToCenter();
-            aimObject.LookAt(targets[targetIndex]);
+            if (targets.Count > 0 && !tacticalMode && !usingAbility)
+            {
+                targetIndex = NearestTargetToCenter();
+                Vector3 targetPosition = targets[targetIndex].position;
+                targetPosition.y = transform.position.y; // Keep the same height level
+                transform.LookAt(targetPosition);
+            }
         }
 
         //Attack
@@ -104,6 +117,10 @@ public class TacticalMode : MonoBehaviour
                 anim.SetTrigger("AirKick");
         }
 
+        if (Input.GetKeyDown(KeyCode.Tab))
+        {
+            ToggleLockOnTarget(true); // Cycle forward when Tab is pressed
+        }
 
         if (Input.GetMouseButtonDown(1) && !usingAbility)
         {
@@ -426,4 +443,88 @@ public class TacticalMode : MonoBehaviour
                 targets.Remove(other.transform);
         }
     }
+
+    public void ToggleLockOnTarget(bool forward)
+    {
+        if (targets.Count == 0)
+            return;
+
+        isLockedOn = !isLockedOn; // Toggle lock-on state
+
+        if (isLockedOn)
+        {
+            // If lock-on is enabled, set the character's rotation to face the locked target
+            SetCharacterViewToLockedTarget(targetIndex);
+        }
+        else
+        {
+            // If lock-on is disabled, reset the character's rotation to its original direction
+            playerCharacter.rotation = originalCharacterRotation;
+        }
+
+        // Call the method to update your existing target system with the new lockedTargetIndex
+        UpdateExistingTargetSystem(lockedTargetIndex);
+    }
+
+
+
+
+
+
+    private void SetCharacterViewToLockedTarget(int targetIndex)
+    {
+        if (targetIndex >= 0 && targetIndex < targets.Count)
+        {
+            Transform target = targets[targetIndex];
+
+            if (target != null)
+            {
+                // Calculate the direction from the character to the target
+                Vector3 lookDirection = target.position - playerCharacter.position;
+
+                // Use Quaternion.LookRotation to smoothly rotate the character's view
+                Quaternion lookRotation = Quaternion.LookRotation(lookDirection, Vector3.up);
+
+                // Apply the rotation to the character's transform or camera
+                playerCharacter.rotation = lookRotation;
+            }
+        }
+    }
+    private void UpdateLockOnUI(int targetIndex)
+    {
+        // Implement logic to update the UI here, e.g., highlight the locked target
+        // You can access UI elements or call UI-related functions from here
+    }
+
+    public void UpdateExistingTargetSystem(int lockedTargetIndex)
+    {
+        if (lockedTargetIndex >= 0 && lockedTargetIndex < targets.Count)
+        {
+            Transform lockedTarget = targets[lockedTargetIndex];
+
+            if (lockedTarget != null && playerTransform != null)
+            {
+                if (Input.GetKey(KeyCode.Tab)) // Keep looking at the target while Tab is pressed
+                {
+                    Vector3 lookDirection = lockedTarget.position - playerCharacter.position;
+                    Quaternion lookRotation = Quaternion.LookRotation(lookDirection, Vector3.up);
+                    playerCharacter.rotation = lookRotation;
+                }
+                else
+                {
+                    // Stop looking at the target when Tab is released
+                    // You can optionally reset the player's rotation to its original state here
+                    // playerCharacter.rotation = originalRotation;
+                }
+            }
+        }
+    }
+
+
 }
+    
+
+
+
+
+

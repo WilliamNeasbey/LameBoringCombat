@@ -687,6 +687,9 @@ MonoBehaviour:
       m_Calls: []
   weapon: {fileID: 931386158}
   WeaponObject: {fileID: 931386156}
+  playerCharacter: {fileID: 653359684}
+  playerTransform: {fileID: 653359684}
+  rotationSpeed: 5
   slowMotionTime: 0.005
   tacticalMode: 0
   isAiming: 0
@@ -700,6 +703,7 @@ MonoBehaviour:
   - {fileID: 1926482851}
   targetIndex: 0
   aimObject: {fileID: 1237717408}
+  lockedTargetIndex: -1
   sparkVFX: {fileID: 964077695}
   abilityVFX: {fileID: 1579021105}
   abilityHitVFX: {fileID: 1384832538}
