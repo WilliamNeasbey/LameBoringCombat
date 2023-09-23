@@ -29,10 +29,12 @@ public class CharacterMovement : MonoBehaviour
 	public float StartAnimTime = 0.3f;
 	[Range(0, 1f)]
 	public float StopAnimTime = 0.15f;
-
+	
+	public float gravity = 9.81f;
 	public float verticalVel;
 	private Vector3 moveVector;
 	private TacticalMode gameScript;
+
 	// Use this for initialization
 	void Start()
 	{
@@ -45,26 +47,27 @@ public class CharacterMovement : MonoBehaviour
 	// Update is called once per frame
 	void Update()
 	{
-
 		if (gameScript.usingAbility)
 			return;
 		InputMagnitude();
-		
+
 		isGrounded = controller.isGrounded;
-		if (isGrounded)
+
+		if (!isGrounded) // Only decrease verticalVel when not grounded (airborne)
 		{
-			verticalVel -= 0;
+			verticalVel -= gravity * Time.deltaTime; // Apply gravity to verticalVel
 		}
 		else
 		{
-			verticalVel -= 1;
+			verticalVel = 0; // Reset verticalVel to 0 when grounded
 		}
-		moveVector = new Vector3(0, verticalVel * .2f * Time.deltaTime, 0);
+
+		moveVector = new Vector3(0, verticalVel * 0.2f, 0) * Time.deltaTime;
 
 		controller.Move(moveVector);
-		
-
 	}
+
+
 
 	void PlayerMoveAndRotation(float InputX, float InputZ)
 	{
