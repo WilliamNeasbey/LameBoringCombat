@@ -491,7 +491,11 @@ public class TacticalMode : MonoBehaviour
     public void ToggleLockOnTarget(bool forward)
     {
         if (targets.Count == 0)
+        {
+            isLockedOn = false;
+            anim.SetBool("LockOnAnimation", false); // Set LockOnAnimation to false
             return;
+        }
 
         isLockedOn = !isLockedOn; // Toggle lock-on state
 
@@ -499,7 +503,6 @@ public class TacticalMode : MonoBehaviour
         {
             // If lock-on is enabled, set the character's rotation to face the locked target
             SetCharacterViewToLockedTarget(targetIndex);
-            
         }
         else
         {
@@ -510,6 +513,7 @@ public class TacticalMode : MonoBehaviour
         // Call the method to update your existing target system with the new lockedTargetIndex
         UpdateExistingTargetSystem(lockedTargetIndex);
     }
+
 
 
 
