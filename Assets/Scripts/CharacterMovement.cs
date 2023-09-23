@@ -56,20 +56,24 @@ public class CharacterMovement : MonoBehaviour
 	{
 		if (gameScript.usingAbility)
 			return;
-		InputMagnitude();
 
+		// Check if the character is grounded
 		isGrounded = controller.isGrounded;
+
+		// Set the "IsFalling" parameter in the Animator
+		anim.SetBool("IsFalling", !isGrounded); // Negate isGrounded to set "IsFalling" to true when in the air
 
 		if (isGrounded)
 		{
+			// Handle grounded state
 			jumpCount = 0; // Reset jump count when grounded
 			canJump = true; // Allow jumping when grounded
 			verticalVel = 0; // Reset vertical velocity
 		}
 		else
 		{
-			// Apply gravity to verticalVel when not grounded
-			verticalVel -= gravity * Time.deltaTime;
+			// Handle falling state
+			verticalVel -= gravity * Time.deltaTime; // Apply gravity
 		}
 
 		moveVector = new Vector3(0, verticalVel * 0.2f, 0) * Time.deltaTime;
