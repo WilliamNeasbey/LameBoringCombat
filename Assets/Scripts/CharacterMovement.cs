@@ -6,6 +6,8 @@ public class CharacterMovement : MonoBehaviour
 {
 	public float Velocity;
 	public bool active = true;
+	public float OriginalVelocity;
+	private bool isLockedOn = false;
 	[Space]
 
 	public float InputX;
@@ -42,6 +44,7 @@ public class CharacterMovement : MonoBehaviour
 	// Use this for initialization
 	void Start()
 	{
+		OriginalVelocity = Velocity;
 		anim = this.GetComponent<Animator>();
 		cam = Camera.main;
 		controller = this.GetComponent<CharacterController>();
@@ -72,6 +75,9 @@ public class CharacterMovement : MonoBehaviour
 		moveVector = new Vector3(0, verticalVel * 0.2f, 0) * Time.deltaTime;
 
 		controller.Move(moveVector);
+
+		// Update the "Velocity" parameter in the Animator
+		//anim.SetFloat("Velocity", Velocity);
 
 		// Handle jumping
 		if (canJump && Input.GetButtonDown("Jump"))
@@ -142,6 +148,11 @@ public class CharacterMovement : MonoBehaviour
 
 	void InputMagnitude()
 	{
+		// Calculate the character's speed
+		Speed = new Vector2(InputX, InputZ).sqrMagnitude;
+
+		// Update the "Speed" parameter in the Animator
+		anim.SetFloat("Speed", Speed);
 		//Calculate Input Vectors
 		InputX = active ? Input.GetAxis("Horizontal") : 0;
 		InputZ = active ? Input.GetAxis("Vertical") : 0;

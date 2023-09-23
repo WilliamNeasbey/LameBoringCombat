@@ -150,6 +150,17 @@ public class TacticalMode : MonoBehaviour
         {
             CancelAction();
         }
+
+        if (isLockedOn)
+        {
+            // Set the character's velocity to 2.5 when locked on
+            movement.Velocity = 2.5f;
+        }
+        else
+        {
+            // Reset the character's velocity to the original value when not locked on
+            movement.Velocity = movement.OriginalVelocity;
+        }
     }
 
     public void LightningKicks()
@@ -484,6 +495,7 @@ public class TacticalMode : MonoBehaviour
         {
             // If lock-on is enabled, set the character's rotation to face the locked target
             SetCharacterViewToLockedTarget(targetIndex);
+            
         }
         else
         {
