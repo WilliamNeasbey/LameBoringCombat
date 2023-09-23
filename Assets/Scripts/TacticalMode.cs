@@ -55,6 +55,7 @@ public class TacticalMode : MonoBehaviour
     public int targetIndex;
     public Transform aimObject;
     public int lockedTargetIndex = -1;
+    public float maxDetectionRange = 10f;
 
     [Space]
     [Header("VFX")]
@@ -95,6 +96,23 @@ public class TacticalMode : MonoBehaviour
 
     void Update()
     {
+        // Clear the targets list at the start of each frame
+        targets.Clear();
+
+        // Find all objects with the "Enemy" tag within the detection range
+        Collider[] potentialTargets = Physics.OverlapSphere(playerTransform.position, maxDetectionRange);
+
+        foreach (var potentialTargetCollider in potentialTargets)
+        {
+            Transform potentialTarget = potentialTargetCollider.transform;
+
+            // Check if the potential target has the "Enemy" tag
+            if (potentialTarget.CompareTag("Enemy"))
+            {
+                // Add the detected enemy to the targets list
+                targets.Add(potentialTarget);
+            }
+        }
         if (isLockedOn)
         {
             if (targets.Count > 0 && !tacticalMode && !usingAbility)
@@ -431,7 +449,16 @@ public class TacticalMode : MonoBehaviour
     {
         if (other.CompareTag("Enemy"))
         {
-            targets.Add(other.transform);
+            // Calculate the distance between the player and the potential target
+            float distance = Vector3.Distance(playerTransform.position, other.transform.position);
+
+            // Define your maximum detection range (adjust this value as needed)
+            float maxDetectionRange = 10f;
+
+            if (distance <= maxDetectionRange)
+            {
+                targets.Add(other.transform);
+            }
         }
     }
 
@@ -440,7 +467,9 @@ public class TacticalMode : MonoBehaviour
         if (other.CompareTag("Enemy"))
         {
             if (targets.Contains(other.transform))
+            {
                 targets.Remove(other.transform);
+            }
         }
     }
 
@@ -490,11 +519,7 @@ public class TacticalMode : MonoBehaviour
             }
         }
     }
-    private void UpdateLockOnUI(int targetIndex)
-    {
-        // Implement logic to update the UI here, e.g., highlight the locked target
-        // You can access UI elements or call UI-related functions from here
-    }
+    
 
     public void UpdateExistingTargetSystem(int lockedTargetIndex)
     {
