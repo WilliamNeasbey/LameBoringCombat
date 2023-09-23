@@ -32,6 +32,10 @@ public class CharacterMovement : MonoBehaviour
 	
 	public float gravity = 9.81f;
 	public float verticalVel;
+	private int jumpCount = 0;
+	private bool canJump = true;
+	public float jumpForce = 10f; 
+
 	private Vector3 moveVector;
 	private TacticalMode gameScript;
 
@@ -53,18 +57,46 @@ public class CharacterMovement : MonoBehaviour
 
 		isGrounded = controller.isGrounded;
 
-		if (!isGrounded) // Only decrease verticalVel when not grounded (airborne)
+		if (isGrounded)
 		{
-			verticalVel -= gravity * Time.deltaTime; // Apply gravity to verticalVel
+			jumpCount = 0; // Reset jump count when grounded
+			canJump = true; // Allow jumping when grounded
+			verticalVel = 0; // Reset vertical velocity
 		}
 		else
 		{
-			verticalVel = 0; // Reset verticalVel to 0 when grounded
+			// Apply gravity to verticalVel when not grounded
+			verticalVel -= gravity * Time.deltaTime;
 		}
 
 		moveVector = new Vector3(0, verticalVel * 0.2f, 0) * Time.deltaTime;
 
 		controller.Move(moveVector);
+
+		// Handle jumping
+		if (canJump && Input.GetButtonDown("Jump"))
+		{
+			Jump();
+		}
+	}
+
+	void Jump()
+	{
+		if (jumpCount == 0)
+		{
+			// First jump
+			anim.SetTrigger("JumpTrigger");
+			verticalVel = jumpForce; // Set the initial jump force (adjust as needed)
+			jumpCount++;
+		}
+		else if (jumpCount == 1)
+		{
+			// Second jump
+			anim.SetTrigger("SecondJumpTrigger");
+			verticalVel = jumpForce; // Set the jump force for the second jump (adjust as needed)
+			jumpCount++;
+			canJump = false; // Disable jumping until grounded again
+		}
 	}
 
 

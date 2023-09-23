@@ -975,6 +975,7 @@ MonoBehaviour:
   StopAnimTime: 0.15
   gravity: 70
   verticalVel: 0
+  jumpForce: 40
 --- !u!4 &653359684 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 8d6bb0967a9efd34e87e00fd231ec1c2, type: 3}
