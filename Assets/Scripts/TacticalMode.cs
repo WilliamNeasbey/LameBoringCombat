@@ -154,12 +154,16 @@ public class TacticalMode : MonoBehaviour
         if (isLockedOn)
         {
             // Set the character's velocity to 2.5 when locked on
-            movement.Velocity = 2.5f;
+            //movement.Velocity = 2.5f;
+            anim.SetBool("LockOnAnimation", true); // Set to true when locked on
         }
         else
         {
             // Reset the character's velocity to the original value when not locked on
             movement.Velocity = movement.OriginalVelocity;
+
+            // Set the LockOnAnimation parameter to false
+            anim.SetBool("LockOnAnimation", false);
         }
     }
 

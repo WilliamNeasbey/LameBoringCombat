@@ -958,6 +958,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Velocity: 5
   active: 1
+  OriginalVelocity: 0
   InputX: 0
   InputZ: 0
   desiredMoveDirection: {x: 0, y: 0, z: 0}

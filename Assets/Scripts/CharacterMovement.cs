@@ -31,12 +31,12 @@ public class CharacterMovement : MonoBehaviour
 	public float StartAnimTime = 0.3f;
 	[Range(0, 1f)]
 	public float StopAnimTime = 0.15f;
-	
+
 	public float gravity = 9.81f;
 	public float verticalVel;
 	private int jumpCount = 0;
 	private bool canJump = true;
-	public float jumpForce = 10f; 
+	public float jumpForce = 10f;
 
 	private Vector3 moveVector;
 	private TacticalMode gameScript;
@@ -56,24 +56,26 @@ public class CharacterMovement : MonoBehaviour
 	{
 		if (gameScript.usingAbility)
 			return;
-
-		// Check if the character is grounded
-		isGrounded = controller.isGrounded;
+		InputMagnitude();
+		
+		// Check if the character is grounded with tolerance
+		//isGrounded = CheckIfGroundedWithTolerance();
 
 		// Set the "IsFalling" parameter in the Animator
-		anim.SetBool("IsFalling", !isGrounded); // Negate isGrounded to set "IsFalling" to true when in the air
+		//anim.SetBool("IsFalling", !isGrounded);
+
+		isGrounded = controller.isGrounded;
 
 		if (isGrounded)
 		{
-			// Handle grounded state
 			jumpCount = 0; // Reset jump count when grounded
 			canJump = true; // Allow jumping when grounded
 			verticalVel = 0; // Reset vertical velocity
 		}
 		else
 		{
-			// Handle falling state
-			verticalVel -= gravity * Time.deltaTime; // Apply gravity
+			// Apply gravity to verticalVel when not grounded
+			verticalVel -= gravity * Time.deltaTime;
 		}
 
 		moveVector = new Vector3(0, verticalVel * 0.2f, 0) * Time.deltaTime;
