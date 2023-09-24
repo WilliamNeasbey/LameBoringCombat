@@ -998,12 +998,28 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 163538517}
     - target: {fileID: 6332190416376845056, guid: 1e5fd67c67322804fa670601dafedac1, type: 3}
+      propertyPath: m_XAxis.m_MaxSpeed
+      value: 700
+      objectReference: {fileID: 0}
+    - target: {fileID: 6332190416376845056, guid: 1e5fd67c67322804fa670601dafedac1, type: 3}
+      propertyPath: m_YAxis.m_MaxSpeed
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 6332190416376845056, guid: 1e5fd67c67322804fa670601dafedac1, type: 3}
+      propertyPath: m_YAxis.m_AccelTime
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6332190416376845056, guid: 1e5fd67c67322804fa670601dafedac1, type: 3}
       propertyPath: m_Lens.m_SensorSize.x
       value: 36
       objectReference: {fileID: 0}
     - target: {fileID: 6332190416376845056, guid: 1e5fd67c67322804fa670601dafedac1, type: 3}
       propertyPath: m_Lens.m_SensorSize.y
       value: 24
+      objectReference: {fileID: 0}
+    - target: {fileID: 6332190416376845056, guid: 1e5fd67c67322804fa670601dafedac1, type: 3}
+      propertyPath: m_YAxis.m_InvertInput
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6332190416376845087, guid: 1e5fd67c67322804fa670601dafedac1, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2522,7 +2538,7 @@ PrefabInstance:
     - target: {fileID: -3775007220613677295, guid: a871bf6cb98375c459c7ff1ee4c3fd9d, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: be75263420a286742acb523e9ce1d3d2, type: 2}
+      objectReference: {fileID: 2100000, guid: 2eb6ccc0e8a89974b9bc5de347da1ffb, type: 2}
     - target: {fileID: -1668118308110150231, guid: a871bf6cb98375c459c7ff1ee4c3fd9d, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
@@ -2542,7 +2558,7 @@ PrefabInstance:
     - target: {fileID: 2144562159546304227, guid: a871bf6cb98375c459c7ff1ee4c3fd9d, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: be75263420a286742acb523e9ce1d3d2, type: 2}
+      objectReference: {fileID: 2100000, guid: 2eb6ccc0e8a89974b9bc5de347da1ffb, type: 2}
     - target: {fileID: 2410394630363174820, guid: a871bf6cb98375c459c7ff1ee4c3fd9d, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
@@ -2550,11 +2566,11 @@ PrefabInstance:
     - target: {fileID: 5128063986421979777, guid: a871bf6cb98375c459c7ff1ee4c3fd9d, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: be75263420a286742acb523e9ce1d3d2, type: 2}
+      objectReference: {fileID: 2100000, guid: 31b1919fe3283404383e6cd95066a26d, type: 2}
     - target: {fileID: 7915922185974087861, guid: a871bf6cb98375c459c7ff1ee4c3fd9d, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: be75263420a286742acb523e9ce1d3d2, type: 2}
+      objectReference: {fileID: 2100000, guid: 9e726672bff520745849d5ff435e39e5, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:

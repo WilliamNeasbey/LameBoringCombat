@@ -4,8 +4,15 @@ public class ObjectColourChanger : MonoBehaviour
 {
     public Material[] shirtMaterials; // Array of materials for shirts.
     public Material[] pantsMaterials; // Array of materials for pants.
+    public Material[] glovesMaterials; // Array of materials for gloves.
+    public Material[] hairMaterials; // Array of materials for hair.
+    public Material[] shoesMaterials; // Array of materials for shoes.
+
     const string ShirtColorPrefsKey = "ShirtColor";
     const string PantsColorPrefsKey = "PantsColor";
+    const string GlovesColorPrefsKey = "GlovesColor";
+    const string HairColorPrefsKey = "HairColor";
+    const string ShoesColorPrefsKey = "ShoesColor";
 
     private void LoadColorFromPlayerPrefs(string prefsKey, Material[] materials)
     {
@@ -31,7 +38,6 @@ public class ObjectColourChanger : MonoBehaviour
         }
     }
 
-
     // Call this method when initializing the object to load its color for shirts.
     public void InitializeShirtWithPlayerPrefsKey(string prefsKey)
     {
@@ -44,26 +50,33 @@ public class ObjectColourChanger : MonoBehaviour
         LoadColorFromPlayerPrefs(prefsKey, pantsMaterials);
     }
 
+    // Call this method when initializing the object to load its color for gloves.
+    public void InitializeGlovesWithPlayerPrefsKey(string prefsKey)
+    {
+        LoadColorFromPlayerPrefs(prefsKey, glovesMaterials);
+    }
+
+    // Call this method when initializing the object to load its color for hair.
+    public void InitializeHairWithPlayerPrefsKey(string prefsKey)
+    {
+        LoadColorFromPlayerPrefs(prefsKey, hairMaterials);
+    }
+
+    // Call this method when initializing the object to load its color for shoes.
+    public void InitializeShoesWithPlayerPrefsKey(string prefsKey)
+    {
+        LoadColorFromPlayerPrefs(prefsKey, shoesMaterials);
+    }
+
     private void Start()
     {
-        string loadedColor = PlayerPrefs.GetString(ShirtColorPrefsKey);
-        Color parsedColor;
-        if (ColorUtility.TryParseHtmlString(loadedColor, out parsedColor))
-        {
-            foreach (Material material in shirtMaterials)
-            {
-                material.SetColor("_Color", parsedColor);
-            }
-        }
-        else
-        {
-            Debug.LogError("Failed to parse color from PlayerPrefs for key: " + ShirtColorPrefsKey);
-        }
-
-        // Load and apply shirt and pants colors when the object spawns.
+        // Load and apply colors when the object spawns.
         Debug.Log("Awake: Loading and applying colors...");
         InitializeShirtWithPlayerPrefsKey(ShirtColorPrefsKey);
         InitializePantsWithPlayerPrefsKey(PantsColorPrefsKey);
+        InitializeGlovesWithPlayerPrefsKey(GlovesColorPrefsKey);
+        InitializeHairWithPlayerPrefsKey(HairColorPrefsKey);
+        InitializeShoesWithPlayerPrefsKey(ShoesColorPrefsKey);
         Debug.Log("Awake: Colors loaded and applied.");
     }
 }
