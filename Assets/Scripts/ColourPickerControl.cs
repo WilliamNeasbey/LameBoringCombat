@@ -19,24 +19,36 @@ public class ColourPickerControl : MonoBehaviour
     private Texture2D hueTexture, svTexture, outputTexture;
 
     [SerializeField]
-    MeshRenderer changeThisColour;
+    SkinnedMeshRenderer changeThisColour;
+
     private Material materialToChange;
+    private Material[] materialsToChange;
 
     [SerializeField]
     private string customPrefsKey = "DefaultKey"; // Default key or specify your own default key.
 
     private void Start()
     {
-        materialToChange = changeThisColour.material;
+        // Assuming you have a SkinnedMeshRenderer component attached to the same GameObject.
+        if (changeThisColour != null)
+        {
+            // Assign the materials from the SkinnedMeshRenderer.
+            materialsToChange = changeThisColour.sharedMaterials;
+        }
+        else
+        {
+            // Handle the case where no SkinnedMeshRenderer is found.
+            Debug.LogError("SkinnedMeshRenderer not found.");
+            // You may want to provide a fallback behavior or error handling here.
+        }
 
+        // The rest of your Start() method remains the same.
         CreateHueImage();
-
         CreateSVImage();
-
         CreateOutputImage();
-
         UpdateOutputImage();
     }
+
 
     private void CreateHueImage()
     {
@@ -124,16 +136,26 @@ public class ColourPickerControl : MonoBehaviour
         currentsat = S;
         currentVal = V;
 
+        // Create an array of Color objects for each material.
+        Color[] colors = new Color[materialsToChange.Length];
+        for (int i = 0; i < colors.Length; i++)
+        {
+            colors[i] = Color.HSVToRGB(currentHue, currentsat, currentVal);
+        }
+
         UpdateOutputImage();
+
+        // Call the function to update the material colors with the array of Color objects.
+        UpdateMaterialColor(colors);
     }
 
     public void UpdateSVImage()
     {
         currentHue = hueSlider.value;
 
-        for(int y = 0; y < svTexture.height; y++)
+        for (int y = 0; y < svTexture.height; y++)
         {
-            for(int x = 0; x < svTexture.width; x++)
+            for (int x = 0; x < svTexture.width; x++)
             {
                 svTexture.SetPixel(x, y, Color.HSVToRGB(currentHue, (float)x / svTexture.width, (float)y / svTexture.height));
             }
@@ -141,8 +163,17 @@ public class ColourPickerControl : MonoBehaviour
 
         svTexture.Apply();
 
+        // Create an array of Color objects for each material.
+        Color[] colors = new Color[materialsToChange.Length];
+        for (int i = 0; i < colors.Length; i++)
+        {
+            colors[i] = Color.HSVToRGB(currentHue, currentsat, currentVal);
+        }
+
         UpdateOutputImage();
 
+        // Call the function to update the material colors with the array of Color objects.
+        UpdateMaterialColor(colors);
     }
 
     public void OnTextInput()
@@ -196,26 +227,32 @@ public class ColourPickerControl : MonoBehaviour
         // Log the hex color being saved.
         Debug.Log("Saved Hex Color to PlayerPrefs: " + prefsKey + ", " + hexColor);
 
-        // Update the material color (optional).
-        UpdateMaterialColor(hexColor);
+        // Convert the hexColor string to a Color object.
+        Color newColor;
+        if (ColorUtility.TryParseHtmlString(hexColor, out newColor))
+        {
+            // Call the function to update the material colors with the new Color object.
+            UpdateMaterialColor(new Color[] { newColor });
+        }
     }
 
 
 
-    private void UpdateMaterialColor(string hexColor)
-    {
-        Color newColor;
 
-        if (ColorUtility.TryParseHtmlString("#" + hexColor, out newColor))
+    private void UpdateMaterialColor(Color[] colors)
+    {
+        // Update each material's color with the corresponding Color from the array.
+        for (int i = 0; i < materialsToChange.Length; i++)
         {
-            // Update the material color here.
-            // Assuming you have a materialToChange variable for the object.
-            if (materialToChange != null && materialToChange.HasProperty("_Color"))
+            Material material = materialsToChange[i];
+            if (material != null && material.HasProperty("_Color"))
             {
-                materialToChange.SetColor("_Color", newColor);
+                material.SetColor("_Color", colors[i]);
             }
         }
     }
+
+
 
 
     private void LoadColorFromPlayerPrefs(string prefsKey)
