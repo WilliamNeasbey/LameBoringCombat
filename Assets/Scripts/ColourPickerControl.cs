@@ -20,9 +20,11 @@ public class ColourPickerControl : MonoBehaviour
 
     [SerializeField]
     MeshRenderer changeThisColour;
-
+    private Material materialToChange;
     private void Start()
     {
+        materialToChange = changeThisColour.material;
+
         CreateHueImage();
 
         CreateSVImage();
@@ -96,7 +98,7 @@ public class ColourPickerControl : MonoBehaviour
     {
         Color currentColour = Color.HSVToRGB(currentHue, currentsat, currentVal);
 
-        for(int i = 0; i < outputTexture.height;i++)
+        for (int i = 0; i < outputTexture.height; i++)
         {
             outputTexture.SetPixel(0, i, currentColour);
         }
@@ -105,8 +107,13 @@ public class ColourPickerControl : MonoBehaviour
 
         hexInputFeild.text = ColorUtility.ToHtmlStringRGB(currentColour);
 
-        changeThisColour.GetComponent<MeshRenderer>().material.SetColor("_BaseColor", currentColour);
+        // Check if materialToChange is assigned and has a "_Color" property.
+        if (materialToChange != null && materialToChange.HasProperty("_Color"))
+        {
+            materialToChange.SetColor("_Color", currentColour);
+        }
     }
+
 
     public void SetSV(float S, float V)
     {
