@@ -100,6 +100,8 @@ public class TacticalMode : MonoBehaviour
     {
         originalCharacterRotation = playerCharacter.rotation;
         weapon.onHit.AddListener((target) => HitTarget(target));
+        rightFist.onHit.AddListener((target) => HitTarget(target)); 
+        leftFist.onHit.AddListener((target) => HitTarget(target));  
         movement = GetComponent<CharacterMovement>();
         anim = GetComponent<Animator>();
         camImpulseSource = Camera.main.GetComponent<CinemachineImpulseSource>();
