@@ -15,13 +15,15 @@ public class EnemyScript : MonoBehaviour
     private float lastComboStepTime = 0f; // Add this variable
     private int comboStep = 0; // Add this variable
     private float comboCooldown = 2f; // Adjust the cooldown time as needed
+    private float minComboCooldown = .2f; // Minimum combo cooldown time (adjust as needed)
+    private float maxComboCooldown = 1f; // Maximum combo cooldown time (adjust as needed)
 
 
     public float minDistanceToOtherEnemies = 2f; // Minimum distance to maintain from other enemies
 
     private void Awake()
     {
-        timeBetweenAttacks = Random.Range(0.5f, 2f); // Random time between 0.5 to 2 seconds for attacks
+        timeBetweenAttacks = Random.Range(0.2f, 0.5f); // Adjusted time between attacks to be quicker
     }
 
     private void Start()
@@ -32,6 +34,12 @@ public class EnemyScript : MonoBehaviour
 
     private void Update()
     {
+        // Calculate the direction to move towards the player
+        Vector3 directionToPlayer = (playerTransform.position - transform.position).normalized;
+
+        // Rotate the enemy to face the player
+        transform.rotation = Quaternion.LookRotation(directionToPlayer);
+
         // Check if the player is within the attack range
         if (Vector3.Distance(transform.position, playerTransform.position) <= attackRange)
         {
@@ -60,9 +68,6 @@ public class EnemyScript : MonoBehaviour
         // Move the enemy towards the player
         transform.Translate(directionToPlayer * moveSpeed * Time.deltaTime, Space.World);
 
-        // Rotate the enemy to face the player (optional)
-        transform.LookAt(playerTransform);
-
         // Avoid standing too close to other enemies
         AvoidOtherEnemies();
     }
@@ -90,6 +95,7 @@ public class EnemyScript : MonoBehaviour
             }
         }
     }
+
 
     private void AttackPlayer()
     {
@@ -124,8 +130,8 @@ public class EnemyScript : MonoBehaviour
 
         comboStep = (comboStep + 1) % 3; // Increment comboStep and wrap around
 
-        // Set the attack cooldown timer
-        attackCooldown = Time.time + timeBetweenAttacks;
+        // Set a random combo cooldown timer
+        comboCooldown = Random.Range(minComboCooldown, maxComboCooldown);
     }
 
 
