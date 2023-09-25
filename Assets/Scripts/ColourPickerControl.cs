@@ -19,26 +19,28 @@ public class ColourPickerControl : MonoBehaviour
     private Texture2D hueTexture, svTexture, outputTexture;
 
     [SerializeField]
-    SkinnedMeshRenderer changeThisColour;
+    private SkinnedMeshRenderer[] changeTheseColours; // Change this line
+
+    private Material[] materialsToChange;
 
     private Material materialToChange;
-    private Material[] materialsToChange;
+   
 
     [SerializeField]
     private string customPrefsKey = "DefaultKey"; // Default key or specify your own default key.
 
     private void Start()
     {
-        // Assuming you have a SkinnedMeshRenderer component attached to the same GameObject.
-        if (changeThisColour != null)
+        // Assuming you have SkinnedMeshRenderer components in the array.
+        if (changeTheseColours != null && changeTheseColours.Length > 0)
         {
-            // Assign the materials from the SkinnedMeshRenderer.
-            materialsToChange = changeThisColour.sharedMaterials;
+            // Assign the materials from the first SkinnedMeshRenderer in the array.
+            materialsToChange = changeTheseColours[0].sharedMaterials;
         }
         else
         {
-            // Handle the case where no SkinnedMeshRenderer is found.
-            Debug.LogError("SkinnedMeshRenderer not found.");
+            // Handle the case where no SkinnedMeshRenderers are found.
+            Debug.LogError("No SkinnedMeshRenderers found in the array.");
             // You may want to provide a fallback behavior or error handling here.
         }
 
@@ -241,16 +243,36 @@ public class ColourPickerControl : MonoBehaviour
 
     private void UpdateMaterialColor(Color[] colors)
     {
-        // Update each material's color with the corresponding Color from the array.
-        for (int i = 0; i < materialsToChange.Length; i++)
+        // Loop through each SkinnedMeshRenderer in the array.
+        for (int i = 0; i < changeTheseColours.Length; i++)
         {
-            Material material = materialsToChange[i];
-            if (material != null && material.HasProperty("_Color"))
+            SkinnedMeshRenderer renderer = changeTheseColours[i];
+
+            if (renderer != null)
             {
-                material.SetColor("_Color", colors[i]);
+                Material[] rendererMaterials = renderer.sharedMaterials;
+
+                // Check if the renderer has the same number of materials as the colors array.
+                if (rendererMaterials.Length == colors.Length)
+                {
+                    // Update each material's color with the corresponding Color from the array.
+                    for (int j = 0; j < rendererMaterials.Length; j++)
+                    {
+                        Material material = rendererMaterials[j];
+                        if (material != null && material.HasProperty("_Color"))
+                        {
+                            material.SetColor("_Color", colors[j]);
+                        }
+                    }
+                }
+                else
+                {
+                    Debug.LogWarning("Materials count does not match colors count for SkinnedMeshRenderer " + i);
+                }
             }
         }
     }
+
 
 
 
