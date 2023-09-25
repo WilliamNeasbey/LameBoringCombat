@@ -33,6 +33,7 @@ public class TacticalMode : MonoBehaviour
     public Transform playerTransform;
     private Quaternion originalCharacterRotation;
     public float rotationSpeed = 5.0f; // Adjust the rotation speed as needed
+    public float health = 100f;
 
 
     [Header("Time Stats")]
@@ -111,6 +112,13 @@ public class TacticalMode : MonoBehaviour
     {
         // Clear the targets list at the start of each frame
         targets.Clear();
+      
+        // Check if the player's health is depleted
+        if (health <= 0)
+        {
+            // Perform actions when health reaches zero or below (e.g., trigger death animation, game over logic)
+            Die();
+        }
 
         // Find all objects with the "Enemy" tag within the detection range
         Collider[] potentialTargets = Physics.OverlapSphere(playerTransform.position, maxDetectionRange);
@@ -626,6 +634,21 @@ public class TacticalMode : MonoBehaviour
         // Wait for half a second before allowing the next attack
         yield return new WaitForSeconds(0.4f);
         canAttack = true; // Re-enable attacks
+    }
+
+    public void GetHit(float damage)
+    {
+        anim.SetTrigger("Hit");
+        health -= 10;
+        if (health <= 0f)
+        {
+            Die();
+        }
+    }
+
+    void Die()
+    {
+        // Add your death logic here, such as showing a game over screen or restarting the level.
     }
 
 }
