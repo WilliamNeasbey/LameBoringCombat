@@ -7,12 +7,14 @@ public class ObjectColourChanger : MonoBehaviour
     public Material[] glovesMaterials; // Array of materials for gloves.
     public Material[] hairMaterials; // Array of materials for hair.
     public Material[] shoesMaterials; // Array of materials for shoes.
+    public Material[] hatMaterials; // Array of materials for hats.
 
     const string ShirtColorPrefsKey = "ShirtColor";
     const string PantsColorPrefsKey = "PantsColor";
     const string GlovesColorPrefsKey = "GlovesColor";
     const string HairColorPrefsKey = "HairColor";
     const string ShoesColorPrefsKey = "ShoesColor";
+    const string HatColorPrefsKey = "HatColor"; // New PlayerPrefs key for hat color.
 
     private void LoadColorFromPlayerPrefs(string prefsKey, Material[] materials)
     {
@@ -68,6 +70,12 @@ public class ObjectColourChanger : MonoBehaviour
         LoadColorFromPlayerPrefs(prefsKey, shoesMaterials);
     }
 
+    // Call this method when initializing the object to load its color for hats.
+    public void InitializeHatWithPlayerPrefsKey(string prefsKey)
+    {
+        LoadColorFromPlayerPrefs(prefsKey, hatMaterials);
+    }
+
     private void Start()
     {
         // Load and apply colors when the object spawns.
@@ -77,6 +85,7 @@ public class ObjectColourChanger : MonoBehaviour
         InitializeGlovesWithPlayerPrefsKey(GlovesColorPrefsKey);
         InitializeHairWithPlayerPrefsKey(HairColorPrefsKey);
         InitializeShoesWithPlayerPrefsKey(ShoesColorPrefsKey);
+        InitializeHatWithPlayerPrefsKey(HatColorPrefsKey);
         Debug.Log("Awake: Colors loaded and applied.");
     }
 }
