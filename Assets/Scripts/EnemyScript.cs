@@ -22,11 +22,11 @@ public class EnemyScript : MonoBehaviour
     public float minDistanceToOtherEnemies = 2f; // Minimum distance to maintain from other enemies
 
     // References to  colliders 
-    public WeaponCollision weapon;
+    public WeaponCollisionEnemy weapon;
     public GameObject WeaponObject;
-    public LeftFistCollision leftFist;
+    public LeftFistCollisionEnemy leftFist;
     public GameObject LeftFistObject;
-    public RightFistCollision rightFist;
+    public RightFistCollisionEnemy rightFist;
     public GameObject RightFistObject;
 
     private void Awake()
