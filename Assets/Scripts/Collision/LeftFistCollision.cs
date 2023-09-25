@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-[System.Serializable] public class CollisionEvent : UnityEvent<Transform> { }
-public class WeaponCollision : MonoBehaviour
+public class LeftFistCollision : MonoBehaviour
 {
-
     public CollisionEvent onHit;
 
     private void OnTriggerEnter(Collider other)

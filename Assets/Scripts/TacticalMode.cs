@@ -25,6 +25,10 @@ public class TacticalMode : MonoBehaviour
     private Animator anim;
     public WeaponCollision weapon;
     public GameObject WeaponObject;
+    public RightFistCollision rightFist;
+    public GameObject RightFistObject;
+    public LeftFistCollision leftFist;
+    public GameObject LeftFistObject;
     public Transform playerCharacter;
     public Transform playerTransform;
     private Quaternion originalCharacterRotation;
@@ -85,6 +89,13 @@ public class TacticalMode : MonoBehaviour
 
     private CinemachineImpulseSource camImpulseSource;
 
+    [Space]
+    [Header("combos")]
+    private float lastAttackTime;
+    private int comboCount = 0; // Initialize combo count
+    private bool canAttack = true; // Added flag to control attack cooldown
+
+
     private void Start()
     {
         originalCharacterRotation = playerCharacter.rotation;
@@ -124,16 +135,37 @@ public class TacticalMode : MonoBehaviour
             }
         }
 
-        //Attack
-        if ((Input.GetMouseButtonDown(0)) && !tacticalMode && !usingAbility)
+        // Attack
+        if (canAttack && (Input.GetMouseButtonDown(0)) && !tacticalMode && !usingAbility)
         {
+            if (Time.time - lastAttackTime > 1f)
+            {
+                // Reset combo count if it's been too long since the last attack
+                comboCount = 0;
+            }
 
-            OnAttack.Invoke();
-
-            if (!dashing)
-                //MoveTowardsTarget(targets[targetIndex]);
+            if (comboCount == 0)
+            {
+                anim.SetTrigger("Punch");
+            }
+            else if (comboCount == 1)
+            {
+                anim.SetTrigger("Punch2"); // Trigger the second punch animation
+            }
+            else if (comboCount == 2)
+            {
                 anim.SetTrigger("AirKick");
+            }
+
+            comboCount = (comboCount + 1) % 3; // Increment combo count and wrap around
+
+            lastAttackTime = Time.time;
+
+            // Disable further attacks for a brief moment
+            canAttack = false;
+            StartCoroutine(ComboCooldown());
         }
+
 
         if (Input.GetKeyDown(KeyCode.Tab))
         {
@@ -409,6 +441,28 @@ public class TacticalMode : MonoBehaviour
        
         WeaponObject.SetActive(false);
     }
+    
+    public void HitEventRightFist()
+    {
+        VFXDir = 5;
+        RightFistObject.SetActive(true);
+    }
+    public void HitDisableRightFist()
+    {
+
+        RightFistObject.SetActive(false);
+    }
+    
+    public void HitEventLeftFist()
+    {
+        VFXDir = 5;
+        LeftFistObject.SetActive(true);
+    }
+    public void HitDisableLeftFist()
+    {
+
+        LeftFistObject.SetActive(false);
+    }
 
     public void CancelAction()
     {
@@ -565,6 +619,12 @@ public class TacticalMode : MonoBehaviour
         }
     }
 
+    IEnumerator ComboCooldown()
+    {
+        // Wait for half a second before allowing the next attack
+        yield return new WaitForSeconds(0.4f);
+        canAttack = true; // Re-enable attacks
+    }
 
 }
     
