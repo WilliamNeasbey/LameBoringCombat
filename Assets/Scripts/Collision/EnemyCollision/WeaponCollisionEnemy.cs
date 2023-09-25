@@ -10,6 +10,8 @@ public class WeaponCollisionEnemy : MonoBehaviour
     public CollisionEvent onHit;
 
     private TacticalMode tacticalMode; // Reference to the TacticalMode script
+    public ParticleSystem collisionParticlePrefab; // Reference to the particle system prefab
+    public AudioSource collisionSound; // Reference to the audio source
 
     private void Start()
     {
@@ -24,6 +26,18 @@ public class WeaponCollisionEnemy : MonoBehaviour
             onHit.Invoke(other.transform);
             // Trigger the GetHit method in the TacticalMode script
             tacticalMode.GetHit(10f); // Pass the desired damage amount (e.g., 10) as an argument
+
+            // Instantiate the collision particle effect at the collision location
+            if (collisionParticlePrefab != null)
+            {
+                Instantiate(collisionParticlePrefab, transform.position, Quaternion.identity);
+            }
+
+            // Play the collision sound
+            if (collisionSound != null)
+            {
+                collisionSound.Play();
+            }
         }
     }
 }

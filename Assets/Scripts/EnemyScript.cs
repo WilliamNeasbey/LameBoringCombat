@@ -17,7 +17,9 @@ public class EnemyScript : MonoBehaviour
     private float comboCooldown = 2f; // Adjust the cooldown time as needed
     private float minComboCooldown = .2f; // Minimum combo cooldown time (adjust as needed)
     private float maxComboCooldown = 1f; // Maximum combo cooldown time (adjust as needed)
-
+    public GameObject ragdollPrefab;
+    public float ragdollForce = 500f; // Adjust the force magnitude as needed
+    public float forceRandomRange = 100f; // Adjust the random range as needed
 
     public float minDistanceToOtherEnemies = 2f; // Minimum distance to maintain from other enemies
 
@@ -47,8 +49,14 @@ public class EnemyScript : MonoBehaviour
         // Calculate the direction to move towards the player
         Vector3 directionToPlayer = (playerTransform.position - transform.position).normalized;
 
-        // Rotate the enemy to face the player
-        transform.rotation = Quaternion.LookRotation(directionToPlayer);
+        // Create a new direction vector with Y set to zero (horizontal direction)
+        Vector3 horizontalDirection = new Vector3(directionToPlayer.x, 0f, directionToPlayer.z).normalized;
+
+        // Rotate the enemy to face the horizontal direction
+        if (horizontalDirection != Vector3.zero)
+        {
+            transform.rotation = Quaternion.LookRotation(horizontalDirection);
+        }
 
         // Check if the player is within the attack range
         if (Vector3.Distance(transform.position, playerTransform.position) <= attackRange)
@@ -69,6 +77,7 @@ public class EnemyScript : MonoBehaviour
             MoveTowardsPlayer();
         }
     }
+
 
     private void MoveTowardsPlayer()
     {
@@ -159,8 +168,28 @@ public class EnemyScript : MonoBehaviour
 
     public void Die()
     {
+
         Destroy(gameObject);
         // Play death audio or perform other actions here
+
+        // Spawn the ragdoll prefab at the same position as the enemy
+        GameObject ragdoll = Instantiate(ragdollPrefab, transform.position, transform.rotation);
+
+        // Calculate the force direction (opposite of the enemy's forward direction)
+        Vector3 forceDirection = -transform.forward;
+
+        // Apply a random force within the specified range
+        float randomForceMagnitude = ragdollForce + Random.Range(-forceRandomRange, forceRandomRange);
+        Vector3 appliedForce = forceDirection * randomForceMagnitude;
+
+        // Get all rigidbodies in the ragdoll
+        Rigidbody[] ragdollRigidbodies = ragdoll.GetComponentsInChildren<Rigidbody>();
+
+        // Apply the force to each rigidbody in the ragdoll
+        foreach (Rigidbody rb in ragdollRigidbodies)
+        {
+            rb.AddForce(appliedForce);
+        }
     }
 
     public void HitEvent()

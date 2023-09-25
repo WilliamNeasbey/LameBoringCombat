@@ -10426,7 +10426,7 @@ ParticleSystem:
           m_PostInfinity: 2
           m_RotationOrder: 4
     arc:
-      value: 0
+      value: 0.01
       mode: 1
       spread: 0
       speed:
@@ -15249,7 +15249,7 @@ ParticleSystem:
           m_PostInfinity: 2
           m_RotationOrder: 4
     arc:
-      value: 0
+      value: 0.01
       mode: 1
       spread: 0
       speed:
