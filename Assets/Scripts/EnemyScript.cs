@@ -21,6 +21,14 @@ public class EnemyScript : MonoBehaviour
 
     public float minDistanceToOtherEnemies = 2f; // Minimum distance to maintain from other enemies
 
+    // References to  colliders 
+    public WeaponCollision weapon;
+    public GameObject WeaponObject;
+    public LeftFistCollision leftFist;
+    public GameObject LeftFistObject;
+    public RightFistCollision rightFist;
+    public GameObject RightFistObject;
+
     private void Awake()
     {
         timeBetweenAttacks = Random.Range(0.2f, 0.5f); // Adjusted time between attacks to be quicker
@@ -30,6 +38,8 @@ public class EnemyScript : MonoBehaviour
     {
         anim = GetComponent<Animator>();
         playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
+
+     
     }
 
     private void Update()
@@ -152,4 +162,38 @@ public class EnemyScript : MonoBehaviour
         Destroy(gameObject);
         // Play death audio or perform other actions here
     }
+
+    public void HitEvent()
+    {
+        
+        WeaponObject.SetActive(true);
+    }
+    public void HitDisable()
+    {
+
+        WeaponObject.SetActive(false);
+    }
+
+    public void HitEventRightFist()
+    {
+       
+        RightFistObject.SetActive(true);
+    }
+    public void HitDisableRightFist()
+    {
+
+        RightFistObject.SetActive(false);
+    }
+
+    public void HitEventLeftFist()
+    {
+        
+        LeftFistObject.SetActive(true);
+    }
+    public void HitDisableLeftFist()
+    {
+
+        LeftFistObject.SetActive(false);
+    }
+
 }
