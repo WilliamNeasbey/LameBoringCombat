@@ -8,6 +8,13 @@ public class ObjectColourChanger : MonoBehaviour
     public Material[] hairMaterials; // Array of materials for hair.
     public Material[] shoesMaterials; // Array of materials for shoes.
     public Material[] hatMaterials; // Array of materials for hats.
+    public Material[] backBlingMaterials; // Array of materials for back bling.
+    public Material[] leftHandMaterials; // Array of materials for left hand.
+    public Material[] rightHandMaterials; // Array of materials for right hand.
+    public Material[] pantsAccessoryMaterials; // Array of materials for pants accessory.
+    public Material[] leftShoeMaterials; // Array of materials for left shoe.
+    public Material[] rightShoeMaterials; // Array of materials for right shoe.
+
 
     const string ShirtColorPrefsKey = "ShirtColor";
     const string PantsColorPrefsKey = "PantsColor";
@@ -15,6 +22,12 @@ public class ObjectColourChanger : MonoBehaviour
     const string HairColorPrefsKey = "HairColor";
     const string ShoesColorPrefsKey = "ShoesColor";
     const string HatColorPrefsKey = "HatColor"; // New PlayerPrefs key for hat color.
+    const string BackBlingColorPrefsKey = "BackBlingColor"; // PlayerPrefs key for back bling color.
+    const string LeftHandColorPrefsKey = "LeftHandColor"; // PlayerPrefs key for left hand color.
+    const string RightHandColorPrefsKey = "RightHandColor"; // PlayerPrefs key for right hand color.
+    const string PantsAccessoryColorPrefsKey = "PantsAccessoryColor"; // PlayerPrefs key for pants accessory color.
+    const string LeftShoeColorPrefsKey = "LeftShoeColor"; // PlayerPrefs key for left shoe color.
+    const string RightShoeColorPrefsKey = "RightShoeColor"; // PlayerPrefs key for right shoe color.
 
     private void LoadColorFromPlayerPrefs(string prefsKey, Material[] materials)
     {
