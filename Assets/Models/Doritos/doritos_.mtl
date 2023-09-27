@@ -1,0 +1,24 @@
+# Blender MTL File: 'doritos.blend'
+# Material Count: 2
+
+newmtl frente.001
+Ns 536.467581
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.044118 0.044118 0.044118
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd D:\\Pendrive\\Imagens\\Doritos-140g.png
+
+newmtl tras.001
+Ns 536.467581
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.044118 0.044118 0.044118
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd caralhooooo.png

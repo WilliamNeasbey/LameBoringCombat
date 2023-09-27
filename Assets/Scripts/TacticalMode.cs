@@ -211,21 +211,30 @@ public class TacticalMode : MonoBehaviour
 
     public void LightningKicks()
     {
-        ModifyATB(-200);
+        if (atbSlider >= 200) // Check if the player has at least 200 ATB points
+        {
+            ModifyATB(-200); // Deduct 200 ATB points
 
-        StartCoroutine(AbilityCooldown());
+            StartCoroutine(AbilityCooldown());
 
-        SetTacticalMode(false);
+            SetTacticalMode(false);
 
-        MoveTowardsTarget(targets[targetIndex]);
+            MoveTowardsTarget(targets[targetIndex]);
 
-        //Animation
-        anim.SetTrigger("LightningKicks");
+            // Animation
+            anim.SetTrigger("LightningKicks");
 
-        //Polish
-        PlayVFX(abilityVFX, false);
-        LightColor(groundLight, abilityColot, .3f);
+            // Polish
+            PlayVFX(abilityVFX, false);
+            LightColor(groundLight, abilityColot, .3f);
+        }
+        else
+        {
+            // Display a message or perform some action to indicate that the player doesn't have enough ATB.
+            Debug.Log("Not enough ATB for LightningKicks.");
+        }
     }
+
 
     public void Heal()
     {
