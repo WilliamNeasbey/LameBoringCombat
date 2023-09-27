@@ -2,9 +2,7 @@ using UnityEngine;
 
 public class HairSelection : MonoBehaviour
 {
-    public GameObject hair1; // Reference to the first hair object in the Hierarchy.
-    public GameObject hair2; // Reference to the second hair object in the Hierarchy.
-
+    public GameObject[] hairOptions; // Reference to an array of hair objects in the Hierarchy.
     private const string PlayerPrefsKey = "SelectedHair"; // PlayerPrefs key to store the selected hair option.
 
     // Function to handle the button press and set the selected hair option.
@@ -13,16 +11,11 @@ public class HairSelection : MonoBehaviour
         PlayerPrefs.SetInt(PlayerPrefsKey, hairOption);
         PlayerPrefs.Save();
 
-        // Check which hair option was selected and enable/disable accordingly.
-        if (hairOption == 1)
+        // Loop through all hair options and enable/disable accordingly.
+        for (int i = 0; i < hairOptions.Length; i++)
         {
-            hair1.SetActive(true);
-            hair2.SetActive(false);
-        }
-        else if (hairOption == 2)
-        {
-            hair1.SetActive(false);
-            hair2.SetActive(true);
+            bool isSelected = (i == (hairOption - 1)); // Subtract 1 to match array index.
+            hairOptions[i].SetActive(isSelected);
         }
     }
 
