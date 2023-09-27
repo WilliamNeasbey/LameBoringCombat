@@ -88,6 +88,12 @@ public class ObjectColourChanger : MonoBehaviour
     {
         LoadColorFromPlayerPrefs(prefsKey, hatMaterials);
     }
+    
+    // Call this method when initializing the object to load its color for hats.
+    public void InitializeBackBlingWithPlayerPrefsKey(string prefsKey)
+    {
+        LoadColorFromPlayerPrefs(prefsKey, backBlingMaterials);
+    }
 
     private void Start()
     {
@@ -99,6 +105,12 @@ public class ObjectColourChanger : MonoBehaviour
         InitializeHairWithPlayerPrefsKey(HairColorPrefsKey);
         InitializeShoesWithPlayerPrefsKey(ShoesColorPrefsKey);
         InitializeHatWithPlayerPrefsKey(HatColorPrefsKey);
+        InitializeBackBlingWithPlayerPrefsKey(BackBlingColorPrefsKey);
+        InitializeHatWithPlayerPrefsKey(LeftHandColorPrefsKey);
+        InitializeHatWithPlayerPrefsKey(RightHandColorPrefsKey);
+        InitializeHatWithPlayerPrefsKey(PantsAccessoryColorPrefsKey);
+        InitializeHatWithPlayerPrefsKey(LeftShoeColorPrefsKey);
+        InitializeHatWithPlayerPrefsKey(RightShoeColorPrefsKey);
         Debug.Log("Awake: Colors loaded and applied.");
     }
 }
