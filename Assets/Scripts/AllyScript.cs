@@ -59,7 +59,8 @@ public class AllyScript : MonoBehaviour
     public enum AllyState
     {
         Idle,       // The ally is not doing anything
-        Moving,     // The ally is moving towards an enemy
+        MovingToPlayer,  // The ally is moving towards the player
+        MovingToEnemy,   // The ally is moving towards an enemy
         Attacking   // The ally is attacking an enemy
     }
 
@@ -74,18 +75,43 @@ public class AllyScript : MonoBehaviour
             case AllyState.Idle:
                 if (nearestEnemy != null)
                 {
-                    currentState = AllyState.Moving;
+                    currentState = AllyState.MovingToEnemy;
+                    MoveTowardsEnemy(nearestEnemy);
                 }
-                else if (playerTransform != null && enemyTransform == null)
+                else if (playerTransform != null)
                 {
-                    currentState = AllyState.Moving;
+                    currentState = AllyState.MovingToPlayer;
+                    FollowPlayer();
                 }
                 break;
 
-            case AllyState.Moving:
+            case AllyState.MovingToPlayer:
+                if (playerTransform != null)
+                {
+                    FollowPlayer();
+
+                    // Check if there are enemies in range
+                    if (nearestEnemy != null && Vector3.Distance(transform.position, nearestEnemy.position) <= attackRange)
+                    {
+                        currentState = AllyState.Attacking;
+                    }
+                }
+                else
+                {
+                    currentState = AllyState.Idle;
+                }
+                break;
+
+            case AllyState.MovingToEnemy:
                 if (nearestEnemy != null)
                 {
                     MoveTowardsEnemy(nearestEnemy);
+
+                    // Check if the enemy is in attack range
+                    if (Vector3.Distance(transform.position, nearestEnemy.position) <= attackRange)
+                    {
+                        currentState = AllyState.Attacking;
+                    }
                 }
                 else
                 {
@@ -105,6 +131,7 @@ public class AllyScript : MonoBehaviour
                 break;
         }
     }
+
 
 
 
