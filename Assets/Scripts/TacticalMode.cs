@@ -80,6 +80,7 @@ public class TacticalMode : MonoBehaviour
     [Header("Cameras")]
     public GameObject gameCam;
     public CinemachineVirtualCamera targetCam;
+    public float zoomSpeed = 10f; // Adjust the zoom speed as needed
     private bool isLockedOn = false;
 
     [Space]
@@ -206,6 +207,50 @@ public class TacticalMode : MonoBehaviour
 
             // Set the LockOnAnimation parameter to false
             anim.SetBool("LockOnAnimation", false);
+        }
+
+        // Check for mouse scroll delta input
+        float scrollDelta = Input.mouseScrollDelta.y;
+        Debug.Log("Scroll Delta: " + scrollDelta); // Debug log to check the input
+
+        // Adjust the camera's position based on scroll delta
+        float zoomSpeed = 0.1f; // Adjust the speed as needed
+        Vector3 newPosition = gameCam.transform.position + Vector3.forward * scrollDelta * zoomSpeed;
+        gameCam.transform.position = newPosition;
+
+        // Limit the camera's position to a reasonable range (e.g., a minimum and maximum distance from the player character)
+        float minDistance = 5f; // Adjust as needed
+        float maxDistance = 20f; // Adjust as needed
+        gameCam.transform.position = new Vector3(
+            gameCam.transform.position.x,
+            gameCam.transform.position.y,
+            Mathf.Clamp(gameCam.transform.position.z, -maxDistance, -minDistance)
+        );
+    }
+
+    public void Hadouken()
+    {
+        if (atbSlider >= 200) // Check if the player has at least 200 ATB points
+        {
+            ModifyATB(-200); // Deduct 200 ATB points
+
+            StartCoroutine(AbilityCooldown());
+
+            SetTacticalMode(false);
+
+            MoveTowardsTarget(targets[targetIndex]);
+
+            // Animation
+            anim.SetTrigger("LightningKicks");
+
+            // Polish
+            PlayVFX(abilityVFX, false);
+            LightColor(groundLight, abilityColot, .3f);
+        }
+        else
+        {
+            // Display a message or perform some action to indicate that the player doesn't have enough ATB.
+            Debug.Log("Not enough ATB for LightningKicks.");
         }
     }
 
