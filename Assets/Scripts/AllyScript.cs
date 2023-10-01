@@ -6,22 +6,22 @@ public class AllyScript : MonoBehaviour
 {
     private Animator anim;
     public float health = 50f;
-    public float moveSpeed = 3f; // Speed at which the enemy moves towards the player
-    public float attackRange = 1f; // Lowered attack range to 1 unit
-    private Transform enemyTransform; // Reference to the nearest enemy's transform
-    private bool canAttack = true; // Flag to control attack cooldown
+    public float moveSpeed = 3f;
+    public float rotationSpeed = 5f;
+    public float attackRange = 1f;
+    private Transform enemyTransform;
+    private bool canAttack = true;
     private float attackCooldown = 0f;
     private float timeBetweenAttacks;
-    private float lastComboStepTime = 0f; // Add this variable
-    private int comboStep = 0; // Add this variable
-    private float comboCooldown = 2f; // Adjust the cooldown time as needed
-    private float minComboCooldown = .2f; // Minimum combo cooldown time (adjust as needed)
-    private float maxComboCooldown = 1f; // Maximum combo cooldown time (adjust as needed)
+    private float lastComboStepTime = 0f;
+    private int comboStep = 0;
+    private float comboCooldown = 2f;
+    private float minComboCooldown = .2f;
+    private float maxComboCooldown = 1f;
     public GameObject ragdollPrefab;
-    public float ragdollForce = 500f; // Adjust the force magnitude as needed
-    public float forceRandomRange = 100f; // Adjust the random range as needed
-
-    public float minDistanceToOtherEnemies = 2f; // Minimum distance to maintain from other enemies
+    public float ragdollForce = 500f;
+    public float forceRandomRange = 100f;
+    public float minDistanceToOtherEnemies = 2f;
 
     // References to colliders
     public WeaponCollision weapon;
@@ -33,45 +33,49 @@ public class AllyScript : MonoBehaviour
 
     private void Awake()
     {
-        timeBetweenAttacks = Random.Range(0.1f, 0.3f); // Adjusted time between attacks to be quicker
+        timeBetweenAttacks = Random.Range(0.2f, 0.5f);
     }
+
+    private Transform nearestEnemyTransform;
 
     private void Start()
     {
         anim = GetComponent<Animator>();
-        // Find the nearest enemy with the "Enemy" tag
-        FindNearestEnemy();
+        StartCoroutine(FindNearestEnemyRoutine());
+    }
+
+    private IEnumerator FindNearestEnemyRoutine()
+    {
+        while (true)
+        {
+            FindNearestEnemy();
+            yield return new WaitForSeconds(1f); // Adjust the frequency of checking for the nearest enemy
+        }
     }
 
     private void Update()
     {
+        // Calculate the direction to move towards the nearest enemy
         if (enemyTransform == null)
         {
-            // If there is no nearest enemy, try to find one
             FindNearestEnemy();
         }
 
         if (enemyTransform != null)
         {
-            // Calculate the direction to move towards the nearest enemy
             Vector3 directionToEnemy = (enemyTransform.position - transform.position).normalized;
 
-            // Create a new direction vector with Y set to zero (horizontal direction)
             Vector3 horizontalDirection = new Vector3(directionToEnemy.x, 0f, directionToEnemy.z).normalized;
 
-            // Rotate the enemy to face the horizontal direction
             if (horizontalDirection != Vector3.zero)
             {
                 transform.rotation = Quaternion.LookRotation(horizontalDirection);
             }
 
-            // Check if the enemy is within the attack range
             if (Vector3.Distance(transform.position, enemyTransform.position) <= attackRange)
             {
-                // Stop moving towards the enemy and trigger the attack
                 canAttack = true;
 
-                // Check if the attack cooldown has elapsed
                 if (canAttack && Time.time >= attackCooldown)
                 {
                     AttackEnemy();
@@ -79,12 +83,12 @@ public class AllyScript : MonoBehaviour
             }
             else
             {
-                // If the enemy is not in attack range, move towards the enemy while avoiding other enemies
                 canAttack = false;
                 MoveTowardsEnemy();
             }
         }
     }
+
 
     private void FindNearestEnemy()
     {
@@ -109,7 +113,7 @@ public class AllyScript : MonoBehaviour
             // Calculate the direction to move towards the enemy
             Vector3 directionToEnemy = (enemyTransform.position - transform.position).normalized;
 
-            // Move the enemy towards the enemy
+            // Move the ally towards the enemy
             transform.Translate(directionToEnemy * moveSpeed * Time.deltaTime, Space.World);
 
             // Avoid standing too close to other enemies
@@ -136,7 +140,7 @@ public class AllyScript : MonoBehaviour
                         // Calculate a direction away from the other enemy
                         Vector3 avoidDirection = (transform.position - enemy.transform.position).normalized;
 
-                        // Move the enemy away from the other enemy
+                        // Move the ally away from the other enemy
                         transform.Translate(avoidDirection * moveSpeed * Time.deltaTime, Space.World);
                     }
                 }
@@ -177,8 +181,8 @@ public class AllyScript : MonoBehaviour
 
         comboStep = (comboStep + 1) % 3; // Increment comboStep and wrap around
 
-        // Set a fixed combo cooldown timer (you can adjust this value as needed)
-        comboCooldown = 0.2f; // Set to the desired cooldown time.
+        // Set a random combo cooldown timer
+        comboCooldown = 0.3f;
     }
 
     // Other methods for handling hits, death, etc.

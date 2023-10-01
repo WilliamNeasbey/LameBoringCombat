@@ -1493,7 +1493,7 @@ GameObject:
   - component: {fileID: 4260684304952780832}
   m_Layer: 7
   m_Name: Lamp Thug  ragdoll
-  m_TagString: Enemy
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1876,6 +1876,8 @@ MonoBehaviour:
   onHit:
     m_PersistentCalls:
       m_Calls: []
+  collisionParticlePrefab: {fileID: 0}
+  collisionSound: {fileID: 0}
 --- !u!1 &4362529680103719218
 GameObject:
   m_ObjectHideFlags: 0
@@ -3177,6 +3179,8 @@ MonoBehaviour:
   onHit:
     m_PersistentCalls:
       m_Calls: []
+  collisionParticlePrefab: {fileID: 0}
+  collisionSound: {fileID: 0}
 --- !u!1 &6898114275683568511
 GameObject:
   m_ObjectHideFlags: 0
@@ -4078,6 +4082,8 @@ MonoBehaviour:
   onHit:
     m_PersistentCalls:
       m_Calls: []
+  collisionParticlePrefab: {fileID: 0}
+  collisionSound: {fileID: 0}
 --- !u!1 &8904613379898725239
 GameObject:
   m_ObjectHideFlags: 0
