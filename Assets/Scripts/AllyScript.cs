@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.AI;
 public class AllyScript : MonoBehaviour
 {
     private Animator anim;
@@ -31,95 +31,146 @@ public class AllyScript : MonoBehaviour
     public RightFistCollision rightFist;
     public GameObject RightFistObject;
 
+    private Transform nearestEnemyTransform;
+    private NavMeshAgent navMeshAgent;
+
+    private float enemyDetectionRange = 10f; // Adjust this value to control the range at which enemies are detected
+    public Transform playerTransform; // Reference to the player's transform
+    private float followDistance = 2f; // Adjust this value to control the distance behind the player
+    private AllyState currentState = AllyState.Idle;
+
+
     private void Awake()
     {
+        navMeshAgent = GetComponent<NavMeshAgent>();
+        playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
         timeBetweenAttacks = Random.Range(0.2f, 0.5f);
     }
 
-    private Transform nearestEnemyTransform;
+    
 
     private void Start()
     {
         anim = GetComponent<Animator>();
-        StartCoroutine(FindNearestEnemyRoutine());
+       // StartCoroutine(FindNearestEnemyRoutine());
     }
 
-    private IEnumerator FindNearestEnemyRoutine()
+
+    public enum AllyState
     {
-        while (true)
-        {
-            FindNearestEnemy();
-            yield return new WaitForSeconds(1f); // Adjust the frequency of checking for the nearest enemy
-        }
+        Idle,       // The ally is not doing anything
+        Moving,     // The ally is moving towards an enemy
+        Attacking   // The ally is attacking an enemy
     }
+
 
     private void Update()
     {
-        // Calculate the direction to move towards the nearest enemy
-        if (enemyTransform == null)
+        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+        Transform nearestEnemy = FindNearestEnemy(enemies);
+
+        switch (currentState)
         {
-            FindNearestEnemy();
-        }
-
-        if (enemyTransform != null)
-        {
-            Vector3 directionToEnemy = (enemyTransform.position - transform.position).normalized;
-
-            Vector3 horizontalDirection = new Vector3(directionToEnemy.x, 0f, directionToEnemy.z).normalized;
-
-            if (horizontalDirection != Vector3.zero)
-            {
-                transform.rotation = Quaternion.LookRotation(horizontalDirection);
-            }
-
-            if (Vector3.Distance(transform.position, enemyTransform.position) <= attackRange)
-            {
-                canAttack = true;
-
-                if (canAttack && Time.time >= attackCooldown)
+            case AllyState.Idle:
+                if (nearestEnemy != null)
                 {
-                    AttackEnemy();
+                    currentState = AllyState.Moving;
                 }
-            }
-            else
-            {
-                canAttack = false;
-                MoveTowardsEnemy();
-            }
+                else if (playerTransform != null && enemyTransform == null)
+                {
+                    currentState = AllyState.Moving;
+                }
+                break;
+
+            case AllyState.Moving:
+                if (nearestEnemy != null)
+                {
+                    MoveTowardsEnemy(nearestEnemy);
+                }
+                else
+                {
+                    currentState = AllyState.Idle;
+                }
+                break;
+
+            case AllyState.Attacking:
+                if (nearestEnemy != null)
+                {
+                    AttackEnemy(nearestEnemy);
+                }
+                else
+                {
+                    currentState = AllyState.Idle;
+                }
+                break;
         }
     }
 
 
-    private void FindNearestEnemy()
+
+
+
+    private Transform FindNearestEnemy(GameObject[] enemies)
     {
-        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
-        float nearestDistance = Mathf.Infinity;
+        Transform nearestEnemy = null;
+        float nearestDistance = enemyDetectionRange;
 
         foreach (GameObject enemy in enemies)
         {
             float distanceToEnemy = Vector3.Distance(transform.position, enemy.transform.position);
-            if (distanceToEnemy < nearestDistance)
+
+            if (distanceToEnemy <= nearestDistance)
             {
                 nearestDistance = distanceToEnemy;
-                enemyTransform = enemy.transform;
+                nearestEnemy = enemy.transform;
             }
         }
+
+        return nearestEnemy;
     }
 
-    private void MoveTowardsEnemy()
+    private void FollowPlayer()
     {
-        if (enemyTransform != null)
+        if (playerTransform != null)
+        {
+            // Calculate the direction from the player to the ally
+            Vector3 playerToAlly = -playerTransform.forward;
+
+            // Calculate the target position behind the player
+            Vector3 targetPosition = playerTransform.position + playerToAlly * followDistance;
+
+            // Use NavMeshAgent to move the ally to the target position
+            navMeshAgent.SetDestination(targetPosition);
+
+            // Reset the target enemy transform
+            enemyTransform = null;
+        }
+    }
+    private void MoveTowardsEnemy(Transform enemy)
+    {
+        if (enemy != null)
         {
             // Calculate the direction to move towards the enemy
-            Vector3 directionToEnemy = (enemyTransform.position - transform.position).normalized;
+            Vector3 directionToEnemy = (enemy.position - transform.position).normalized;
 
-            // Move the ally towards the enemy
-            transform.Translate(directionToEnemy * moveSpeed * Time.deltaTime, Space.World);
+            // Use NavMeshAgent for ally movement
+            navMeshAgent.SetDestination(enemy.position);
 
             // Avoid standing too close to other enemies
             AvoidOtherEnemies();
+
+            // Check the distance to the enemy
+            if (Vector3.Distance(transform.position, enemy.position) <= attackRange)
+            {
+                currentState = AllyState.Attacking;
+            }
+        }
+        else
+        {
+            currentState = AllyState.Idle;
         }
     }
+
 
     private void AvoidOtherEnemies()
     {
@@ -148,7 +199,7 @@ public class AllyScript : MonoBehaviour
         }
     }
 
-    private void AttackEnemy()
+    private void AttackEnemy(Transform enemy)
     {
         // Check if it's time for the next combo step
         if (Time.time - lastComboStepTime >= comboCooldown)
@@ -156,7 +207,14 @@ public class AllyScript : MonoBehaviour
             lastComboStepTime = Time.time;
             ComboStep();
         }
+
+        // Check if the enemy is still in range
+        if (enemy != null && Vector3.Distance(transform.position, enemy.position) > attackRange)
+        {
+            currentState = AllyState.Idle;
+        }
     }
+
 
     private void ComboStep()
     {

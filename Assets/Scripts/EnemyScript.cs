@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class EnemyScript : MonoBehaviour
 {
@@ -17,6 +18,7 @@ public class EnemyScript : MonoBehaviour
     private float comboCooldown = 2f; // Adjust the cooldown time as needed
     private float minComboCooldown = .2f; // Minimum combo cooldown time (adjust as needed)
     private float maxComboCooldown = 1f; // Maximum combo cooldown time (adjust as needed)
+    private NavMeshAgent navMeshAgent;
     public GameObject ragdollPrefab;
     public float ragdollForce = 500f; // Adjust the force magnitude as needed
     public float forceRandomRange = 100f; // Adjust the random range as needed
@@ -34,6 +36,7 @@ public class EnemyScript : MonoBehaviour
     private void Awake()
     {
         timeBetweenAttacks = Random.Range(0.2f, 0.5f); // Adjusted time between attacks to be quicker
+        navMeshAgent = GetComponent<NavMeshAgent>();
     }
 
     private void Start()
@@ -47,35 +50,23 @@ public class EnemyScript : MonoBehaviour
 
     private void Update()
     {
-        // Calculate the direction to move towards the player
-        Vector3 directionToPlayer = (playerTransform.position - transform.position).normalized;
-
-        // Create a new direction vector with Y set to zero (horizontal direction)
-        Vector3 horizontalDirection = new Vector3(directionToPlayer.x, 0f, directionToPlayer.z).normalized;
-
-        // Rotate the enemy to face the horizontal direction
-        if (horizontalDirection != Vector3.zero)
+        if (playerTransform != null)
         {
-            transform.rotation = Quaternion.LookRotation(horizontalDirection);
-        }
+            // Set the destination of the NavMeshAgent to the player's position
+            navMeshAgent.SetDestination(playerTransform.position);
 
-        // Check if the player is within the attack range
-        if (Vector3.Distance(transform.position, playerTransform.position) <= attackRange)
-        {
-            // Stop moving towards the player and trigger the attack
-            canAttack = true;
-
-            // Check if the attack cooldown has elapsed
-            if (canAttack && Time.time >= attackCooldown)
+            // Check if the player is within the attack range
+            if (Vector3.Distance(transform.position, playerTransform.position) <= attackRange)
             {
+                // Stop moving and trigger the attack
+                navMeshAgent.isStopped = true;
                 AttackPlayer();
             }
-        }
-        else
-        {
-            // If the player is not in attack range, move towards the player while avoiding other enemies
-            canAttack = false;
-            MoveTowardsPlayer();
+            else
+            {
+                // Resume moving
+                navMeshAgent.isStopped = false;
+            }
         }
     }
 
