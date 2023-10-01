@@ -10,6 +10,7 @@ public class EnemyScript : MonoBehaviour
     public float moveSpeed = 3f; // Speed at which the enemy moves towards the player
     public float attackRange = 1f; // Lowered attack range to 1 unit
     private Transform playerTransform;
+    private Transform allyTransform;
     private bool canAttack = true; // Flag to control attack cooldown
     private float attackCooldown = 0f;
     private float timeBetweenAttacks;
@@ -43,29 +44,50 @@ public class EnemyScript : MonoBehaviour
     {
         anim = GetComponent<Animator>();
         playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
-        playerTransform = GameObject.FindGameObjectWithTag("Ally").transform;
-
-
+        allyTransform = GameObject.FindGameObjectWithTag("Ally").transform;
     }
+
 
     private void Update()
     {
-        if (playerTransform != null)
+        if (playerTransform != null && allyTransform != null)
         {
-            // Set the destination of the NavMeshAgent to the player's position
-            navMeshAgent.SetDestination(playerTransform.position);
+            float distanceToPlayer = Vector3.Distance(transform.position, playerTransform.position);
+            float distanceToAlly = Vector3.Distance(transform.position, allyTransform.position);
 
-            // Check if the player is within the attack range
-            if (Vector3.Distance(transform.position, playerTransform.position) <= attackRange)
+            Transform targetTransform = null;
+
+            if (distanceToAlly < distanceToPlayer)
             {
-                // Stop moving and trigger the attack
-                navMeshAgent.isStopped = true;
-                AttackPlayer();
+                targetTransform = allyTransform;
             }
             else
             {
-                // Resume moving
-                navMeshAgent.isStopped = false;
+                targetTransform = playerTransform;
+            }
+
+            if (targetTransform != null)
+            {
+                if (Vector3.Distance(transform.position, targetTransform.position) <= attackRange)
+                {
+                    // Stop moving
+                    navMeshAgent.isStopped = true;
+
+                    // Rotate to face the target
+                    transform.LookAt(targetTransform);
+
+                    // Attack the target
+                    AttackPlayer();
+                }
+                else
+                {
+                    // Player/ally is not in attack range, so move towards the target
+                    navMeshAgent.isStopped = false;
+                    navMeshAgent.SetDestination(targetTransform.position);
+
+                    // Rotate to face the movement direction
+                    transform.LookAt(targetTransform);
+                }
             }
         }
     }
