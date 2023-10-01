@@ -40,8 +40,9 @@ public class EnemyScript : MonoBehaviour
     {
         anim = GetComponent<Animator>();
         playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
+        playerTransform = GameObject.FindGameObjectWithTag("Ally").transform;
 
-     
+
     }
 
     private void Update()

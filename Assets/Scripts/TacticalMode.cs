@@ -297,7 +297,7 @@ public class TacticalMode : MonoBehaviour
 
         if (target.GetComponent<EnemyScript>() != null)
         {
-            target.GetComponent<EnemyScript>().GetHit();
+           // target.GetComponent<EnemyScript>().GetHit();
 
             // Debug logs to check health and removal
             Debug.Log("Enemy Health: " + target.GetComponent<EnemyScript>().health);

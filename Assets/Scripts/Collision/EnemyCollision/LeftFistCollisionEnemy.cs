@@ -40,5 +40,26 @@ public class LeftFistCollisionEnemy : MonoBehaviour
                 collisionSound.Play();
             }
         }
+        if (other.CompareTag("Ally"))
+        {
+            onHit.Invoke(other.transform);
+            // Call the GetHit method of the AllyScript to apply damage to the ally
+            AllyScript ally = other.GetComponent<AllyScript>();
+            if (ally != null)
+            {
+                ally.GetHit();
+            }
+            // Instantiate the collision particle effect at the collision location
+            if (collisionParticlePrefab != null)
+            {
+                Instantiate(collisionParticlePrefab, transform.position, Quaternion.identity);
+            }
+
+            // Play the collision sound
+            if (collisionSound != null)
+            {
+                collisionSound.Play();
+            }
+        }
     }
 }
