@@ -34,7 +34,7 @@ public class TacticalMode : MonoBehaviour
     private Quaternion originalCharacterRotation;
     public float rotationSpeed = 5.0f; // Adjust the rotation speed as needed
     public float health = 100f;
-
+    public GameObject projectilePrefab;
 
     [Header("Time Stats")]
     public float slowMotionTime = .005f;
@@ -211,7 +211,7 @@ public class TacticalMode : MonoBehaviour
 
         // Check for mouse scroll delta input
         float scrollDelta = Input.mouseScrollDelta.y;
-        Debug.Log("Scroll Delta: " + scrollDelta); // Debug log to check the input
+       // Debug.Log("Scroll Delta: " + scrollDelta); // Debug log to check the input
 
         // Adjust the camera's position based on scroll delta
         float zoomSpeed = 0.1f; // Adjust the speed as needed
@@ -230,18 +230,27 @@ public class TacticalMode : MonoBehaviour
 
     public void Hadouken()
     {
-        if (atbSlider >= 200) // Check if the player has at least 200 ATB points
+        if (atbSlider >= 100)
         {
-            ModifyATB(-200); // Deduct 200 ATB points
+            ModifyATB(-100);
 
             StartCoroutine(AbilityCooldown());
 
             SetTacticalMode(false);
 
-            MoveTowardsTarget(targets[targetIndex]);
+            // Create a new instance of the projectile
+            GameObject newProjectile = Instantiate(projectilePrefab, transform.position, Quaternion.identity);
+
+            // Get the projectile component and set its target
+            Projectile projectile = newProjectile.GetComponent<Projectile>();
+            if (projectile != null && isLockedOn && lockedTargetIndex >= 0 && lockedTargetIndex < targets.Count)
+            {
+                Transform lockedTarget = targets[lockedTargetIndex];
+                projectile.SetTarget(lockedTarget);
+            }
 
             // Animation
-            anim.SetTrigger("LightningKicks");
+            anim.SetTrigger("Sephiroth");
 
             // Polish
             PlayVFX(abilityVFX, false);
@@ -249,8 +258,7 @@ public class TacticalMode : MonoBehaviour
         }
         else
         {
-            // Display a message or perform some action to indicate that the player doesn't have enough ATB.
-            Debug.Log("Not enough ATB for LightningKicks.");
+            Debug.Log("Not enough ATB for Hadouken.");
         }
     }
 

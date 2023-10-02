@@ -9,15 +9,41 @@ public class ButtonEvent : MonoBehaviour, ISubmitHandler, ISelectHandler, IDesel
 
     public UnityEvent Confirm;
     public UnityEvent Select;
+    public ButtonType buttonType = ButtonType.None;
 
     private Vector3 pos;
 
+    public enum ButtonType
+    {
+        None,
+        ButtonA,
+        ButtonB,
+        ButtonC,
+        // Add more button types as needed
+    }
+    public UnityEvent ButtonAConfirmEvent;
+    public UnityEvent ButtonBConfirmEvent;
+    public UnityEvent ButtonCConfirmEvent;
     private void Start()
     {
         pos = transform.position;
         StartCoroutine(WaitForFrames());
     }
+    
+    public void SetA()
+    {
+        buttonType = ButtonType.ButtonA;
+    }
+    public void SetB()
+    {
+        buttonType = ButtonType.ButtonB;
+    }
 
+    public void SetC()
+    {
+        buttonType = ButtonType.ButtonC;
+    }
+   
     IEnumerator WaitForFrames()
     {
         yield return new WaitForSecondsRealtime(.5f);
@@ -38,6 +64,30 @@ public class ButtonEvent : MonoBehaviour, ISubmitHandler, ISelectHandler, IDesel
     public void OnSubmit(BaseEventData eventData)
     {
         transform.DOPunchPosition(Vector3.right, .2f, 10, 1).SetUpdate(true);
-        Confirm.Invoke();
+
+        // Check the button type and invoke the corresponding Confirm event
+        switch (buttonType)
+        {
+            case ButtonType.ButtonA:
+                ButtonAConfirmEvent.Invoke();
+                break;
+
+            case ButtonType.ButtonB:
+                ButtonBConfirmEvent.Invoke();
+                break;
+
+            case ButtonType.ButtonC:
+                ButtonCConfirmEvent.Invoke();
+                break;
+
+            // Add cases for other button types as needed
+
+            default:
+                // If no specific button type is set, invoke the default Confirm event
+                Confirm.Invoke();
+                break;
+        }
     }
+
+
 }
