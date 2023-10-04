@@ -113,7 +113,19 @@ public class TacticalMode : MonoBehaviour
     {
         // Clear the targets list at the start of each frame
         targets.Clear();
-      
+
+        // Disable/Enable the CharacterMovement script based on tacticalMode
+        if (tacticalMode)
+        {
+            // Disable the CharacterMovement script
+            movement.enabled = false;
+        }
+        else
+        {
+            // Enable the CharacterMovement script
+            movement.enabled = true;
+        }
+
         // Check if the player's health is depleted
         if (health <= 0)
         {
