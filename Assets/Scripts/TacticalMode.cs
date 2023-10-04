@@ -99,6 +99,10 @@ public class TacticalMode : MonoBehaviour
     private int comboCount = 0; // Initialize combo count
     private bool canAttack = true; // Added flag to control attack cooldown
 
+    [Space]
+    [Header("Sound")]
+    public AudioSource KamehamehaSound;
+    public AudioSource RoadHouseSound;
 
     private void Start()
     {
@@ -269,6 +273,7 @@ public class TacticalMode : MonoBehaviour
             // Polish
             PlayVFX(abilityVFX, false);
             LightColor(groundLight, abilityColot, .3f);
+            KamehamehaSound.Play();
         }
         else
         {
@@ -320,6 +325,7 @@ public class TacticalMode : MonoBehaviour
             // Polish
             PlayVFX(abilityVFX, false);
             LightColor(groundLight, abilityColot, .3f);
+            RoadHouseSound.Play();
         }
         else
         {
