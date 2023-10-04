@@ -24,7 +24,9 @@ public class TacticalMode : MonoBehaviour
     private CharacterMovement movement;
     private Animator anim;
     public WeaponCollision weapon;
+    public KamehamehaCollision Kamehameha;
     public GameObject WeaponObject;
+    public GameObject KamehamehaObject;
     public RightFistCollision rightFist;
     public GameObject RightFistObject;
     public LeftFistCollision leftFist;
@@ -262,7 +264,7 @@ public class TacticalMode : MonoBehaviour
             }
 
             // Animation
-            anim.SetTrigger("Sephiroth");
+            anim.SetTrigger("Kamehameha");
 
             // Polish
             PlayVFX(abilityVFX, false);
@@ -572,6 +574,17 @@ public class TacticalMode : MonoBehaviour
     {
 
         LeftFistObject.SetActive(false);
+    }
+
+    public void HitEventKamehameha()
+    {
+        VFXDir = 5;
+        KamehamehaObject.SetActive(true);
+    }
+    public void HitDisableKamehameha()
+    {
+
+        KamehamehaObject.SetActive(false);
     }
 
     public void CancelAction()
