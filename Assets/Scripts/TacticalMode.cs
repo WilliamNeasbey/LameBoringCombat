@@ -288,6 +288,31 @@ public class TacticalMode : MonoBehaviour
         }
     }
 
+    public void RoadHouse()
+    {
+        if (atbSlider >= 100) // Check if the player has at least 100 ATB points
+        {
+            ModifyATB(-100); // Deduct 100 ATB points
+
+            StartCoroutine(AbilityCooldown());
+
+            SetTacticalMode(false);
+
+            MoveTowardsTarget(targets[targetIndex]);
+
+            // Animation
+            anim.SetTrigger("AirKick3");
+
+            // Polish
+            PlayVFX(abilityVFX, false);
+            LightColor(groundLight, abilityColot, .3f);
+        }
+        else
+        {
+            // Display a message or perform some action to indicate that the player doesn't have enough ATB.
+            Debug.Log("Not enough ATB for LightningKicks.");
+        }
+    }
 
     public void Heal()
     {
