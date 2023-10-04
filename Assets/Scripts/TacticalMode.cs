@@ -344,7 +344,8 @@ public class TacticalMode : MonoBehaviour
 
     public void MoveTowardsTarget(Transform target)
     {
-        if (Vector3.Distance(transform.position, target.position) > 1 && Vector3.Distance(transform.position, target.position) < 10)
+        //change the value of the last number one row below to change the automove distance  
+        if (Vector3.Distance(transform.position, target.position) > 1 && Vector3.Distance(transform.position, target.position) < 100)
         {
             StartCoroutine(DashCooldown());
             transform.DOMove(TargetOffset(), .5f);
