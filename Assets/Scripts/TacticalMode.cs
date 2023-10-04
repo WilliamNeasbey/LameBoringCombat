@@ -37,6 +37,8 @@ public class TacticalMode : MonoBehaviour
     public float rotationSpeed = 5.0f; // Adjust the rotation speed as needed
     public float health = 100f;
     public GameObject projectilePrefab;
+    public float atbRechargeRate = 10.0f; // Adjust the recharge rate as needed
+
 
     [Header("Time Stats")]
     public float slowMotionTime = .005f;
@@ -47,6 +49,8 @@ public class TacticalMode : MonoBehaviour
     public bool isAiming;
     public bool usingAbility;
     public bool dashing;
+    private bool isChargingKI = false; // Flag to track KI charging state
+
 
     [Space]
 
@@ -70,14 +74,18 @@ public class TacticalMode : MonoBehaviour
     public VisualEffect abilityVFX;
     public VisualEffect abilityHitVFX;
     public VisualEffect healVFX;
+    public GameObject kiChargingParticle;
+
     [Space]
     [Header("Ligts")]
     public Light swordLight;
     public Light groundLight;
+
     [Header("Ligh Colors")]
     public Color sparkColor;
     public Color healColor;
     public Color abilityColot;
+
     [Space]
     [Header("Cameras")]
     public GameObject gameCam;
@@ -103,6 +111,7 @@ public class TacticalMode : MonoBehaviour
     [Header("Sound")]
     public AudioSource KamehamehaSound;
     public AudioSource RoadHouseSound;
+    public AudioSource KIchargingSound;
 
     private void Start()
     {
@@ -244,6 +253,52 @@ public class TacticalMode : MonoBehaviour
             gameCam.transform.position.y,
             Mathf.Clamp(gameCam.transform.position.z, -maxDistance, -minDistance)
         );
+
+        // Check if the "q" key is held down
+        if (Input.GetKey(KeyCode.Q))
+        {
+            camImpulseSource.m_ImpulseDefinition.m_AmplitudeGain = 0.3f; // Value of the camera shake
+            camImpulseSource.GenerateImpulse();
+            movement.enabled = false;
+            // Start charging KI
+            if (!isChargingKI)
+            {
+                
+                isChargingKI = true;
+                anim.SetBool("chargingKI", true);
+                KIchargingSound.Play();
+                kiChargingParticle.SetActive(true);
+                
+                canAttack = false;
+                Debug.Log("Movement script disabled.");
+                
+
+            }
+
+            // Increase the ATB value while the button is held until it reaches the max
+            if (atbSlider < filledAtbValue * 2)
+            {
+                ModifyATB(Time.deltaTime * atbRechargeRate); // Adjust atbRechargeRate as needed
+            }
+        }
+        else
+        {
+            // Stop charging KI
+            if (isChargingKI)
+            {
+                isChargingKI = false;
+                anim.SetBool("chargingKI", false); // Reset animation bool
+                KIchargingSound.Stop(); // Disable the KI charging sound
+                kiChargingParticle.SetActive(false);
+                movement.enabled = true;
+                canAttack = true;
+            }
+
+            
+        }
+
+
+
     }
 
     public void Hadouken()
@@ -336,19 +391,30 @@ public class TacticalMode : MonoBehaviour
 
     public void Heal()
     {
-        ModifyATB(-100);
+        if (atbSlider >= 100)
+        {
+            // Deduct ATB points
+            ModifyATB(-100);
+            SetTacticalMode(false);
+            // Calculate the amount to heal
+            float healAmount = Mathf.Min(50, 100 - health); // Heal up to 50 or until reaching 100 health
 
-        StartCoroutine(AbilityCooldown());
+            // Apply the healing
+            health += healAmount;
 
-        SetTacticalMode(false);
+            // Animation
+            anim.SetTrigger("heal");
 
-        //Animation
-        anim.SetTrigger("heal");
-
-        //Polish
-        PlayVFX(healVFX, false);
-        LightColor(groundLight, healColor, .5f);
+            // Polish
+            PlayVFX(healVFX, false);
+            LightColor(groundLight, healColor, 0.5f);
+        }
+        else
+        {
+            Debug.Log("Not enough ATB for the Heal spell.");
+        }
     }
+
 
     public void MoveTowardsTarget(Transform target)
     {
