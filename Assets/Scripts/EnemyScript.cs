@@ -73,8 +73,11 @@ public class EnemyScript : MonoBehaviour
                     // Stop moving
                     navMeshAgent.isStopped = true;
 
-                    // Rotate to face the target
-                    transform.LookAt(targetTransform);
+                    // Calculate the direction to face the target while keeping the Y rotation constant
+                    Vector3 targetDirection = targetTransform.position - transform.position;
+                    targetDirection.y = 0f; // Keep the Y component at 0 to prevent vertical rotation
+                    Quaternion targetRotation = Quaternion.LookRotation(targetDirection);
+                    transform.rotation = targetRotation;
 
                     // Attack the target
                     AttackPlayer();
@@ -85,12 +88,15 @@ public class EnemyScript : MonoBehaviour
                     navMeshAgent.isStopped = false;
                     navMeshAgent.SetDestination(targetTransform.position);
 
-                    // Rotate to face the movement direction
-                    transform.LookAt(targetTransform);
+                    // Rotate to face the movement direction while keeping Y rotation constant
+                    Vector3 moveDirection = (targetTransform.position - transform.position).normalized;
+                    moveDirection.y = 0f; // Keep the Y component at 0 to prevent vertical rotation
+                    transform.rotation = Quaternion.LookRotation(moveDirection);
                 }
             }
         }
     }
+
 
 
     private void MoveTowardsPlayer()

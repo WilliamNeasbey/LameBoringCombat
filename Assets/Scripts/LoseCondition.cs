@@ -7,6 +7,7 @@ public class LoseCondition : MonoBehaviour
     public GameObject HitSound; // Reference to the HitSound because it gets annoying
     public GameObject DeathUI;  // Reference to the Death UI GameObject
     public GameObject player;   // Reference to the player GameObject (the one to be destroyed)
+    public GameObject Wincondition; // Reference to the Wincondition
 
     private void Start()
     {
@@ -15,6 +16,7 @@ public class LoseCondition : MonoBehaviour
         DeathUI.SetActive(false);
         Cameras.SetActive(true);
         HitSound.SetActive(true);
+        Wincondition.SetActive(true);
     }
 
     private void Update()
@@ -26,6 +28,7 @@ public class LoseCondition : MonoBehaviour
             BattleUI.SetActive(false);
             Cameras.SetActive(false);
             HitSound.SetActive(false);
+            Wincondition.SetActive(false);
             DeathUI.SetActive(true);
         }
     }

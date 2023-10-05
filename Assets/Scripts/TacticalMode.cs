@@ -21,6 +21,7 @@ public class TacticalMode : MonoBehaviour
     [HideInInspector]
     public TacticalModeEvent OnTargetSelectTrigger;
 
+    public CharacterMovement characterMovement;
     private CharacterMovement movement;
     private Animator anim;
     public WeaponCollision weapon;
@@ -33,6 +34,7 @@ public class TacticalMode : MonoBehaviour
     public GameObject LeftFistObject;
     public Transform playerCharacter;
     public Transform playerTransform;
+    public float standAwayDistance = 1.0f; // Adjust as needed
     private Quaternion originalCharacterRotation;
     public float rotationSpeed = 5.0f; // Adjust the rotation speed as needed
     public float health = 100f;
@@ -50,7 +52,13 @@ public class TacticalMode : MonoBehaviour
     public bool usingAbility;
     public bool dashing;
     private bool isChargingKI = false; // Flag to track KI charging state
-
+    
+    //dashing crap
+    private bool isDashing = false; private Vector3 dashStartPosition;
+    private Vector3 dashEndPosition;
+    private float dashSpeed = 10f; // Adjust the speed as needed
+    private float dashDuration = .2f; // Adjust the duration as needed
+    private float dashStartTime; // Variable to store the dash start time
 
     [Space]
 
@@ -129,6 +137,7 @@ public class TacticalMode : MonoBehaviour
         movement = GetComponent<CharacterMovement>();
         anim = GetComponent<Animator>();
         camImpulseSource = Camera.main.GetComponent<CinemachineImpulseSource>();
+        characterMovement = GetComponent<CharacterMovement>();
     }
 
     void Update()
@@ -304,7 +313,52 @@ public class TacticalMode : MonoBehaviour
             
         }
 
+        /*
+        //dash
+        if ((Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift)) && !isDashing)
+        {
+            // Check if there is enough ATB to perform the shift move
+            if (atbSlider >= 20)
+            {
+                // Consume 20 ATB only when the dash starts
+                ModifyATB(-20);
+                isDashing = true;
 
+                // Store the dash start and end positions
+                dashStartPosition = transform.position;
+                float horizontalInput = Input.GetAxis("Horizontal");
+                float verticalInput = Input.GetAxis("Vertical");
+                Vector3 moveDirection = new Vector3(horizontalInput, 0, verticalInput).normalized;
+                dashEndPosition = transform.position + moveDirection * 20f; // Adjust the dash distance as needed
+
+                // Store the dash start time
+                dashStartTime = Time.time;
+            }
+            else
+            {
+                Debug.Log("Not enough ATB for Shift move.");
+            }
+        }
+
+        if (isDashing)
+        {
+            // Calculate the current progress of the dash
+            float dashProgress = (Time.time - dashStartTime) / dashDuration;
+
+            // Move the player towards the dash end position
+            transform.position = Vector3.Lerp(dashStartPosition, dashEndPosition, dashProgress);
+
+            // Check if the dash is complete
+            if (dashProgress >= 1.0f)
+            {
+                isDashing = false;
+
+                // Reset the character's position to the dash end position to avoid small offsets
+                transform.position = dashEndPosition;
+            }
+        }
+
+        */
 
     }
 
@@ -424,15 +478,18 @@ public class TacticalMode : MonoBehaviour
 
 
     public void MoveTowardsTarget(Transform target)
+{
+    // Change the value of the last number one row below to change the automove distance
+    if (Vector3.Distance(transform.position, target.position) > 1 && Vector3.Distance(transform.position, target.position) < 100)
     {
-        //change the value of the last number one row below to change the automove distance  
-        if (Vector3.Distance(transform.position, target.position) > 1 && Vector3.Distance(transform.position, target.position) < 100)
-        {
-            StartCoroutine(DashCooldown());
-            transform.DOMove(TargetOffset(), .5f);
-            transform.DOLookAt(targets[targetIndex].position, .2f);
-        }
+        StartCoroutine(DashCooldown());
+        Vector3 newTargetPosition = TargetOffset(); // Calculate the target position to stand away from the target
+        transform.DOMove(newTargetPosition, 0.5f); // Move the character to the new position
+        transform.DOLookAt(targets[targetIndex].position, 0.2f); // Look at the target
     }
+}
+
+
 
     IEnumerator AbilityCooldown()
     {
