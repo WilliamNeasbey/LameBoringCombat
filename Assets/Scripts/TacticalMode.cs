@@ -113,6 +113,13 @@ public class TacticalMode : MonoBehaviour
     public AudioSource RoadHouseSound;
     public AudioSource KIchargingSound;
 
+
+    [Space]
+    [Header("ragdoll")]
+    public GameObject ragdollPrefab;
+    public float ragdollForce = 500f; // Adjust the force magnitude as needed
+    public float forceRandomRange = 100f; // Adjust the random range as needed
+
     private void Start()
     {
         originalCharacterRotation = playerCharacter.rotation;
@@ -831,9 +838,29 @@ public class TacticalMode : MonoBehaviour
         }
     }
 
-    void Die()
+    public void Die()
     {
-        // Add your death logic here, such as showing a game over screen or restarting the level.
+        Destroy(gameObject);
+        // Play death audio or perform other actions here
+
+        // Spawn the ragdoll prefab at the same position as the enemy
+        GameObject ragdoll = Instantiate(ragdollPrefab, transform.position, transform.rotation);
+
+        // Calculate the force direction (opposite of the enemy's forward direction)
+        Vector3 forceDirection = -transform.forward;
+
+        // Apply a random force within the specified range
+        float randomForceMagnitude = ragdollForce + Random.Range(-forceRandomRange, forceRandomRange);
+        Vector3 appliedForce = forceDirection * randomForceMagnitude;
+
+        // Get all rigidbodies in the ragdoll
+        Rigidbody[] ragdollRigidbodies = ragdoll.GetComponentsInChildren<Rigidbody>();
+
+        // Apply the force to each rigidbody in the ragdoll
+        foreach (Rigidbody rb in ragdollRigidbodies)
+        {
+            rb.AddForce(appliedForce);
+        }
     }
 
 }
