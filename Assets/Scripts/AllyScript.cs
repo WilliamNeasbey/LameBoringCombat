@@ -39,6 +39,9 @@ public class AllyScript : MonoBehaviour
     private float followDistance = 2f; // Adjust this value to control the distance behind the player
     private AllyState currentState = AllyState.Idle;
 
+    private bool hasLost = false;
+    private bool isPlayerAlive = true;
+
 
     private void Awake()
     {
@@ -130,6 +133,20 @@ public class AllyScript : MonoBehaviour
                 }
                 break;
         }
+        // Check if the player object is destroyed and the "Lose" animation hasn't been triggered yet
+        if (playerTransform == null && !hasLost)
+        {
+            // Set the flag to true to indicate that the "Lose" animation has been triggered
+            hasLost = true;
+
+            // Disable the NavMeshAgent to stop the ally from moving
+            navMeshAgent.enabled = false;
+
+            // Player is destroyed, trigger the "Lose" animation once
+            TriggerLoseAnimationOnce();
+            // Disable the AllyScript component to stop the ally from attacking
+            enabled = false;
+        }
     }
 
 
@@ -175,7 +192,7 @@ public class AllyScript : MonoBehaviour
     }
     private void MoveTowardsEnemy(Transform enemy)
     {
-        if (enemy != null)
+        if (enemy != null && isPlayerAlive)
         {
             // Calculate the direction to move towards the enemy
             Vector3 directionToEnemy = (enemy.position - transform.position).normalized;
@@ -197,6 +214,7 @@ public class AllyScript : MonoBehaviour
             currentState = AllyState.Idle;
         }
     }
+
 
 
     private void AvoidOtherEnemies()
@@ -305,6 +323,12 @@ public class AllyScript : MonoBehaviour
         {
             rb.AddForce(appliedForce);
         }
+    }
+
+    private void TriggerLoseAnimationOnce()
+    {
+        // Trigger the "Lose" animation
+        anim.SetTrigger("Lose");
     }
 
     public void HitEvent()

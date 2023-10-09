@@ -24,6 +24,8 @@ public class EnemyScript : MonoBehaviour
     public float ragdollForce = 500f; // Adjust the force magnitude as needed
     public float forceRandomRange = 100f; // Adjust the random range as needed
 
+    private bool hasDanced = false;
+
     public float minDistanceToOtherEnemies = 2f; // Minimum distance to maintain from other enemies
 
     // References to  colliders 
@@ -52,7 +54,18 @@ public class EnemyScript : MonoBehaviour
     {
         if (playerTransform != null && allyTransform != null)
         {
+            // Check if the enemy is overlapping with the player
             float distanceToPlayer = Vector3.Distance(transform.position, playerTransform.position);
+            if (distanceToPlayer < 1.0f)
+            {
+                // Calculate a direction away from the player
+                Vector3 moveDirection = (transform.position - playerTransform.position).normalized;
+                moveDirection.y = 0f; // Keep the Y component at 0 to prevent vertical rotation
+
+                // Move the enemy away from the player by 1 unit
+                transform.Translate(moveDirection * 1.0f * Time.deltaTime, Space.World);
+            }
+
             float distanceToAlly = Vector3.Distance(transform.position, allyTransform.position);
 
             Transform targetTransform = null;
@@ -68,14 +81,17 @@ public class EnemyScript : MonoBehaviour
 
             if (targetTransform != null)
             {
-                if (Vector3.Distance(transform.position, targetTransform.position) <= attackRange)
+                // Calculate the direction to the target
+                Vector3 targetDirection = targetTransform.position - transform.position;
+                targetDirection.y = 0f; // Keep the Y component at 0 to prevent vertical rotation
+
+                // Check if the enemy is within attack range
+                if (distanceToPlayer <= attackRange || distanceToAlly <= attackRange)
                 {
                     // Stop moving
                     navMeshAgent.isStopped = true;
 
-                    // Calculate the direction to face the target while keeping the Y rotation constant
-                    Vector3 targetDirection = targetTransform.position - transform.position;
-                    targetDirection.y = 0f; // Keep the Y component at 0 to prevent vertical rotation
+                    // Rotate to face the target while keeping the Y rotation constant
                     Quaternion targetRotation = Quaternion.LookRotation(targetDirection);
                     transform.rotation = targetRotation;
 
@@ -95,7 +111,20 @@ public class EnemyScript : MonoBehaviour
                 }
             }
         }
+        // Check if the player object is destroyed and the dance animation hasn't been triggered yet
+        if (playerTransform == null && !hasDanced)
+        {
+            // Player is destroyed, trigger a dance animation once
+            TriggerDanceAnimationOnce();
+
+            // Set the flag to true to indicate that the dance animation has been triggered
+            hasDanced = true;
+        }
     }
+
+
+
+
 
 
 
@@ -104,12 +133,31 @@ public class EnemyScript : MonoBehaviour
         // Calculate the direction to move towards the player
         Vector3 directionToPlayer = (playerTransform.position - transform.position).normalized;
 
-        // Move the enemy towards the player
-        transform.Translate(directionToPlayer * moveSpeed * Time.deltaTime, Space.World);
+        // Calculate the distance to the player
+        float distanceToPlayer = Vector3.Distance(transform.position, playerTransform.position);
+
+        // Calculate the minimum distance at which the enemy should push away
+        float minPushDistance = 1.0f; // You can adjust this value as needed
+
+        // Check if the enemy is too close to the player
+        if (distanceToPlayer < minPushDistance)
+        {
+            // Calculate the direction to push the enemy away from the player
+            Vector3 pushDirection = -directionToPlayer;
+
+            // Move the enemy away from the player
+            transform.Translate(pushDirection * moveSpeed * Time.deltaTime, Space.World);
+        }
+        else
+        {
+            // If the enemy is not too close, simply move towards the player
+            transform.Translate(directionToPlayer * moveSpeed * Time.deltaTime, Space.World);
+        }
 
         // Avoid standing too close to other enemies
         AvoidOtherEnemies();
     }
+
 
     private void AvoidOtherEnemies()
     {
@@ -210,6 +258,18 @@ public class EnemyScript : MonoBehaviour
         {
             rb.AddForce(appliedForce);
         }
+    }
+
+    private void TriggerDanceAnimationOnce()
+    {
+        // List of dance animation trigger names
+        string[] danceAnimations = { "Dance1", "Dance2", "Dance3" };
+
+        // Choose a random dance animation
+        string randomDanceAnimation = danceAnimations[Random.Range(0, danceAnimations.Length)];
+
+        // Trigger the chosen dance animation
+        anim.SetTrigger(randomDanceAnimation);
     }
 
     public void HitEvent()
