@@ -190,7 +190,7 @@ public class TacticalMode : MonoBehaviour
         }
 
         // Attack
-        if (canAttack && (Input.GetMouseButtonDown(0)) && !tacticalMode && !usingAbility)
+        if (canAttack && (Input.GetMouseButtonDown(0) || Input.GetButtonDown("Square")) && !tacticalMode && !usingAbility)
         {
             if (Time.time - lastAttackTime > 1f)
             {
