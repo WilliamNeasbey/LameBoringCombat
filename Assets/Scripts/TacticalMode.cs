@@ -221,7 +221,7 @@ public class TacticalMode : MonoBehaviour
         }
 
 
-        if (Input.GetKeyDown(KeyCode.Tab))
+        if (Input.GetKeyDown(KeyCode.Tab) || Input.GetButtonDown("R3"))
         {
             ToggleLockOnTarget(true); // Cycle forward when Tab is pressed
         }
@@ -862,7 +862,7 @@ public class TacticalMode : MonoBehaviour
 
             if (lockedTarget != null && playerTransform != null)
             {
-                if (Input.GetKey(KeyCode.Tab)) // Keep looking at the target while Tab is pressed
+                if (Input.GetKey(KeyCode.Tab) || Input.GetButtonDown("R3")) // Keep looking at the target while Tab is pressed
                 {
                     Vector3 lookDirection = lockedTarget.position - playerCharacter.position;
                     Quaternion lookRotation = Quaternion.LookRotation(lookDirection, Vector3.up);
