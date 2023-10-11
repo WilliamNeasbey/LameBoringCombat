@@ -226,7 +226,7 @@ public class TacticalMode : MonoBehaviour
             ToggleLockOnTarget(true); // Cycle forward when Tab is pressed
         }
 
-        if (Input.GetMouseButtonDown(1) && !usingAbility)
+        if ((Input.GetMouseButtonDown(1) || Input.GetButtonDown("R1")) && !usingAbility)
         {
             if (atbCount > 0 && !tacticalMode)
                 SetTacticalMode(true);
