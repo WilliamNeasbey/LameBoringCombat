@@ -314,50 +314,18 @@ public class TacticalMode : MonoBehaviour
         }
 
         /*
-        //dash
         if ((Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift)) && !isDashing)
         {
-            // Check if there is enough ATB to perform the shift move
+            // Check if there is enough ATB to perform the dash
             if (atbSlider >= 20)
             {
-                // Consume 20 ATB only when the dash starts
-                ModifyATB(-20);
-                isDashing = true;
-
-                // Store the dash start and end positions
-                dashStartPosition = transform.position;
-                float horizontalInput = Input.GetAxis("Horizontal");
-                float verticalInput = Input.GetAxis("Vertical");
-                Vector3 moveDirection = new Vector3(horizontalInput, 0, verticalInput).normalized;
-                dashEndPosition = transform.position + moveDirection * 20f; // Adjust the dash distance as needed
-
-                // Store the dash start time
-                dashStartTime = Time.time;
+                StartCoroutine(Dash());
             }
             else
             {
-                Debug.Log("Not enough ATB for Shift move.");
+                Debug.Log("Not enough ATB for Dash.");
             }
         }
-
-        if (isDashing)
-        {
-            // Calculate the current progress of the dash
-            float dashProgress = (Time.time - dashStartTime) / dashDuration;
-
-            // Move the player towards the dash end position
-            transform.position = Vector3.Lerp(dashStartPosition, dashEndPosition, dashProgress);
-
-            // Check if the dash is complete
-            if (dashProgress >= 1.0f)
-            {
-                isDashing = false;
-
-                // Reset the character's position to the dash end position to avoid small offsets
-                transform.position = dashEndPosition;
-            }
-        }
-
         */
 
     }
