@@ -201,6 +201,9 @@ public class CharacterMovement : MonoBehaviour
 		isDashing = true;
 		float dashEndTime = Time.time + dashDuration;
 
+		// Trigger the dash animation
+		anim.SetTrigger("DashTrigger");
+
 		// Calculate the dash direction based on player input
 		Vector3 inputDirection = new Vector3(InputX, 0, InputZ).normalized;
 
@@ -217,8 +220,13 @@ public class CharacterMovement : MonoBehaviour
 			}
 		}
 
+		// Stop the dash animation
+		anim.ResetTrigger("DashTrigger");
+
 		isDashing = false;
 	}
+
+
 
 
 
