@@ -2631,6 +2631,9 @@ MonoBehaviour:
   gravity: 70
   verticalVel: 0
   jumpForce: 40
+  dashSpeed: 10
+  dashDuration: 0.5
+  dashCooldown: 2
 --- !u!1 &173202593
 GameObject:
   m_ObjectHideFlags: 0
@@ -15840,11 +15843,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6332190415429669905, guid: 1e5fd67c67322804fa670601dafedac1, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.05206172
+      value: 0.052061684
       objectReference: {fileID: 0}
     - target: {fileID: 6332190415429669905, guid: 1e5fd67c67322804fa670601dafedac1, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.005350943
+      value: 0.005350939
       objectReference: {fileID: 0}
     - target: {fileID: 6332190415429669905, guid: 1e5fd67c67322804fa670601dafedac1, type: 3}
       propertyPath: m_LocalRotation.y
@@ -15852,7 +15855,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6332190415429669905, guid: 1e5fd67c67322804fa670601dafedac1, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.10210202
+      value: -0.10210203
       objectReference: {fileID: 0}
     - target: {fileID: 6332190415429669906, guid: 1e5fd67c67322804fa670601dafedac1, type: 3}
       propertyPath: m_Lens.m_SensorSize.x
@@ -17330,6 +17333,9 @@ MonoBehaviour:
   gravity: 70
   verticalVel: 0
   jumpForce: 40
+  dashSpeed: 10
+  dashDuration: 0.5
+  dashCooldown: 2
 --- !u!4 &653359684 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 8d6bb0967a9efd34e87e00fd231ec1c2, type: 3}
@@ -35617,7 +35623,7 @@ MonoBehaviour:
   m_OverrideVoxelSize: 0
   m_VoxelSize: 0.16666667
   m_MinRegionArea: 2
-  m_NavMeshData: {fileID: 23800000, guid: 96c5e6f6350d352489ef0ae805bc09fb, type: 2}
+  m_NavMeshData: {fileID: 23800000, guid: 04be2a88e9382df478f84fd31358df42, type: 2}
   m_BuildHeightMesh: 0
 --- !u!4 &1453151385
 Transform:
@@ -56252,6 +56258,7 @@ GameObject:
   - component: {fileID: 163538515}
   - component: {fileID: 163538514}
   - component: {fileID: 163538513}
+  - component: {fileID: 919132148061955271}
   - component: {fileID: 919132148061955269}
   - component: {fileID: 919132148061955270}
   m_Layer: 8
@@ -56297,6 +56304,20 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!114 &919132148061955271
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 919132148061955268}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b1b909627fc96a4596207b16bade857, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dashSpeed: 20
+  dashTime: 0.25
 --- !u!4 &1031632035306292259
 Transform:
   m_ObjectHideFlags: 0

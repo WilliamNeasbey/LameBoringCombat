@@ -41,6 +41,13 @@ public class CharacterMovement : MonoBehaviour
 	private Vector3 moveVector;
 	private TacticalMode gameScript;
 
+
+	private bool isDashing = false;
+	public float dashSpeed = 10f;
+	public float dashDuration = 0.5f;
+	public float dashCooldown = 2.0f;
+	private float dashCooldownTimer = 0.0f;
+
 	// Use this for initialization
 	void Start()
 	{
@@ -57,7 +64,14 @@ public class CharacterMovement : MonoBehaviour
 		if (gameScript.usingAbility)
 			return;
 		InputMagnitude();
-		
+
+		// Check for dashing
+		if (Input.GetKeyDown(KeyCode.LeftShift) && !isDashing && Time.time >= dashCooldownTimer)
+		{
+			StartCoroutine(Dash());
+			dashCooldownTimer = Time.time + dashCooldown;
+		}
+
 		// Check if the character is grounded with tolerance
 		//isGrounded = CheckIfGroundedWithTolerance();
 
@@ -181,4 +195,34 @@ public class CharacterMovement : MonoBehaviour
 			anim.SetFloat("Blend", Speed, StopAnimTime, Time.deltaTime);
 		}
 	}
+
+	IEnumerator Dash()
+	{
+		isDashing = true;
+		float dashEndTime = Time.time + dashDuration;
+
+		// Calculate the dash direction based on player input
+		Vector3 inputDirection = new Vector3(InputX, 0, InputZ).normalized;
+
+		if (inputDirection != Vector3.zero)
+		{
+			// Calculate the movement relative to the camera
+			Vector3 dashDirection = cam.transform.TransformDirection(inputDirection);
+
+			while (Time.time < dashEndTime)
+			{
+				// Apply the dash using the calculated movement direction
+				controller.Move(dashDirection * dashSpeed * Time.deltaTime);
+				yield return null;
+			}
+		}
+
+		isDashing = false;
+	}
+
+
+
+
+
+
 }
