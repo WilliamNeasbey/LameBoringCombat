@@ -22,8 +22,11 @@ public class UIManager : MonoBehaviour
     public bool aimAtTarget;
 
     public Slider atbSlider;
-    public Image atbCompleteLeft;
-    public Image atbCompleteRight;
+    public Image atbComplete1;
+    public Image atbComplete2;
+    public Image atbComplete3;
+    public Image atbComplete4;
+    
     void Start()
     {
 
@@ -67,8 +70,10 @@ public class UIManager : MonoBehaviour
         atbSlider.DOComplete();
         atbSlider.DOValue(gameScript.atbSlider, .15f);
 
-        atbCompleteLeft.DOFade(gameScript.atbSlider >= 100 ? 1 : 0, .2f);
-        atbCompleteRight.DOFade(gameScript.atbSlider >= 200 ? 1 : 0, .2f);
+        atbComplete1.DOFade(gameScript.atbSlider >= 100 ? 1 : 0, .2f);
+        atbComplete2.DOFade(gameScript.atbSlider >= 200 ? 1 : 0, .2f);
+        atbComplete3.DOFade(gameScript.atbSlider >= 300 ? 1 : 0, .2f);
+        atbComplete4.DOFade(gameScript.atbSlider >= 400 ? 1 : 0, .2f);
     }
 
     public void ShowTacticalMenu(bool on)

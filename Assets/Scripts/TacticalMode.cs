@@ -39,7 +39,7 @@ public class TacticalMode : MonoBehaviour
     public float rotationSpeed = 5.0f; // Adjust the rotation speed as needed
     public float health = 100f;
     public GameObject projectilePrefab;
-    public float atbRechargeRate = 10.0f; // Adjust the recharge rate as needed
+    public float atbRechargeRate = 50.0f; // Adjust the recharge rate as needed
 
 
     [Header("Time Stats")]
@@ -292,7 +292,7 @@ public class TacticalMode : MonoBehaviour
             }
 
             // Increase the ATB value while the button is held until it reaches the max
-            if (atbSlider < filledAtbValue * 2)
+            if (atbSlider < filledAtbValue * 4)
             {
                 ModifyATB(Time.deltaTime * atbRechargeRate); // Adjust atbRechargeRate as needed
             }
@@ -522,7 +522,7 @@ public class TacticalMode : MonoBehaviour
         OnModificationATB.Invoke();
 
         atbSlider += amount;
-        atbSlider = Mathf.Clamp(atbSlider, 0, (filledAtbValue * 2));
+        atbSlider = Mathf.Clamp(atbSlider, 0, (filledAtbValue * 4));
 
         if (amount > 0)
         {
