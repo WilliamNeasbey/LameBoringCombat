@@ -62,6 +62,14 @@ public class CharacterSelectDisplay : NetworkBehaviour
 
         if (IsServer)
         {
+            // Spawn character objects for each player
+            Character[] allCharacters = characterDatabase.GetAllCharacters();
+            foreach (var character in allCharacters)
+            {
+                var selectbuttonInstance = Instantiate(selectButtonPrefab, charactersHolder);
+                selectbuttonInstance.SetCharacter(this, character);
+                characterButtons.Add(selectbuttonInstance);
+            }
             NetworkManager.Singleton.OnClientConnectedCallback -= HandleClientConnected;
             NetworkManager.Singleton.OnClientDisconnectCallback -= HandleClientDisconnected;
         }
@@ -85,9 +93,11 @@ public class CharacterSelectDisplay : NetworkBehaviour
 
     public void Select(Character character)
     {
+        ulong localClientId = IsServer ? NetworkManager.ServerClientId : NetworkManager.Singleton.LocalClientId;
+
         for (int i = 0; i < players.Count; i++)
         {
-            if (players[i].ClientId != NetworkManager.Singleton.LocalClientId) { continue; }
+            if (players[i].ClientId != localClientId) { continue; }
 
             if (players[i].IsLockedIn) { return; }
 
@@ -113,9 +123,11 @@ public class CharacterSelectDisplay : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     private void SelectServerRpc(int characterId, ServerRpcParams serverRpcParams = default)
     {
+        ulong senderClientId = serverRpcParams.Receive.SenderClientId;
+
         for (int i = 0; i < players.Count; i++)
         {
-            if (players[i].ClientId != serverRpcParams.Receive.SenderClientId) { continue; }
+            if (players[i].ClientId != senderClientId) { continue; }
 
             if (!characterDatabase.IsValidCharacterId(characterId)) { return; }
 
@@ -137,9 +149,11 @@ public class CharacterSelectDisplay : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     private void LockInServerRpc(ServerRpcParams serverRpcParams = default)
     {
+        ulong senderClientId = serverRpcParams.Receive.SenderClientId;
+
         for (int i = 0; i < players.Count; i++)
         {
-            if (players[i].ClientId != serverRpcParams.Receive.SenderClientId) { continue; }
+            if (players[i].ClientId != senderClientId) { continue; }
 
             if (!characterDatabase.IsValidCharacterId(players[i].CharacterId)) { return; }
 
@@ -157,7 +171,7 @@ public class CharacterSelectDisplay : NetworkBehaviour
             if (!player.IsLockedIn) { return; }
         }
 
-        foreach(var player in players)
+        foreach (var player in players)
         {
             ServerManager.Instance.SetCharacter(player.ClientId, player.CharacterId);
         }
@@ -167,6 +181,8 @@ public class CharacterSelectDisplay : NetworkBehaviour
 
     private void HandlePlayersStateChanged(NetworkListEvent<CharacterSelectState> changeEvent)
     {
+        ulong localClientId = IsServer ? NetworkManager.ServerClientId : NetworkManager.Singleton.LocalClientId;
+
         for (int i = 0; i < playerCards.Length; i++)
         {
             if (players.Count > i)
@@ -191,7 +207,7 @@ public class CharacterSelectDisplay : NetworkBehaviour
 
         foreach (var player in players)
         {
-            if (player.ClientId != NetworkManager.Singleton.LocalClientId) { continue; }
+            if (player.ClientId != localClientId) { continue; }
 
             if (player.IsLockedIn)
             {
@@ -206,18 +222,19 @@ public class CharacterSelectDisplay : NetworkBehaviour
             }
 
             lockInButton.interactable = true;
-
             break;
         }
     }
 
     private bool IsCharacterTaken(int characterId, bool checkAll)
     {
+        ulong localClientId = IsServer ? NetworkManager.ServerClientId : NetworkManager.Singleton.LocalClientId;
+
         for (int i = 0; i < players.Count; i++)
         {
             if (!checkAll)
             {
-                if (players[i].ClientId == NetworkManager.Singleton.LocalClientId) { continue; }
+                if (players[i].ClientId == localClientId) { continue; }
             }
 
             if (players[i].IsLockedIn && players[i].CharacterId == characterId)

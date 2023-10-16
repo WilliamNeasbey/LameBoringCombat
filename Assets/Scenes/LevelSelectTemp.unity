@@ -808,7 +808,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterSelectSceneName: CharacterSelect
-  gameplaySceneName: Gameplay
+  gameplaySceneName: Lobby1
 --- !u!4 &637175438
 Transform:
   m_ObjectHideFlags: 0
@@ -913,7 +913,7 @@ MonoBehaviour:
   authenticator: {fileID: 0}
   playerPrefab: {fileID: 0}
   autoCreatePlayer: 0
-  playerSpawnMethod: 0
+  playerSpawnMethod: 1
   spawnPrefabs:
   - {fileID: 0}
   snapshotSettings:

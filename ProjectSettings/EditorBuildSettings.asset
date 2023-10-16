@@ -32,7 +32,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/LevelSelectTemp.unity
     guid: 294d792347a582142a85c04dc227fa0a
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/Lobby1.unity
     guid: bbe7db194e7a2ef41b7c03652ce2449e
   - enabled: 1

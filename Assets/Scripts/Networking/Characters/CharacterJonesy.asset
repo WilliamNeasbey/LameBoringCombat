@@ -16,4 +16,4 @@ MonoBehaviour:
   displayName: Defaukt Skin
   icon: {fileID: 21300000, guid: 7341607379528aa4d8fa31e431d94408, type: 3}
   introPrefab: {fileID: 2748259094593885307, guid: 0225d88fa2c8cdb429dc217095d2d03c, type: 3}
-  gameplayPrefab: {fileID: 8350168429079467084, guid: 75c77d2e575247543b1c0b2478b043b6, type: 3}
+  gameplayPrefab: {fileID: 0}
