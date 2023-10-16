@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 10b06c7c69874ad4390b6d9b4d73ce98, type: 3}
+  m_Name: CharacterAstroNaut
+  m_EditorClassIdentifier: 
+  id: 14
+  displayName: Astronaut
+  icon: {fileID: 21300000, guid: c395e7bd1c87ef6468c1c44a73580c22, type: 3}
+  introPrefab: {fileID: 3154260321502022289, guid: 92a577cb911363f4aa2cd6eeaf7e7d2c, type: 3}
+  gameplayPrefab: {fileID: 8350168429079467084, guid: f0fc9741232fe7a4db2491fe35362b41, type: 3}

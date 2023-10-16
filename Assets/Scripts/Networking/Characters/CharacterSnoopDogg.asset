@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 10b06c7c69874ad4390b6d9b4d73ce98, type: 3}
+  m_Name: CharacterSnoopDogg
+  m_EditorClassIdentifier: 
+  id: 20
+  displayName: SnoopDogg
+  icon: {fileID: 21300000, guid: de4271eb61bd4704b9c25190a0630617, type: 3}
+  introPrefab: {fileID: 7950217998531542586, guid: cbc55371d7a5df74aae6dc92596a21ed, type: 3}
+  gameplayPrefab: {fileID: 8350168429079467084, guid: f0267af55e2fe84448afde1652e33c2c, type: 3}

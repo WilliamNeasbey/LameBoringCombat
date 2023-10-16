@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 
 public class ServerManager : MonoBehaviour
 {
-    /*
+    
     [Header("Settings")]
     [SerializeField] private string characterSelectSceneName = "CharacterSelect";
     [SerializeField] private string gameplaySceneName = "Gameplay";
@@ -99,5 +99,5 @@ public class ServerManager : MonoBehaviour
         NetworkManager.Singleton.SceneManager.LoadScene(gameplaySceneName, LoadSceneMode.Single);
     }
 
-    */
+    
 }
