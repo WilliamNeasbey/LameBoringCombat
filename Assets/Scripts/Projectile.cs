@@ -37,7 +37,7 @@ public class Projectile : MonoBehaviour
         else
         {
             // If the target is null (for example, the target is destroyed), destroy the projectile
-            Destroy(gameObject);
+           // Destroy(gameObject);
         }
     }
 }

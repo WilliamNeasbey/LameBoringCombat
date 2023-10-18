@@ -128,6 +128,19 @@ public class TacticalMode : MonoBehaviour
     public float ragdollForce = 500f; // Adjust the force magnitude as needed
     public float forceRandomRange = 100f; // Adjust the random range as needed
 
+    //Swords of sparta
+    private bool isSwordsOfSpartaActive = false;
+    private float swordsOfSpartaDuration = 5f; // Duration for Swords of Sparta effect
+
+    public GameObject swordsOfSpartaObject; // Reference to the Swords of Sparta game object
+    public AudioSource swordsOfSpartaActivationSound; // Sound to play on Swords of Sparta activation
+
+
+    //Kikoken
+    public GameObject KikokenPrefab;
+    [SerializeField] private Transform projectilePosition; 
+    public AudioSource KikokenSound; 
+
     private void Start()
     {
         originalCharacterRotation = playerCharacter.rotation;
@@ -357,7 +370,67 @@ public class TacticalMode : MonoBehaviour
             }
         }
         */
+        if (Input.GetKeyDown(KeyCode.V))
+        {
+            SwordsOfSparta();
+        }
+        
+        if (Input.GetKeyDown(KeyCode.Z))
+        {
+            Kikoken();
+        }
+    }
 
+   
+
+
+    private void SwordsOfSparta()
+    {
+        isSwordsOfSpartaActive = true;
+        swordsOfSpartaObject.SetActive(true);
+
+        // Play the Swords of Sparta activation sound
+        if (swordsOfSpartaActivationSound != null)
+            swordsOfSpartaActivationSound.Play();
+
+        // Disable the Swords of Sparta object after the specified duration
+        StartCoroutine(DeactivateSwordsOfSparta());
+    }
+
+
+    private IEnumerator DeactivateSwordsOfSparta()
+    {
+        yield return new WaitForSeconds(swordsOfSpartaDuration);
+
+        // Deactivate the Swords of Sparta object and reset the flag
+        swordsOfSpartaObject.SetActive(false);
+        isSwordsOfSpartaActive = false;
+    }
+
+    public void Kikoken()
+    {
+
+        // Play the Kamehameha animation
+        anim.SetTrigger("Kikoken");
+
+        // Play the Kamehameha sound
+        if (KikokenSound != null)
+            KikokenSound.Play();
+
+        // Wait for a short delay to synchronize with the animation
+        StartCoroutine(PerformKikokenWithDelay());
+
+       
+    }
+
+    
+
+    private IEnumerator PerformKikokenWithDelay()
+    {
+        yield return new WaitForSeconds(0.5f); // Adjust the delay as needed
+
+        // Instantiate the kamehameha prefab at the kick position with the same rotation as the player
+        GameObject kamehamehaObject = Instantiate(KikokenPrefab, projectilePosition.position, transform.rotation);
     }
 
     public void Hadouken()
