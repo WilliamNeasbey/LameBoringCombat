@@ -220,13 +220,43 @@ public class TacticalMode : MonoBehaviour
             StartCoroutine(ComboCooldown());
         }
 
+        // Attack
+        if (canAttack && (Input.GetMouseButtonDown(1) || Input.GetButtonDown("Square")) && !tacticalMode && !usingAbility)
+        {
+            if (Time.time - lastAttackTime > 1f)
+            {
+                // Reset combo count if it's been too long since the last attack
+                comboCount = 0;
+            }
+
+            if (comboCount == 0)
+            {
+                anim.SetTrigger("LowKick");
+            }
+            else if (comboCount == 1)
+            {
+                anim.SetTrigger("MidKick"); // Trigger the second punch animation
+            }
+            else if (comboCount == 2)
+            {
+                anim.SetTrigger("HighKick");
+            }
+
+            comboCount = (comboCount + 1) % 3; // Increment combo count and wrap around
+
+            lastAttackTime = Time.time;
+
+            // Disable further attacks for a brief moment
+            canAttack = false;
+            StartCoroutine(ComboCooldown());
+        }
 
         if (Input.GetKeyDown(KeyCode.Tab) || Input.GetButtonDown("R3"))
         {
             ToggleLockOnTarget(true); // Cycle forward when Tab is pressed
         }
 
-        if ((Input.GetMouseButtonDown(1) || Input.GetButtonDown("R1")) && !usingAbility)
+        if ((Input.GetKeyDown(KeyCode.LeftControl) || Input.GetButtonDown("R1")) && !usingAbility)
         {
             if (atbCount > 0 && !tacticalMode)
                 SetTacticalMode(true);
