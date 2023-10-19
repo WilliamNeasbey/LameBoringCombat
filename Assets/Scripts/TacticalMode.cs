@@ -384,9 +384,17 @@ public class TacticalMode : MonoBehaviour
    
 
 
-    private void SwordsOfSparta()
+    public void SwordsOfSparta()
     {
-        isSwordsOfSpartaActive = true;
+        if (atbSlider >= 200)
+        {
+            ModifyATB(-200);
+
+            StartCoroutine(AbilityCooldown());
+
+            SetTacticalMode(false);
+
+                   isSwordsOfSpartaActive = true;
         swordsOfSpartaObject.SetActive(true);
 
         // Play the Swords of Sparta activation sound
@@ -395,6 +403,12 @@ public class TacticalMode : MonoBehaviour
 
         // Disable the Swords of Sparta object after the specified duration
         StartCoroutine(DeactivateSwordsOfSparta());
+        }
+        else
+        {
+            Debug.Log("Not enough ATB for Hadouken.");
+        }
+
     }
 
 
@@ -409,7 +423,13 @@ public class TacticalMode : MonoBehaviour
 
     public void Kikoken()
     {
+        if (atbSlider >= 100)
+        {
+            ModifyATB(-100);
 
+            StartCoroutine(AbilityCooldown());
+
+            SetTacticalMode(false);
         // Play the Kamehameha animation
         anim.SetTrigger("Kikoken");
 
@@ -419,6 +439,19 @@ public class TacticalMode : MonoBehaviour
 
         // Wait for a short delay to synchronize with the animation
         StartCoroutine(PerformKikokenWithDelay());
+        
+
+        
+
+        }
+
+        
+
+        else
+        {
+            Debug.Log("Not enough ATB for Hadouken.");
+        }
+       
 
        
     }
@@ -435,9 +468,10 @@ public class TacticalMode : MonoBehaviour
 
     public void Hadouken()
     {
-        if (atbSlider >= 100)
+        //This is actually the kamehameha
+        if (atbSlider >= 200)
         {
-            ModifyATB(-100);
+            ModifyATB(-200);
 
             StartCoroutine(AbilityCooldown());
 

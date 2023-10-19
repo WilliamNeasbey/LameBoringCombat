@@ -19,11 +19,15 @@ public class ButtonEvent : MonoBehaviour, ISubmitHandler, ISelectHandler, IDesel
         ButtonA,
         ButtonB,
         ButtonC,
+        ButtonD,
+        ButtonE,
         // Add more button types as needed
     }
     public UnityEvent ButtonAConfirmEvent;
     public UnityEvent ButtonBConfirmEvent;
     public UnityEvent ButtonCConfirmEvent;
+    public UnityEvent ButtonDConfirmEvent;
+    public UnityEvent ButtonEConfirmEvent;
     private void Start()
     {
         pos = transform.position;
@@ -42,6 +46,16 @@ public class ButtonEvent : MonoBehaviour, ISubmitHandler, ISelectHandler, IDesel
     public void SetC()
     {
         buttonType = ButtonType.ButtonC;
+    }
+    
+    public void SetD()
+    {
+        buttonType = ButtonType.ButtonD;
+    } 
+    
+    public void SetE()
+    {
+        buttonType = ButtonType.ButtonE;
     }
    
     IEnumerator WaitForFrames()
@@ -78,6 +92,14 @@ public class ButtonEvent : MonoBehaviour, ISubmitHandler, ISelectHandler, IDesel
 
             case ButtonType.ButtonC:
                 ButtonCConfirmEvent.Invoke();
+                break;
+            
+            case ButtonType.ButtonD:
+                ButtonDConfirmEvent.Invoke();
+                break;
+            
+            case ButtonType.ButtonE:
+                ButtonEConfirmEvent.Invoke();
                 break;
 
             // Add cases for other button types as needed
