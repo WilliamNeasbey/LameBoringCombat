@@ -32,6 +32,8 @@ public class TacticalMode : MonoBehaviour
     public GameObject RightFistObject;
     public LeftFistCollision leftFist;
     public GameObject LeftFistObject;
+    public LeftLegCollision leftLeg;
+    public GameObject LeftLegObject;
     public Transform playerCharacter;
     public Transform playerTransform;
     public float standAwayDistance = 1.0f; // Adjust as needed
@@ -139,7 +141,15 @@ public class TacticalMode : MonoBehaviour
     //Kikoken
     public GameObject KikokenPrefab;
     [SerializeField] private Transform projectilePosition; 
-    public AudioSource KikokenSound; 
+    public AudioSource KikokenSound;
+
+    //teleport kick shadow nothing personal kid edgy kick from sonic06
+    public float teleportDistance = 5f; // Adjust the teleport distance as needed
+    public float teleportCooldown = 5f; // Cooldown duration for the teleport ability
+    public LayerMask enemyLayer; // Specify the enemy layer in the Inspector
+
+    private bool isTeleportOnCooldown = false;
+    private float lastTeleportTime = 0f;
 
     private void Start()
     {
@@ -372,7 +382,7 @@ public class TacticalMode : MonoBehaviour
         */
         if (Input.GetKeyDown(KeyCode.V))
         {
-            SwordsOfSparta();
+            BreakItDown();
         }
         
         if (Input.GetKeyDown(KeyCode.Z))
@@ -381,8 +391,46 @@ public class TacticalMode : MonoBehaviour
         }
     }
 
-   
+    /*
+    private void TeleportKick()
+    {
+        if (atbSlider >= 100 && !isTeleportOnCooldown)
+        {
+            // Deduct ATB points
+            ModifyATB(-100);
 
+            // Find the selected enemy (you can use your existing logic)
+
+            // Calculate teleport destination position in front of the selected enemy
+            Vector3 teleportDestination = CalculateTeleportDestination(selectedEnemy);
+
+            // Play teleport sound
+            PlayTeleportSound();
+
+            // Teleport to the target's position
+            MoveTowardsTarget(selectedEnemy);
+
+            // Trigger the kick animation
+            anim.SetTrigger("Kick");
+
+            // Play the kick sound
+            PlayKickSound();
+
+            // Play voice line
+            PlayVoiceLineForKick();
+
+            // Set teleport cooldown
+            isTeleportOnCooldown = true;
+            lastTeleportTime = Time.time;
+
+            // You may need to handle other game logic, such as damage to the enemy.
+        }
+        else
+        {
+            Debug.Log("Not enough ATB for teleport kick or still on cooldown.");
+        }
+    }
+    */
 
     public void SwordsOfSparta()
     {
@@ -426,37 +474,43 @@ public class TacticalMode : MonoBehaviour
         if (atbSlider >= 100)
         {
             ModifyATB(-100);
-
             StartCoroutine(AbilityCooldown());
-
             SetTacticalMode(false);
-        // Play the Kamehameha animation
-        anim.SetTrigger("Kikoken");
 
-        // Play the Kamehameha sound
-        if (KikokenSound != null)
-            KikokenSound.Play();
+            // Get the nearest enemy to the player
+            int nearestTargetIndex = NearestTargetToCenter();
+            if (nearestTargetIndex >= 0 && nearestTargetIndex < targets.Count)
+            {
+                Transform nearestEnemy = targets[nearestTargetIndex];
 
-        // Wait for a short delay to synchronize with the animation
-        StartCoroutine(PerformKikokenWithDelay());
-        
+                // Calculate the direction from the player to the nearest enemy
+                Vector3 lookDirection = nearestEnemy.position - playerCharacter.position;
 
-        
+                // Use Quaternion.LookRotation to smoothly rotate the player character's view
+                Quaternion lookRotation = Quaternion.LookRotation(lookDirection, Vector3.up);
 
+                // Apply the rotation to the player character's transform
+                playerCharacter.rotation = lookRotation;
+            }
+
+            // Play the Kamehameha animation
+            anim.SetTrigger("Kikoken");
+
+            // Play the Kikoken sound
+            if (KikokenSound != null)
+                KikokenSound.Play();
+
+            // Wait for a short delay to synchronize with the animation
+            StartCoroutine(PerformKikokenWithDelay());
         }
-
-        
-
         else
         {
-            Debug.Log("Not enough ATB for Hadouken.");
+            Debug.Log("Not enough ATB for Kikoken.");
         }
-       
-
-       
     }
 
-    
+
+
 
     private IEnumerator PerformKikokenWithDelay()
     {
@@ -542,6 +596,33 @@ public class TacticalMode : MonoBehaviour
 
             // Animation
             anim.SetTrigger("AirKick3");
+
+            // Polish
+            PlayVFX(abilityVFX, false);
+            LightColor(groundLight, abilityColot, .3f);
+            RoadHouseSound.Play();
+        }
+        else
+        {
+            // Display a message or perform some action to indicate that the player doesn't have enough ATB.
+            Debug.Log("Not enough ATB for LightningKicks.");
+        }
+    }  
+    
+    public void BreakItDown()
+    {
+        if (atbSlider >= 100) // Check if the player has at least 100 ATB points
+        {
+            ModifyATB(-100); // Deduct 100 ATB points
+
+            StartCoroutine(AbilityCooldown());
+
+            SetTacticalMode(false);
+
+            MoveTowardsTarget(targets[targetIndex]);
+
+            // Animation
+            anim.SetTrigger("BreakDance");
 
             // Polish
             PlayVFX(abilityVFX, false);
@@ -815,6 +896,16 @@ public class TacticalMode : MonoBehaviour
     {
 
         LeftFistObject.SetActive(false);
+    }
+    public void HitEventLeftLeg()
+    {
+        VFXDir = 5;
+        LeftLegObject.SetActive(true);
+    }
+    public void HitDisableLeftLeg()
+    {
+
+        LeftLegObject.SetActive(false);
     }
 
     public void HitEventKamehameha()
