@@ -43,6 +43,8 @@ public class TacticalMode : MonoBehaviour
     public GameObject projectilePrefab;
     public float atbRechargeRate = 50.0f; // Adjust the recharge rate as needed
 
+    public LockOnUI lockOnUITarget;
+
 
     [Header("Time Stats")]
     public float slowMotionTime = .005f;
@@ -1003,6 +1005,10 @@ public class TacticalMode : MonoBehaviour
         {
             isLockedOn = false;
             anim.SetBool("LockOnAnimation", false); // Set LockOnAnimation to false
+            if (lockOnUITarget != null)
+            {
+                lockOnUITarget.SetTarget(null); // Unset the target for the UI Image
+            }
             return;
         }
 
@@ -1010,21 +1016,45 @@ public class TacticalMode : MonoBehaviour
 
         if (isLockedOn)
         {
-            // If lock-on is enabled, set the character's rotation to face the locked target
+            // Determine the targetIndex here
+            Transform lockedOnTarget = GetLockedOnTargetTransform(targetIndex);
+
+            // Set the character's view to the locked target
             SetCharacterViewToLockedTarget(targetIndex);
-        }
-        else
-        {
-            // If lock-on is disabled, reset the character's rotation to its original direction
-            playerCharacter.rotation = originalCharacterRotation;
+
+            if (lockOnUITarget != null)
+            {
+                lockOnUITarget.SetTarget(lockedOnTarget);
+            }
         }
 
-        // Call the method to update your existing target system with the new lockedTargetIndex
+        else
+        {
+            // Handle when lock-on is disabled
+            playerCharacter.rotation = originalCharacterRotation;
+
+            if (lockOnUITarget != null)
+            {
+                lockOnUITarget.SetTarget(null); // Unset the target for the UI Image
+            }
+        }
+
+        // Update your existing target system with the new lockedTargetIndex
         UpdateExistingTargetSystem(lockedTargetIndex);
     }
 
 
 
+
+    private Transform GetLockedOnTargetTransform(int targetIndex)
+    {
+        if (targetIndex >= 0 && targetIndex < targets.Count)
+        {
+            return targets[targetIndex];
+        }
+
+        return null; // Return null if the targetIndex is out of bounds
+    }
 
 
 
