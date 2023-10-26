@@ -19,6 +19,12 @@ public class EnemyScript : MonoBehaviour
     private float comboCooldown = 2f; // Adjust the cooldown time as needed
     private float minComboCooldown = .2f; // Minimum combo cooldown time (adjust as needed)
     private float maxComboCooldown = 1f; // Maximum combo cooldown time (adjust as needed)
+    private bool isHit = false; // Flag to control hit state
+    private float hitDuration = 0.5f; // Half a second hit duration
+    private float lastHitTime = 0f;
+    private bool isHitStun = false; // Flag to control hit stun state
+    private float hitStunDuration = 1.8f; // Adjust hit stun duration as needed
+    private float hitStunEndTime = 0f; // Add this variable to store the end time of hit stun
     private NavMeshAgent navMeshAgent;
     public GameObject ragdollPrefab;
     public float ragdollForce = 500f; // Adjust the force magnitude as needed
@@ -110,6 +116,21 @@ public class EnemyScript : MonoBehaviour
                     transform.rotation = Quaternion.LookRotation(moveDirection);
                 }
             }
+            // Check if the enemy is in a hit stun state
+            if (isHitStun)
+            {
+                // Check if the hit stun duration has passed
+                if (Time.time >= hitStunEndTime)
+                {
+                    isHitStun = false;
+                }
+            }
+
+            // If not in hit state or hit stun state, the enemy can attack
+            if (!isHit && !isHitStun)
+            {
+                AttackPlayer();
+            }
         }
         // Check if the player object is destroyed and the dance animation hasn't been triggered yet
         if (playerTransform == null && !hasDanced)
@@ -186,13 +207,24 @@ public class EnemyScript : MonoBehaviour
 
     private void AttackPlayer()
     {
-        // Check if it's time for the next combo step
-        if (Time.time - lastComboStepTime >= comboCooldown)
+        if (!isHitStun)
         {
-            lastComboStepTime = Time.time;
-            ComboStep();
+            // Check if it's time for the next combo step
+            if (Time.time - lastComboStepTime >= comboCooldown)
+            {
+                lastComboStepTime = Time.time;
+                ComboStep();
+            }
+        }
+
+        // If the enemy is in a hit state, check the hit duration
+        if (isHit && Time.time - lastHitTime >= hitDuration)
+        {
+            // Reset the hit state when the hit duration has passed
+            isHit = false;
         }
     }
+
 
     private void ComboStep()
     {
@@ -226,13 +258,41 @@ public class EnemyScript : MonoBehaviour
 
     public void GetHit()
     {
-        anim.SetTrigger("Hit");
-        health -= 10;
-        if (health <= 0f)
+        
+        // Apply damage
+            health -= 10;
+
+            // Trigger the hit animation
+            anim.SetTrigger("Hit");
+
+            // Check if the enemy's health is depleted
+            if (health <= 0f)
+            {
+                Die();
+            }
+        // Set the hit stun state and its end time
+        EnterHitStun();
+        // Check if the enemy is not already in a hit state
+        if (!isHit)
         {
-            Die();
+            // Set the hit state and duration
+            isHit = true;
+            lastHitTime = Time.time;
+
+            
         }
     }
+
+
+
+
+    private void EnterHitStun()
+    {
+        // Set hit stun state and its end time
+        isHitStun = true;
+        hitStunEndTime = Time.time + hitStunDuration;
+    }
+
 
     public void Die()
     {
