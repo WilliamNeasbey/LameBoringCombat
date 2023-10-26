@@ -256,7 +256,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d98cb60f5c07ade46980fcdb3eb9a32b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sceneName: AlexKiddStage
+  sceneName: ArenaStage
 --- !u!114 &232340860
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -497,7 +497,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d98cb60f5c07ade46980fcdb3eb9a32b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sceneName: SnoopDoggStage
+  sceneName: TutorialStage
 --- !u!1 &583497279
 GameObject:
   m_ObjectHideFlags: 0
@@ -683,7 +683,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d98cb60f5c07ade46980fcdb3eb9a32b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sceneName: ArenaStage
+  sceneName: SnoopDoggStage
 --- !u!114 &616870856
 MonoBehaviour:
   m_ObjectHideFlags: 0
