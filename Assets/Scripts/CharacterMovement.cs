@@ -111,16 +111,18 @@ public class CharacterMovement : MonoBehaviour
 		if (jumpCount == 0)
 		{
 			// First jump
-			anim.SetTrigger("JumpTrigger");
+			
 			verticalVel = jumpForce; // Set the initial jump force (adjust as needed)
 			jumpCount++;
+			anim.SetTrigger("JumpTrigger");
 		}
 		else if (jumpCount == 1)
 		{
 			// Second jump
-			anim.SetTrigger("SecondJumpTrigger");
+			
 			verticalVel = jumpForce; // Set the jump force for the second jump (adjust as needed)
 			jumpCount++;
+			anim.SetTrigger("SecondJumpTrigger");
 			canJump = false; // Disable jumping until grounded again
 		}
 	}
