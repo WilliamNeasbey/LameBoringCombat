@@ -87,6 +87,7 @@ public class TacticalMode : MonoBehaviour
     public VisualEffect abilityHitVFX;
     public VisualEffect healVFX;
     public GameObject kiChargingParticle;
+    public GameObject HealingParticle;
 
     [Space]
     [Header("Ligts")]
@@ -654,14 +655,23 @@ public class TacticalMode : MonoBehaviour
             // Animation
             anim.SetTrigger("heal");
 
-            // Polish
-            PlayVFX(healVFX, false);
+            // Activate the healing particles
+            HealingParticle.SetActive(true);
             LightColor(groundLight, healColor, 0.5f);
+
+            // Deactivate the particles after 2 seconds
+            StartCoroutine(DeactivateHealingParticlesAfterDelay(2.0f));
         }
         else
         {
             Debug.Log("Not enough ATB for the Heal spell.");
         }
+    }
+
+    private IEnumerator DeactivateHealingParticlesAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        HealingParticle.SetActive(false);
     }
 
 
