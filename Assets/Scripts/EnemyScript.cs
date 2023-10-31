@@ -365,4 +365,5 @@ public class EnemyScript : MonoBehaviour
         LeftFistObject.SetActive(false);
     }
 
+
 }
