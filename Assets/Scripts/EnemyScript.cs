@@ -300,6 +300,9 @@ public class EnemyScript : MonoBehaviour
         Destroy(gameObject);
         // Play death audio or perform other actions here
 
+        // Notify listeners that the enemy has died
+        SendMessage("OnEnemyDied", SendMessageOptions.DontRequireReceiver);
+
         // Spawn the ragdoll prefab at the same position as the enemy
         GameObject ragdoll = Instantiate(ragdollPrefab, transform.position, transform.rotation);
 
