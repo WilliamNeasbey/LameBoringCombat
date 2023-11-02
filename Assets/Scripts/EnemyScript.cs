@@ -42,6 +42,10 @@ public class EnemyScript : MonoBehaviour
     public RightFistCollisionEnemy rightFist;
     public GameObject RightFistObject;
 
+    public int pointsValue = 100; // Points to add when this enemy is destroyed
+
+    private PointCounter pointCounter;
+
     private void Awake()
     {
         timeBetweenAttacks = Random.Range(0.2f, 0.5f); // Adjusted time between attacks to be quicker
@@ -300,6 +304,8 @@ public class EnemyScript : MonoBehaviour
         Destroy(gameObject);
         // Play death audio or perform other actions here
 
+       
+
         // Notify listeners that the enemy has died
         SendMessage("OnEnemyDied", SendMessageOptions.DontRequireReceiver);
 
@@ -321,6 +327,14 @@ public class EnemyScript : MonoBehaviour
         {
             rb.AddForce(appliedForce);
         }
+
+        // Add points when the enemy is destroyed
+        PointCounter pointCounter = FindObjectOfType<PointCounter>();
+        if (pointCounter != null)
+        {
+            pointCounter.AddPoints(100); // Add 100 points for each destroyed enemy
+        }
+
     }
 
     private void TriggerDanceAnimationOnce()
