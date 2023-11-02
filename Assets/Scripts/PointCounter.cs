@@ -1,13 +1,20 @@
 using UnityEngine;
 using TMPro;
+using System.Collections; // Add this using directive for IEnumerator
 
 public class PointCounter : MonoBehaviour
 {
     public TextMeshProUGUI pointsText;
-    private int points = 0;
+    public int points = 0;
 
-    public int pointsIncreasePerSecond = 100; // Adjust this value as needed
+    public int pointsIncreasePerSecond = 0; // Adjust this value as needed
     private Coroutine increasePointsCoroutine;
+
+    public int Points // Add a public property to access the points
+    {
+        get { return points; }
+        private set { points = value; }
+    }
 
     private void Start()
     {
@@ -28,19 +35,5 @@ public class PointCounter : MonoBehaviour
 
   
 
-    private void StopIncreasingPoints()
-    {
-        if (increasePointsCoroutine != null)
-        {
-            StopCoroutine(increasePointsCoroutine);
-            increasePointsCoroutine = null;
-        }
-    }
-
-   
-
-    private void OnDestroy()
-    {
-        StopIncreasingPoints();
-    }
+    
 }

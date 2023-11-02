@@ -4,39 +4,55 @@ using TMPro;
 public class PurchaseItem : MonoBehaviour
 {
     public TextMeshProUGUI pointsText;
-    public int itemCost = 200; // Adjust the cost as needed
+    public int itemCost = 200;
     public GameObject itemToEnable;
     public GameObject purchaseUI;
     public GameObject alreadyPurchasedUI;
 
-    private int points = 1000; // Initialize with an initial point value
-    private bool isPlayerInsideTrigger = false; // Flag to track if the player is inside the trigger
-    private bool hasPurchasedItem = false; // Flag to track if the player has purchased the item
+    public PointCounter pointCounter; // Reference to the PointCounter script
+    private bool isPlayerInsideTrigger = false;
+    private bool hasPurchasedItem = false;
 
     void Start()
     {
-        UpdatePointsText();
+        // Find the PointCounter script in the scene and store a reference to it
+        pointCounter = FindObjectOfType<PointCounter>();
+
+        if (pointCounter == null)
+        {
+            Debug.LogError("PointCounter script not found in the scene.");
+        }
+
         UpdateUI();
     }
 
     void Update()
     {
-        // Check if the player presses the F key and is inside the trigger
         if (Input.GetKeyDown(KeyCode.F) && isPlayerInsideTrigger)
         {
             if (CanAffordItem() && !hasPurchasedItem)
             {
-                // Deduct the cost of the item
-                points -= itemCost;
-                UpdatePointsText();
+                if (pointCounter != null)
+                {
+                    if (pointCounter.points >= itemCost)
+                    {
+                        pointCounter.AddPoints(-itemCost);
+                        pointsText.text = "Points: " + pointCounter.points.ToString();
+                    }
+                    else
+                    {
+                        Debug.Log("Not enough points to purchase the item.");
+                        return;
+                    }
+                }
+                else
+                {
+                    Debug.LogError("PointCounter reference is null.");
+                    return;
+                }
 
-                // Enable the item in the hierarchy
                 itemToEnable.SetActive(true);
-
-                // Set the flag to indicate the item has been purchased
                 hasPurchasedItem = true;
-
-                // Update the UI
                 UpdateUI();
             }
             else
@@ -46,14 +62,8 @@ public class PurchaseItem : MonoBehaviour
         }
     }
 
-    void UpdatePointsText()
-    {
-        pointsText.text = "Points: " + points.ToString();
-    }
-
     void UpdateUI()
     {
-        // Show the appropriate UI based on whether the item has been purchased
         if (!hasPurchasedItem)
         {
             purchaseUI.SetActive(isPlayerInsideTrigger);
@@ -68,22 +78,18 @@ public class PurchaseItem : MonoBehaviour
 
     bool CanAffordItem()
     {
-        return points >= itemCost;
-    }
-
-    public void AddPoints(int amount)
-    {
-        points += amount;
-        UpdatePointsText();
+        if (pointCounter != null)
+        {
+            return pointCounter.points >= itemCost;
+        }
+        return false;
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
-            Debug.Log("Player entered the trigger zone.");
             isPlayerInsideTrigger = true;
-            // Update the UI when the player enters the trigger zone
             UpdateUI();
         }
     }
@@ -92,9 +98,7 @@ public class PurchaseItem : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            Debug.Log("Player exited the trigger zone.");
             isPlayerInsideTrigger = false;
-            // Update the UI when the player exits the trigger zone
             UpdateUI();
         }
     }
