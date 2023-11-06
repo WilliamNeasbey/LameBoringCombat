@@ -5,11 +5,11 @@ using TMPro;
 
 public class WaveSpawner : MonoBehaviour
 {
-    public Transform spawnPoint;
+    public Transform[] spawnPoints;
     public float timeBetweenWaves = 10f;
     public TextMeshProUGUI roundText;
     public TextMeshProUGUI enemiesLeftText;
-    public GameObject enemyPrefab; // Reference to the enemy prefab
+    public GameObject[] enemyPrefabs; // Array of enemy prefabs
 
     private int currentRound = 0;
     private int enemiesLeftInWave = 0;
@@ -87,7 +87,11 @@ public class WaveSpawner : MonoBehaviour
 
     GameObject SpawnEnemy()
     {
-        // Instantiate the enemy prefab at your spawn point
+        // Randomly select an enemy prefab and a spawn point
+        GameObject enemyPrefab = enemyPrefabs[Random.Range(0, enemyPrefabs.Length)];
+        Transform spawnPoint = spawnPoints[Random.Range(0, spawnPoints.Length)];
+
+        // Instantiate the enemy prefab at the chosen spawn point
         GameObject enemy = Instantiate(enemyPrefab, spawnPoint.position, spawnPoint.rotation);
         // You can handle your enemy spawning logic here
         return enemy;
