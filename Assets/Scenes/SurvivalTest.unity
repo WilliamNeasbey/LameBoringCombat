@@ -19103,11 +19103,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6332190415354909564, guid: 1e5fd67c67322804fa670601dafedac1, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.052221708
+      value: 0.0522217
       objectReference: {fileID: 0}
     - target: {fileID: 6332190415354909564, guid: 1e5fd67c67322804fa670601dafedac1, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.0034562687
+      value: 0.0034562682
       objectReference: {fileID: 0}
     - target: {fileID: 6332190415354909564, guid: 1e5fd67c67322804fa670601dafedac1, type: 3}
       propertyPath: m_LocalRotation.y
@@ -35047,6 +35047,63 @@ SkinnedMeshRenderer:
     m_Center: {x: 0.000554502, y: -0.15302044, z: -0.06161952}
     m_Extent: {x: 1.0512605, y: 1.4164515, z: 1.1751184}
   m_DirtyAABB: 0
+--- !u!1001 &1144708957
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 7641976839419337075, guid: c1207b0f3a04d8545b28f0d018b8c57f, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -44.42
+      objectReference: {fileID: 0}
+    - target: {fileID: 7641976839419337075, guid: c1207b0f3a04d8545b28f0d018b8c57f, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 7641976839419337075, guid: c1207b0f3a04d8545b28f0d018b8c57f, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 44
+      objectReference: {fileID: 0}
+    - target: {fileID: 7641976839419337075, guid: c1207b0f3a04d8545b28f0d018b8c57f, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7641976839419337075, guid: c1207b0f3a04d8545b28f0d018b8c57f, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7641976839419337075, guid: c1207b0f3a04d8545b28f0d018b8c57f, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7641976839419337075, guid: c1207b0f3a04d8545b28f0d018b8c57f, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7641976839419337075, guid: c1207b0f3a04d8545b28f0d018b8c57f, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7641976839419337075, guid: c1207b0f3a04d8545b28f0d018b8c57f, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7641976839419337075, guid: c1207b0f3a04d8545b28f0d018b8c57f, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7641976839419337084, guid: c1207b0f3a04d8545b28f0d018b8c57f, type: 3}
+      propertyPath: m_Name
+      value: FazbearPizza
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: c1207b0f3a04d8545b28f0d018b8c57f, type: 3}
 --- !u!1001 &1151060780
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -75941,3 +75998,4 @@ SceneRoots:
   - {fileID: 524478464}
   - {fileID: 1060307610}
   - {fileID: 486725384}
+  - {fileID: 1144708957}
