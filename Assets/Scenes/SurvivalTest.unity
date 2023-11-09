@@ -32985,6 +32985,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   BattleUI: {fileID: 8392567613931892579}
+  SurvivalModeUI: {fileID: 2106902796}
   Cameras: {fileID: 1974783486}
   HitSound: {fileID: 1234913977}
   DeathUI: {fileID: 1964909513}

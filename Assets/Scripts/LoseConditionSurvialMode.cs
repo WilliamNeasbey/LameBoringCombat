@@ -4,6 +4,7 @@ using TMPro;
 public class LoseConditionSurvivalMode : MonoBehaviour
 {
     public GameObject BattleUI; // Reference to the Battle UI GameObject
+    public GameObject SurvivalModeUI; // Reference to the Syrvuval UI GameObject
     public GameObject Cameras; // Reference to the PlayerCameras
     public GameObject HitSound; // Reference to the HitSound because it gets annoying
     public GameObject DeathUI;  // Reference to the Death UI GameObject
@@ -33,16 +34,20 @@ public class LoseConditionSurvivalMode : MonoBehaviour
     private void Update()
     {
         // Check if the player GameObject is destroyed
-        if (player == null && !gameEnded)
+       // if (player == null && !gameEnded)
+        if (player == null)
         {
             // Player is destroyed, so enable the Death UI and disable the Battle UI
             BattleUI.SetActive(false);
+           // SurvivalModeUI.SetActive(false);
             Cameras.SetActive(false);
             HitSound.SetActive(false);
             Wincondition.SetActive(false);
             LevelMusic.SetActive(false);
             DeathUI.SetActive(true);
             gameOverMusic.SetActive(true);
+            scoreText.gameObject.SetActive(true);
+            highScoreText.gameObject.SetActive(true);
 
             // Get the player's score from the PointsCounter script (replace "PointsCounter" with your actual script name)
             int playerScore = FindObjectOfType<PointCounter>().points;
