@@ -89,12 +89,35 @@ public class WaveSpawner : MonoBehaviour
     {
         // Randomly select an enemy prefab and a spawn point
         GameObject enemyPrefab = enemyPrefabs[Random.Range(0, enemyPrefabs.Length)];
-        Transform spawnPoint = spawnPoints[Random.Range(0, spawnPoints.Length)];
 
-        // Instantiate the enemy prefab at the chosen spawn point
-        GameObject enemy = Instantiate(enemyPrefab, spawnPoint.position, spawnPoint.rotation);
-        // You can handle your enemy spawning logic here
-        return enemy;
+        Transform spawnPoint = GetActiveSpawnPoint();
+        if (spawnPoint != null)
+        {
+            // Instantiate the enemy prefab at the chosen spawn point
+            GameObject enemy = Instantiate(enemyPrefab, spawnPoint.position, spawnPoint.rotation);
+            // You can handle your enemy spawning logic here
+            return enemy;
+        }
+        return null;
+    }
+
+    Transform GetActiveSpawnPoint()
+    {
+        // Randomly select an active spawn point
+        List<Transform> activeSpawnPoints = new List<Transform>();
+        foreach (Transform spawnPoint in spawnPoints)
+        {
+            if (spawnPoint.gameObject.activeSelf)
+            {
+                activeSpawnPoints.Add(spawnPoint);
+            }
+        }
+
+        if (activeSpawnPoints.Count > 0)
+        {
+            return activeSpawnPoints[Random.Range(0, activeSpawnPoints.Count)];
+        }
+        return null;
     }
 
     // This method is called when an enemy dies

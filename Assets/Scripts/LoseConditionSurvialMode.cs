@@ -90,6 +90,14 @@ public class LoseConditionSurvivalMode : MonoBehaviour
                 // Get the current high score
                 int highScore = PlayerPrefs.GetInt("survivalhighscore", 0);
 
+                // Check if the player's score is higher than the current high score
+                if (playerScore > highScore)
+                {
+                    // Set the new high score
+                    highScore = playerScore;
+                    PlayerPrefs.SetInt("survivalhighscore", highScore);
+                }
+
                 // Set the score text to display the player's score and the high score
                 scoreText.text = "Your Score: " + playerScore;
                 highScoreText.text = "High Score: " + highScore;
