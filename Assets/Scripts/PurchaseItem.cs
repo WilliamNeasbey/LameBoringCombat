@@ -5,8 +5,8 @@ public class PurchaseItem : MonoBehaviour
 {
     public TextMeshProUGUI pointsText;
     public int itemCost = 200;
-    public GameObject itemToEnable;
-    public GameObject itemToDisable; // Reference to the object to disable
+    public GameObject[] itemsToEnable; // Array of objects to enable
+    public GameObject[] itemsToDisable; // Array of objects to disable
     public GameObject purchaseUI;
     public GameObject alreadyPurchasedUI;
 
@@ -52,11 +52,17 @@ public class PurchaseItem : MonoBehaviour
                     return;
                 }
 
-                itemToEnable.SetActive(true);
-
-                if (itemToDisable != null)
+                foreach (GameObject itemToEnable in itemsToEnable)
                 {
-                    itemToDisable.SetActive(false); // Disable the specified object
+                    itemToEnable.SetActive(true);
+                }
+
+                foreach (GameObject itemToDisable in itemsToDisable)
+                {
+                    if (itemToDisable != null)
+                    {
+                        itemToDisable.SetActive(false); // Disable the specified object
+                    }
                 }
 
                 hasPurchasedItem = true;

@@ -19,7 +19,7 @@ public class LoseConditionSurvivalMode : MonoBehaviour
 
     private bool gameEnded = false; // Flag to ensure the game over logic is executed only once
 
-     string[] randomQuotes = {
+    string[] randomQuotes = {
     "Don't cry over spilled milk; respawn and chug a jug of victory!",
     //"A grenade in hand is worth two in the bush. Or something like that.",
    // "When life gives you lemons, throw them back and ask for a better killstreak.",
@@ -45,6 +45,7 @@ public class LoseConditionSurvivalMode : MonoBehaviour
    "In the 'Dilemma' of life, my focus remains on my dreams. Even when I'm with my 'boo,' my determination knows no bounds.",
    "No matter how big it is It's time will come It will be reborn as something new",
    "Dreamin', don't give it give it up give it up give it up",
+   "I love you and I need you Nelly, I love you I do need you No matter what I do (woo) All I think about is you (uh huh) Even when I'm with my boo Boy, you know I'm crazy over you",
 
     // Add more quotes 
 };
