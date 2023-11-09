@@ -1241,6 +1241,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 9
       objectReference: {fileID: 0}
+    - target: {fileID: -5069197845471958171, guid: 689bb1cb0ee1e7a49bb047c81087229f, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: -4999088201633142198, guid: 689bb1cb0ee1e7a49bb047c81087229f, type: 3}
       propertyPath: m_Layer
       value: 9
@@ -1343,7 +1347,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 689bb1cb0ee1e7a49bb047c81087229f, type: 3}
       propertyPath: m_Name
-      value: Marine Bozo
+      value: Marine Bozo 1
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 689bb1cb0ee1e7a49bb047c81087229f, type: 3}
       propertyPath: m_Layer
@@ -1393,6 +1397,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 9
       objectReference: {fileID: 0}
+    - target: {fileID: 3140722288543910312, guid: 689bb1cb0ee1e7a49bb047c81087229f, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3588849560313704984, guid: 689bb1cb0ee1e7a49bb047c81087229f, type: 3}
       propertyPath: m_Layer
       value: 9
@@ -1433,6 +1441,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 9
       objectReference: {fileID: 0}
+    - target: {fileID: 6060672185218068830, guid: 689bb1cb0ee1e7a49bb047c81087229f, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 75e17ebd6cfe1de47900f9b0691029db, type: 2}
     - target: {fileID: 6240733294840144465, guid: 689bb1cb0ee1e7a49bb047c81087229f, type: 3}
       propertyPath: m_Layer
       value: 9

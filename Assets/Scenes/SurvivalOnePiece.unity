@@ -71780,7 +71780,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 1500
-  moveSpeed: 3
+  moveSpeed: 5
   rotationSpeed: 5
   attackRange: 1
   ragdollPrefab: {fileID: 3943023351250369455, guid: 208c6a482a0eecd4e9e8df0de4bfa786, type: 3}
