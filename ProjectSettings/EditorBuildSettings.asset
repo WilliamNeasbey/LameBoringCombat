@@ -44,5 +44,8 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/SurvivalTest.unity
     guid: 7400eb6fdea4a1e4fbecc051372db48f
+  - enabled: 1
+    path: Assets/Scenes/SurvivalOnePiece.unity
+    guid: 86047e96cefbe5d43ab74f9f3a190752
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: cd584c93254c1c64d8c3fad2bc0c4067, type: 2}
