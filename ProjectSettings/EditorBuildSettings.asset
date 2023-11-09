@@ -11,7 +11,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/CharacterCustomisation.unity
     guid: e4663c2b2dbff2843b22fe8d6b8b3458
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/CombatTest.unity
     guid: cdd2911968d81f3479059da4893ab51a
   - enabled: 1
@@ -23,10 +23,10 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/ChrisBenoitStage.unity
     guid: 2df47c2fcbac57e4cbce6cf777c153ec
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/AlexKiddStage.unity
     guid: 09f347135ca70b446a7a0629da63bee0
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/ArenaStage.unity
     guid: 892ab6cbef410ee44ad71b784f78c394
   - enabled: 1
@@ -41,7 +41,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/TutorialStage.unity
     guid: 8d8857fab6baece47a85d74dab1a354d
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/SurvivalTest.unity
     guid: 7400eb6fdea4a1e4fbecc051372db48f
   - enabled: 1
