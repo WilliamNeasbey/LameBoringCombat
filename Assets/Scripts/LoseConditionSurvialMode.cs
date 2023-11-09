@@ -44,8 +44,9 @@ public class LoseConditionSurvivalMode : MonoBehaviour
    "Just like in Fortnite, where every game starts with a drop, life begins with a leap of faith. Take the plunge and chase your Victory Royale!",
    "In the 'Dilemma' of life, my focus remains on my dreams. Even when I'm with my 'boo,' my determination knows no bounds.",
    "No matter how big it is It's time will come It will be reborn as something new",
+   "Dreamin', don't give it give it up give it up give it up",
 
-    // Add more quotes related to your preferences
+    // Add more quotes 
 };
 
 
@@ -110,10 +111,11 @@ public class LoseConditionSurvivalMode : MonoBehaviour
             int randomIndex = Random.Range(0, randomQuotes.Length);
             string randomQuote = randomQuotes[randomIndex];
 
-            // Display the random quote
-            randomQuoteText.text = randomQuote;
+            // Display the random quote with quotation marks
+            randomQuoteText.text = "\"" + randomQuote + "\"";
             randomQuoteText.gameObject.SetActive(true);
         }
     }
+
 
 }
