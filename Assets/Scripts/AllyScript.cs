@@ -34,7 +34,7 @@ public class AllyScript : MonoBehaviour
     private Transform nearestEnemyTransform;
     private NavMeshAgent navMeshAgent;
 
-    private float enemyDetectionRange = 10f; // Adjust this value to control the range at which enemies are detected
+    private float enemyDetectionRange = 50f; // Adjust this value to control the range at which enemies are detected
     public Transform playerTransform; // Reference to the player's transform
     private float followDistance = 2f; // Adjust this value to control the distance behind the player
     private AllyState currentState = AllyState.Idle;
@@ -92,12 +92,6 @@ public class AllyScript : MonoBehaviour
                 if (playerTransform != null)
                 {
                     FollowPlayer();
-
-                    // Check if there are enemies in range
-                    if (nearestEnemy != null && Vector3.Distance(transform.position, nearestEnemy.position) <= attackRange)
-                    {
-                        currentState = AllyState.Attacking;
-                    }
                 }
                 else
                 {
@@ -109,7 +103,6 @@ public class AllyScript : MonoBehaviour
                 if (nearestEnemy != null)
                 {
                     MoveTowardsEnemy(nearestEnemy);
-
                     // Check if the enemy is in attack range
                     if (Vector3.Distance(transform.position, nearestEnemy.position) <= attackRange)
                     {
@@ -133,6 +126,7 @@ public class AllyScript : MonoBehaviour
                 }
                 break;
         }
+
         // Check if the player object is destroyed and the "Lose" animation hasn't been triggered yet
         if (playerTransform == null && !hasLost)
         {
@@ -149,47 +143,6 @@ public class AllyScript : MonoBehaviour
         }
     }
 
-
-
-
-
-
-    private Transform FindNearestEnemy(GameObject[] enemies)
-    {
-        Transform nearestEnemy = null;
-        float nearestDistance = enemyDetectionRange;
-
-        foreach (GameObject enemy in enemies)
-        {
-            float distanceToEnemy = Vector3.Distance(transform.position, enemy.transform.position);
-
-            if (distanceToEnemy <= nearestDistance)
-            {
-                nearestDistance = distanceToEnemy;
-                nearestEnemy = enemy.transform;
-            }
-        }
-
-        return nearestEnemy;
-    }
-
-    private void FollowPlayer()
-    {
-        if (playerTransform != null)
-        {
-            // Calculate the direction from the player to the ally
-            Vector3 playerToAlly = -playerTransform.forward;
-
-            // Calculate the target position behind the player
-            Vector3 targetPosition = playerTransform.position + playerToAlly * followDistance;
-
-            // Use NavMeshAgent to move the ally to the target position
-            navMeshAgent.SetDestination(targetPosition);
-
-            // Reset the target enemy transform
-            enemyTransform = null;
-        }
-    }
     private void MoveTowardsEnemy(Transform enemy)
     {
         if (enemy != null && isPlayerAlive)
@@ -214,6 +167,48 @@ public class AllyScript : MonoBehaviour
             currentState = AllyState.Idle;
         }
     }
+
+    // Add a simple method to detect enemies in range
+    private Transform FindNearestEnemy(GameObject[] enemies)
+    {
+        Transform nearestEnemy = null;
+        float nearestDistance = enemyDetectionRange;
+
+        foreach (GameObject enemy in enemies)
+        {
+            float distanceToEnemy = Vector3.Distance(transform.position, enemy.transform.position);
+
+            // Only consider enemies within the detection range
+            if (distanceToEnemy <= enemyDetectionRange && distanceToEnemy <= nearestDistance)
+            {
+                nearestDistance = distanceToEnemy;
+                nearestEnemy = enemy.transform;
+            }
+        }
+
+        return nearestEnemy;
+    }
+
+
+    private void FollowPlayer()
+    {
+        if (playerTransform != null)
+        {
+            // Calculate the direction from the player to the ally
+            Vector3 playerToAlly = -playerTransform.forward;
+
+            // Calculate the target position behind the player
+            Vector3 targetPosition = playerTransform.position + playerToAlly * followDistance;
+
+            // Use NavMeshAgent to move the ally to the target position
+            navMeshAgent.SetDestination(targetPosition);
+
+            // Reset the target enemy transform
+            enemyTransform = null;
+        }
+    }
+  
+
 
 
 

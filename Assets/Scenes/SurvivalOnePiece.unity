@@ -71780,9 +71780,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 1500
-  moveSpeed: 5
-  rotationSpeed: 5
-  attackRange: 1
+  moveSpeed: 15
+  rotationSpeed: 15
+  attackRange: 1.3
   ragdollPrefab: {fileID: 3943023351250369455, guid: 208c6a482a0eecd4e9e8df0de4bfa786, type: 3}
   ragdollForce: 500
   forceRandomRange: 100
@@ -71804,7 +71804,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5
-  m_Speed: 3.5
+  m_Speed: 6
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120
@@ -72449,7 +72449,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pointsText: {fileID: 2134260026}
-  points: 0
+  points: 999999
   pointsIncreasePerSecond: 100
 --- !u!114 &2134260026
 MonoBehaviour:
