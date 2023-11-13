@@ -12,6 +12,8 @@ public class LoseConditionSurvivalMode : MonoBehaviour
     public GameObject Wincondition; // Reference to the Wincondition
     public GameObject LevelMusic; // Reference to the LevelMusic
     public GameObject gameOverMusic; // Reference to the Gameover music
+    public GameObject MouseOn; // Reference to the Mouse toggle on
+    public GameObject MouseOff; // Reference to the Mouse toggle off
     public TextMeshProUGUI scoreText; // Reference to the TextMeshPro UI for displaying the player's score
     public TextMeshProUGUI highScoreText; // Reference to the TextMeshPro UI for displaying the high score
     public TextMeshProUGUI randomQuoteText; // Reference to the TextMeshPro UI for displaying random quotes
@@ -60,6 +62,8 @@ public class LoseConditionSurvivalMode : MonoBehaviour
         Cameras.SetActive(true);
         HitSound.SetActive(true);
         Wincondition.SetActive(true);
+        MouseOn.SetActive(false);
+        MouseOff.SetActive(true);
 
         // Ensure the score texts are hidden initially
         scoreText.gameObject.SetActive(false);
@@ -83,6 +87,8 @@ public class LoseConditionSurvivalMode : MonoBehaviour
                 gameOverMusic.SetActive(true);
                 scoreText.gameObject.SetActive(true);
                 highScoreText.gameObject.SetActive(true);
+                MouseOn.SetActive(true);
+                MouseOff.SetActive(false);
 
                 // Get the player's score from the PointsCounter script (replace "PointsCounter" with your actual script name)
                 int playerScore = FindObjectOfType<PointCounter>().points;
@@ -99,8 +105,9 @@ public class LoseConditionSurvivalMode : MonoBehaviour
                 }
 
                 // Set the score text to display the player's score and the high score
+                //scoreText.text = "Your Score: " + playerScore;
                 scoreText.text = "Your Score: " + playerScore;
-                highScoreText.text = "High Score: " + highScore;
+                highScoreText.text = "Personal Best Score: " + highScore;
 
                 // Display a random quote when the game ends
                 DisplayRandomQuote();
