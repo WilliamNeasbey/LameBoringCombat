@@ -21,6 +21,8 @@ public class LoseConditionSurvivalMode : MonoBehaviour
 
     private bool gameEnded = false; // Flag to ensure the game over logic is executed only once
 
+    public GameObject[] otherThingsToMoveUp; // Array of objects to move on the Y-axis
+
     string[] randomQuotes = {
     "Don't cry over spilled milk; respawn and chug a jug of victory!",
     //"A grenade in hand is worth two in the bush. Or something like that.",
@@ -89,7 +91,7 @@ public class LoseConditionSurvivalMode : MonoBehaviour
                 highScoreText.gameObject.SetActive(true);
                 MouseOn.SetActive(true);
                 MouseOff.SetActive(false);
-                SurvivalModeUI.SetActive(false);
+                //SurvivalModeUI.SetActive(false);
 
                 // Get the player's score from the PointsCounter script 
                 int playerScore = FindObjectOfType<PointCounter>().points;
@@ -112,6 +114,15 @@ public class LoseConditionSurvivalMode : MonoBehaviour
 
                 // Display a random quote when the game ends
                 DisplayRandomQuote();
+
+                // Move otherThingsToMoveUp on the Y-axis by 500
+                foreach (var obj in otherThingsToMoveUp)
+                {
+                    if (obj != null) // Check if the object exists before moving
+                    {
+                        obj.transform.Translate(Vector3.up * 500f, Space.World);
+                    }
+                }
 
                 // Set quoteDisplayed to true to prevent constant changes
                 quoteDisplayed = true;

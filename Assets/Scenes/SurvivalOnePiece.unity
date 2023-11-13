@@ -1672,7 +1672,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &49746197
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1689,7 +1689,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 102.21533, y: 95.52295}
+  m_AnchoredPosition: {x: 102.21533, y: 600}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &49746198
@@ -1712,7 +1712,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 69420
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -21595,11 +21595,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6332190414834607267, guid: 1e5fd67c67322804fa670601dafedac1, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.05215045
+      value: -0.052150436
       objectReference: {fileID: 0}
     - target: {fileID: 6332190414834607267, guid: 1e5fd67c67322804fa670601dafedac1, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.0044030827
+      value: 0.004403081
       objectReference: {fileID: 0}
     - target: {fileID: 6332190414834607268, guid: 1e5fd67c67322804fa670601dafedac1, type: 3}
       propertyPath: field of view
@@ -21671,15 +21671,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6332190415429669905, guid: 1e5fd67c67322804fa670601dafedac1, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.102102
+      value: 0.10210201
       objectReference: {fileID: 0}
     - target: {fileID: 6332190415429669905, guid: 1e5fd67c67322804fa670601dafedac1, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.05206169
+      value: -0.05206171
       objectReference: {fileID: 0}
     - target: {fileID: 6332190415429669905, guid: 1e5fd67c67322804fa670601dafedac1, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.005350938
+      value: 0.005350941
       objectReference: {fileID: 0}
     - target: {fileID: 6332190415429669906, guid: 1e5fd67c67322804fa670601dafedac1, type: 3}
       propertyPath: m_Lens.m_SensorSize.x
@@ -21779,11 +21779,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6332190416511611305, guid: 1e5fd67c67322804fa670601dafedac1, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.052150436
+      value: -0.05215043
       objectReference: {fileID: 0}
     - target: {fileID: 6332190416511611305, guid: 1e5fd67c67322804fa670601dafedac1, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.0044030813
+      value: 0.0044030803
       objectReference: {fileID: 0}
     - target: {fileID: 6332190416511611306, guid: 1e5fd67c67322804fa670601dafedac1, type: 3}
       propertyPath: m_Lens.m_SensorSize.x
@@ -37534,6 +37534,19 @@ MonoBehaviour:
   scoreText: {fileID: 139830078}
   highScoreText: {fileID: 1337307690}
   randomQuoteText: {fileID: 1592713524}
+  otherThingsToMoveUp:
+  - {fileID: 804872103}
+  - {fileID: 663730299}
+  - {fileID: 1628967598}
+  - {fileID: 1981367029}
+  - {fileID: 174837129}
+  - {fileID: 809500466}
+  - {fileID: 866954180}
+  - {fileID: 1468009936}
+  - {fileID: 1354526775}
+  - {fileID: 1287032074}
+  - {fileID: 852990951}
+  - {fileID: 2134260023}
 --- !u!1 &1072006938
 GameObject:
   m_ObjectHideFlags: 0
@@ -67603,7 +67616,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac39350c4cb8f8b40900a0618a10cb90, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inputScore: {fileID: 139830078}
+  inputScore: {fileID: 49746198}
   inputName: {fileID: 1804891942}
   submitScoreEvent:
     m_PersistentCalls:
@@ -77982,7 +77995,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pointsText: {fileID: 2134260026}
-  points: 999999
+  points: 9999
   pointsIncreasePerSecond: 100
 --- !u!114 &2134260026
 MonoBehaviour:
