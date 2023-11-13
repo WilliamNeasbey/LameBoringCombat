@@ -3634,8 +3634,8 @@ MonoBehaviour:
   projectilePrefab: {fileID: 8629093926299216547, guid: da6b0441c458780479fc0fa4866b8940, type: 3}
   atbRechargeRate: 50
   barrierObject: {fileID: 1134884956}
-  barrierCost: 50
-  barrierDrainRate: 10
+  barrierCost: 0
+  barrierDrainRate: 60
   lockOnUITarget: {fileID: 781071183}
   slowMotionTime: 0.005
   tacticalMode: 0
@@ -20316,15 +20316,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6332190415429669905, guid: 1e5fd67c67322804fa670601dafedac1, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.102102
+      value: 0.10210202
       objectReference: {fileID: 0}
     - target: {fileID: 6332190415429669905, guid: 1e5fd67c67322804fa670601dafedac1, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.05206169
+      value: -0.052061714
       objectReference: {fileID: 0}
     - target: {fileID: 6332190415429669905, guid: 1e5fd67c67322804fa670601dafedac1, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.005350938
+      value: 0.0053509423
       objectReference: {fileID: 0}
     - target: {fileID: 6332190415429669906, guid: 1e5fd67c67322804fa670601dafedac1, type: 3}
       propertyPath: m_Lens.m_SensorSize.x

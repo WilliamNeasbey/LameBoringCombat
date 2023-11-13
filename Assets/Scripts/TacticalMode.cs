@@ -336,10 +336,16 @@ public class TacticalMode : MonoBehaviour
         if (Input.GetKey(KeyCode.Q))
         {
             ChargeKi();
+            camImpulseSource.m_ImpulseDefinition.m_AmplitudeGain = 0.3f; // Value of the camera shake
+            camImpulseSource.GenerateImpulse();
+            movement.enabled = false;
+            canAttack = false;
         }
         else
         {
             StopKiCharge();
+            movement.enabled = true;
+            canAttack = true;
         }
 
         /*
@@ -674,6 +680,9 @@ public class TacticalMode : MonoBehaviour
             ModifyATB(-barrierCost);
             isBarrierActive = true;
             barrierObject.SetActive(true);
+
+            // Disable player movement during barrier activation
+            characterMovement.enabled = false;
         }
         else
         {
@@ -685,6 +694,9 @@ public class TacticalMode : MonoBehaviour
     {
         isBarrierActive = false;
         barrierObject.SetActive(false);
+
+        // Enable player movement after barrier deactivation
+        characterMovement.enabled = true;
     }
 
     private void ChargeKi()
@@ -696,9 +708,11 @@ public class TacticalMode : MonoBehaviour
             KIchargingSound.Play();
             kiChargingParticle.SetActive(true);
             canAttack = false;
-            movement.enabled = false;
+            characterMovement.enabled = false;
             Debug.Log("Movement script disabled.");
         }
+
+       
 
         // Increase the ATB value while the button is held until it reaches the max
         if (atbSlider < filledAtbValue * 4 && !isBarrierActive)
@@ -715,10 +729,11 @@ public class TacticalMode : MonoBehaviour
             anim.SetBool("chargingKI", false); // Reset animation bool
             KIchargingSound.Stop(); // Disable the KI charging sound
             kiChargingParticle.SetActive(false);
-            movement.enabled = true;
+            characterMovement.enabled = true;
             canAttack = true;
         }
     }
+
 
     private IEnumerator BarrierCooldown()
     {
