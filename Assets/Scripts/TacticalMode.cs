@@ -42,7 +42,11 @@ public class TacticalMode : MonoBehaviour
     public float health = 100f;
     public GameObject projectilePrefab;
     public float atbRechargeRate = 50.0f; // Adjust the recharge rate as needed
-
+    public GameObject barrierObject;
+    public float barrierCost = 50f;
+    public float barrierDrainRate = 10f; // Adjust as needed
+    private bool isBarrierActive = false;
+    private bool isChargingKi = false;
     public LockOnUI lockOnUITarget;
 
 
@@ -327,46 +331,15 @@ public class TacticalMode : MonoBehaviour
         );
 
         // Check if the "q" key is held down
+
+        // Ki charging logic
         if (Input.GetKey(KeyCode.Q))
         {
-            camImpulseSource.m_ImpulseDefinition.m_AmplitudeGain = 0.3f; // Value of the camera shake
-            camImpulseSource.GenerateImpulse();
-            movement.enabled = false;
-            // Start charging KI
-            if (!isChargingKI)
-            {
-                
-                isChargingKI = true;
-                anim.SetBool("chargingKI", true);
-                KIchargingSound.Play();
-                kiChargingParticle.SetActive(true);
-                
-                canAttack = false;
-                Debug.Log("Movement script disabled.");
-                
-
-            }
-
-            // Increase the ATB value while the button is held until it reaches the max
-            if (atbSlider < filledAtbValue * 4)
-            {
-                ModifyATB(Time.deltaTime * atbRechargeRate); // Adjust atbRechargeRate as needed
-            }
+            ChargeKi();
         }
         else
         {
-            // Stop charging KI
-            if (isChargingKI)
-            {
-                isChargingKI = false;
-                anim.SetBool("chargingKI", false); // Reset animation bool
-                KIchargingSound.Stop(); // Disable the KI charging sound
-                kiChargingParticle.SetActive(false);
-                movement.enabled = true;
-                canAttack = true;
-            }
-
-            
+            StopKiCharge();
         }
 
         /*
@@ -392,6 +365,20 @@ public class TacticalMode : MonoBehaviour
         {
             Kikoken();
         }
+        //Barrier
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            ToggleBarrier();
+        }
+        if (isBarrierActive)
+        {
+            ModifyATB(-barrierDrainRate * Time.deltaTime);
+            if (atbSlider <= 0f)
+            {
+                DeactivateBarrier();
+            }
+        }
+
     }
 
     /*
@@ -667,6 +654,82 @@ public class TacticalMode : MonoBehaviour
             Debug.Log("Not enough ATB for the Heal spell.");
         }
     }
+
+    private void ToggleBarrier()
+    {
+        if (!isBarrierActive)
+        {
+            ActivateBarrier();
+        }
+        else
+        {
+            DeactivateBarrier();
+        }
+    }
+
+    private void ActivateBarrier()
+    {
+        if (atbSlider >= barrierCost)
+        {
+            ModifyATB(-barrierCost);
+            isBarrierActive = true;
+            barrierObject.SetActive(true);
+        }
+        else
+        {
+            Debug.Log("Not enough ATB for the Barrier.");
+        }
+    }
+
+    private void DeactivateBarrier()
+    {
+        isBarrierActive = false;
+        barrierObject.SetActive(false);
+    }
+
+    private void ChargeKi()
+    {
+        if (!isChargingKi)
+        {
+            isChargingKi = true;
+            anim.SetBool("chargingKI", true);
+            KIchargingSound.Play();
+            kiChargingParticle.SetActive(true);
+            canAttack = false;
+            movement.enabled = false;
+            Debug.Log("Movement script disabled.");
+        }
+
+        // Increase the ATB value while the button is held until it reaches the max
+        if (atbSlider < filledAtbValue * 4 && !isBarrierActive)
+        {
+            ModifyATB(Time.deltaTime * atbRechargeRate); // Adjust atbRechargeRate as needed
+        }
+    }
+
+    private void StopKiCharge()
+    {
+        if (isChargingKi)
+        {
+            isChargingKi = false;
+            anim.SetBool("chargingKI", false); // Reset animation bool
+            KIchargingSound.Stop(); // Disable the KI charging sound
+            kiChargingParticle.SetActive(false);
+            movement.enabled = true;
+            canAttack = true;
+        }
+    }
+
+    private IEnumerator BarrierCooldown()
+    {
+        while (isBarrierActive)
+        {
+            yield return null;
+        }
+
+       
+    }
+
 
     private IEnumerator DeactivateHealingParticlesAfterDelay(float delay)
     {
@@ -1123,11 +1186,14 @@ public class TacticalMode : MonoBehaviour
 
     public void GetHit(float damage)
     {
-        anim.SetTrigger("Hit");
-        health -= 10;
-        if (health <= 0f)
+        if (!isBarrierActive)
         {
-            Die();
+            anim.SetTrigger("Hit");
+            health -= 10;
+            if (health <= 0f)
+            {
+                Die();
+            }
         }
     }
 
