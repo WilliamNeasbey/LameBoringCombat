@@ -3634,7 +3634,7 @@ MonoBehaviour:
   projectilePrefab: {fileID: 8629093926299216547, guid: da6b0441c458780479fc0fa4866b8940, type: 3}
   atbRechargeRate: 50
   barrierObject: {fileID: 1134884956}
-  barrierCost: 0
+  barrierCost: 50
   barrierDrainRate: 50
   lockOnUITarget: {fileID: 781071183}
   slowMotionTime: 0.005
@@ -8450,7 +8450,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 16290694f56347f49b38d96b71f91e28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 543450652520463998}
+  player: {fileID: 919132148061955268}
   respawnPoint: {fileID: 155521211}
 --- !u!1 &360975533 stripped
 GameObject:
@@ -19693,7 +19693,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 16290694f56347f49b38d96b71f91e28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 543450652520463998}
+  player: {fileID: 919132148061955268}
   respawnPoint: {fileID: 155521211}
 --- !u!1 &569289898
 GameObject:
@@ -20316,15 +20316,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6332190415429669905, guid: 1e5fd67c67322804fa670601dafedac1, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.102102
+      value: 0.10210201
       objectReference: {fileID: 0}
     - target: {fileID: 6332190415429669905, guid: 1e5fd67c67322804fa670601dafedac1, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.05206169
+      value: -0.05206171
       objectReference: {fileID: 0}
     - target: {fileID: 6332190415429669905, guid: 1e5fd67c67322804fa670601dafedac1, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.005350938
+      value: 0.005350941
       objectReference: {fileID: 0}
     - target: {fileID: 6332190415429669906, guid: 1e5fd67c67322804fa670601dafedac1, type: 3}
       propertyPath: m_Lens.m_SensorSize.x
@@ -36930,6 +36930,7 @@ GameObject:
   - component: {fileID: 1134884959}
   - component: {fileID: 1134884958}
   - component: {fileID: 1134884961}
+  - component: {fileID: 1134884962}
   m_Layer: 0
   m_Name: Mystic Barrier
   m_TagString: Untagged
@@ -37030,7 +37031,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1134884956}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2b5a01723701ec046a6e7d5c7c384ddc, type: 3}
   m_Name: 
@@ -37038,6 +37039,20 @@ MonoBehaviour:
   bobSpeed: 0
   bobHeight: 0
   rotateSpeed: 30
+--- !u!114 &1134884962
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1134884956}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62f5154edb02230449d27b55eb94bbd9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rotationSpeedX: 30
+  rotationSpeedY: 20
 --- !u!1001 &1141679873
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -47568,7 +47583,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 16290694f56347f49b38d96b71f91e28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 543450652520463998}
+  player: {fileID: 919132148061955268}
   respawnPoint: {fileID: 155521211}
 --- !u!1 &1437293911
 GameObject:

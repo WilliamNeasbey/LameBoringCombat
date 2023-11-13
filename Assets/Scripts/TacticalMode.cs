@@ -44,8 +44,10 @@ public class TacticalMode : MonoBehaviour
     public float atbRechargeRate = 50.0f; // Adjust the recharge rate as needed
     public GameObject barrierObject;
     public float barrierCost = 50f;
-    public float barrierDrainRate = 10f; // Adjust as needed
+    public float barrierDrainRate = 50f; // Adjust as needed
     private bool isBarrierActive = false;
+    private float defaultBarrierDrainRate;
+    private float barrierActiveTime = 0f;
     private bool isChargingKi = false;
     public LockOnUI lockOnUITarget;
 
@@ -168,6 +170,7 @@ public class TacticalMode : MonoBehaviour
         anim = GetComponent<Animator>();
         camImpulseSource = Camera.main.GetComponent<CinemachineImpulseSource>();
         characterMovement = GetComponent<CharacterMovement>();
+        defaultBarrierDrainRate = barrierDrainRate;
     }
 
     void Update()
@@ -378,11 +381,25 @@ public class TacticalMode : MonoBehaviour
         }
         if (isBarrierActive)
         {
+            // Increase the barrier active time
+            barrierActiveTime += Time.deltaTime;
+
+            // Adjust the barrier drain rate based on how long the barrier has been active
+            barrierDrainRate = defaultBarrierDrainRate + (barrierActiveTime * 30.5f); // You can adjust the multiplier
+
+            // Drain ATB based on the adjusted barrier drain rate
             ModifyATB(-barrierDrainRate * Time.deltaTime);
             if (atbSlider <= 0f)
             {
                 DeactivateBarrier();
             }
+
+        }
+        else
+        {
+            // Reset barrier active time and drain rate when the barrier is deactivated
+            barrierActiveTime = 0f;
+            barrierDrainRate = defaultBarrierDrainRate;
         }
 
     }
