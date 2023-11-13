@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
+using Cinemachine;
+
 
 public class NetworkMovement : NetworkBehaviour
 {
@@ -20,7 +22,8 @@ public class NetworkMovement : NetworkBehaviour
     public Animator anim;
     public float Speed;
     public float allowPlayerRotation = 0.1f;
-    public Camera cam;
+    //public Camera cam;
+    public Camera playerCamera;
     public CharacterController controller;
     public float OriginalVelocity;
     public NetworkAnimator networkAnimator;
@@ -54,18 +57,45 @@ public class NetworkMovement : NetworkBehaviour
     public float dashCooldown = 2.0f;
     private float dashCooldownTimer = 0.0f;
 
+    [Space]
+    [Header("combos")]
+    private float lastAttackTime;
+    //private int comboCount = 0; // Initialize combo count
+    private bool canAttack = true; // Added flag to control attack cooldown
+    [SyncVar]
+    private int comboCount = 0;
+
     public override void OnStartLocalPlayer()
     {
         base.OnStartLocalPlayer();
 
-        // This code will only run on the local player's client.
         OriginalVelocity = Velocity;
         anim = GetComponent<Animator>();
-        cam = Camera.main;
         controller = GetComponent<CharacterController>();
         gameScript = GetComponent<TacticalMode>();
         networkAnimator = GetComponent<NetworkAnimator>();
+
+        // Assign the camera based on whether the player is the local player or not
+        if (isLocalPlayer)
+        {
+            // Find the CinemachineFreeLook component on the local player
+            CinemachineFreeLook freeLook = FindObjectOfType<CinemachineFreeLook>();
+
+            // Check if CinemachineFreeLook is found
+            if (freeLook != null)
+            {
+                // Assign the Follow and LookAt targets to the local player's transform
+                freeLook.Follow = transform;
+                freeLook.LookAt = transform;
+            }
+            else
+            {
+                Debug.LogError("CinemachineFreeLook not found. Make sure you have a CinemachineFreeLook component in your scene.");
+            }
+        }
     }
+
+
 
     // Update is called once per frame
     void Update()
@@ -108,6 +138,101 @@ public class NetworkMovement : NetworkBehaviour
         if (canJump && Input.GetButtonDown("Jump"))
         {
             Jump();
+        }
+
+        // Attack
+        if (canAttack && (Input.GetMouseButtonDown(0) || Input.GetButtonDown("Square")))
+        {
+            if (Time.time - lastAttackTime > 1f)
+            {
+                // Reset combo count if it's been too long since the last attack
+                comboCount = 0;
+            }
+
+            if (comboCount == 0)
+            {
+                anim.SetTrigger("Punch");
+            }
+            else if (comboCount == 1)
+            {
+                anim.SetTrigger("Punch2"); // Trigger the second punch animation
+            }
+            else if (comboCount == 2)
+            {
+                anim.SetTrigger("AirKick");
+            }
+
+            comboCount = (comboCount + 1) % 3; // Increment combo count and wrap around
+
+            lastAttackTime = Time.time;
+
+            // Disable further attacks for a brief moment
+            canAttack = false;
+            StartCoroutine(ComboCooldown());
+        }
+
+        // Attack
+        if (canAttack && (Input.GetMouseButtonDown(1) || Input.GetButtonDown("Square")))
+        {
+            if (Time.time - lastAttackTime > 1f)
+            {
+                // Reset combo count if it's been too long since the last attack
+                comboCount = 0;
+            }
+
+            if (comboCount == 0)
+            {
+                anim.SetTrigger("LowKick");
+            }
+            else if (comboCount == 1)
+            {
+                anim.SetTrigger("MidKick"); // Trigger the second punch animation
+            }
+            else if (comboCount == 2)
+            {
+                anim.SetTrigger("HighKick");
+            }
+
+            comboCount = (comboCount + 1) % 3; // Increment combo count and wrap around
+
+            lastAttackTime = Time.time;
+
+            // Disable further attacks for a brief moment
+            canAttack = false;
+            StartCoroutine(ComboCooldown());
+        }
+
+    }
+
+    IEnumerator ComboCooldown()
+    {
+        // Wait for half a second before allowing the next attack
+        yield return new WaitForSeconds(0.4f);
+
+        // Synchronize combo count over the network
+        RpcSetComboCount(comboCount);
+
+        canAttack = true; // Re-enable attacks
+    }
+
+    [ClientRpc]
+    void RpcSetComboCount(int count)
+    {
+        // Set combo count on all clients
+        comboCount = count;
+
+        // Play the appropriate combo animation based on the synchronized combo count
+        if (comboCount == 0)
+        {
+            anim.SetTrigger("Punch");
+        }
+        else if (comboCount == 1)
+        {
+            anim.SetTrigger("Punch2");
+        }
+        else if (comboCount == 2)
+        {
+            anim.SetTrigger("AirKick");
         }
     }
 
@@ -195,8 +320,8 @@ public class NetworkMovement : NetworkBehaviour
     void PlayerMoveAndRotation(float InputX, float InputZ)
     {
         var camera = Camera.main;
-        var forward = cam.transform.forward;
-        var right = cam.transform.right;
+        var forward = playerCamera.transform.forward;
+        var right = playerCamera.transform.right;
 
         forward.y = 0f;
         right.y = 0f;
@@ -221,8 +346,8 @@ public class NetworkMovement : NetworkBehaviour
     public void RotateToCamera(Transform t)
     {
         var camera = Camera.main;
-        var forward = cam.transform.forward;
-        var right = cam.transform.right;
+        var forward = playerCamera.transform.forward;
+        var right = playerCamera.transform.right;
 
         desiredMoveDirection = forward;
 
@@ -239,7 +364,7 @@ public class NetworkMovement : NetworkBehaviour
         if (inputDirection != Vector3.zero)
         {
             // Calculate the movement relative to the camera
-            Vector3 dashDirection = cam.transform.TransformDirection(inputDirection);
+            Vector3 dashDirection = playerCamera.transform.TransformDirection(inputDirection);
 
             CmdDash(dashDirection, dashSpeed);
         }

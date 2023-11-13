@@ -5,19 +5,19 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Titlescreen.unity
     guid: 5a7634ecabf8548438ad350e8f017fe2
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/CharacterCustomisation.unity
     guid: e4663c2b2dbff2843b22fe8d6b8b3458
   - enabled: 0
     path: Assets/Scenes/CombatTest.unity
     guid: cdd2911968d81f3479059da4893ab51a
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/SnoopDoggStage.unity
     guid: d0f5eb3bcf30d504ea070a729805d451
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/SnoopDoggWin.unity
     guid: 1c5db289da7ce6f469dc9ade9c0d5988
   - enabled: 0
@@ -35,16 +35,16 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Lobby1.unity
     guid: bbe7db194e7a2ef41b7c03652ce2449e
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/CharacterSelect.unity
     guid: b7544d5a30d9eed449267cef7699537b
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/TutorialStage.unity
     guid: 8d8857fab6baece47a85d74dab1a354d
   - enabled: 0
     path: Assets/Scenes/SurvivalTest.unity
     guid: 7400eb6fdea4a1e4fbecc051372db48f
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/SurvivalOnePiece.unity
     guid: 86047e96cefbe5d43ab74f9f3a190752
   m_configObjects:
