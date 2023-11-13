@@ -89,8 +89,9 @@ public class LoseConditionSurvivalMode : MonoBehaviour
                 highScoreText.gameObject.SetActive(true);
                 MouseOn.SetActive(true);
                 MouseOff.SetActive(false);
+                SurvivalModeUI.SetActive(false);
 
-                // Get the player's score from the PointsCounter script (replace "PointsCounter" with your actual script name)
+                // Get the player's score from the PointsCounter script 
                 int playerScore = FindObjectOfType<PointCounter>().points;
 
                 // Get the current high score
