@@ -7,6 +7,7 @@ using Cinemachine;
 
 public class NetworkMovement : NetworkBehaviour
 {
+    /*
     [SyncVar]
     public float Velocity;
 
@@ -139,7 +140,7 @@ public class NetworkMovement : NetworkBehaviour
         {
             Jump();
         }
-
+        /*
         // Attack
         if (canAttack && (Input.GetMouseButtonDown(0) || Input.GetButtonDown("Square")))
         {
@@ -201,8 +202,9 @@ public class NetworkMovement : NetworkBehaviour
             canAttack = false;
             StartCoroutine(ComboCooldown());
         }
-
+        
     }
+    
 
     IEnumerator ComboCooldown()
     {
@@ -214,7 +216,6 @@ public class NetworkMovement : NetworkBehaviour
 
         canAttack = true; // Re-enable attacks
     }
-
     [ClientRpc]
     void RpcSetComboCount(int count)
     {
@@ -236,7 +237,7 @@ public class NetworkMovement : NetworkBehaviour
         }
     }
 
-
+    
     void Jump()
     {
         if (jumpCount == 0)
@@ -372,4 +373,5 @@ public class NetworkMovement : NetworkBehaviour
         // Make sure to add a return statement
         yield break;
     }
+*/
 }
