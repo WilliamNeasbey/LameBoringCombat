@@ -347,8 +347,8 @@ public class TacticalMode : MonoBehaviour
         else
         {
             StopKiCharge();
-            movement.enabled = true;
-            canAttack = true;
+           // movement.enabled = true;
+           // canAttack = true;
         }
 
         /*
