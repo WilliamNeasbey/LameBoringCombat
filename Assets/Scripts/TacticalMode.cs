@@ -25,8 +25,10 @@ public class TacticalMode : MonoBehaviour
     private CharacterMovement movement;
     private Animator anim;
     public WeaponCollision weapon;
+    public RightFistCollision sword;
     public KamehamehaCollision Kamehameha;
     public GameObject WeaponObject;
+    public GameObject SwordCollision;
     public GameObject KamehamehaObject;
     public RightFistCollision rightFist;
     public GameObject RightFistObject;
@@ -125,6 +127,8 @@ public class TacticalMode : MonoBehaviour
     private float lastAttackTime;
     private int comboCount = 0; // Initialize combo count
     private bool canAttack = true; // Added flag to control attack cooldown
+    bool swordStyle = false;
+    public GameObject Sword; 
 
     [Space]
     [Header("Sound")]
@@ -166,6 +170,8 @@ public class TacticalMode : MonoBehaviour
         weapon.onHit.AddListener((target) => HitTarget(target));
         rightFist.onHit.AddListener((target) => HitTarget(target)); 
         leftFist.onHit.AddListener((target) => HitTarget(target));  
+        leftLeg.onHit.AddListener((target) => HitTarget(target));  
+        sword.onHit.AddListener((target) => HitTarget(target));  
         movement = GetComponent<CharacterMovement>();
         anim = GetComponent<Animator>();
         camImpulseSource = Camera.main.GetComponent<CinemachineImpulseSource>();
@@ -222,66 +228,147 @@ public class TacticalMode : MonoBehaviour
             }
         }
 
+        // Attack style switch logic
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            swordStyle = false; // Switch to default attack style
+            Sword.SetActive(false);
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            swordStyle = true; // Switch to sword attack style
+            Sword.SetActive(true);
+        }
+
+
         // Attack
         if (canAttack && (Input.GetMouseButtonDown(0) || Input.GetButtonDown("Square")) && !tacticalMode && !usingAbility)
         {
-            if (Time.time - lastAttackTime > 1f)
-            {
-                // Reset combo count if it's been too long since the last attack
-                comboCount = 0;
-            }
 
-            if (comboCount == 0)
+            if (!swordStyle) // Default attack style
             {
-                anim.SetTrigger("Punch");
+                if (Time.time - lastAttackTime > 1f)
+                {
+                    // Reset combo count if it's been too long since the last attack
+                    comboCount = 0;
+                }
+
+                if (comboCount == 0)
+                {
+                    anim.SetTrigger("Punch");
+                }
+                else if (comboCount == 1)
+                {
+                    anim.SetTrigger("Punch2"); // Trigger the second punch animation
+                }
+                else if (comboCount == 2)
+                {
+                    anim.SetTrigger("AirKick");
+                }
+
+                comboCount = (comboCount + 1) % 3; // Increment combo count and wrap around
+
+                lastAttackTime = Time.time;
+
+                // Disable further attacks for a brief moment
+                canAttack = false;
+                StartCoroutine(ComboCooldown());
             }
-            else if (comboCount == 1)
+            else // Sword attack style
             {
-                anim.SetTrigger("Punch2"); // Trigger the second punch animation
+                if (Time.time - lastAttackTime > 1f)
+                {
+                    // Reset combo count if it's been too long since the last attack
+                    comboCount = 0;
+                }
+
+                if (comboCount == 0)
+                {
+                    anim.SetTrigger("Sword1");
+                }
+                else if (comboCount == 1)
+                {
+                    anim.SetTrigger("Sword2"); // Trigger the second punch animation
+                }
+                else if (comboCount == 2)
+                {
+                    anim.SetTrigger("Sword3");
+                }
+
+                comboCount = (comboCount + 1) % 3; // Increment combo count and wrap around
+
+                lastAttackTime = Time.time;
+
+                // Disable further attacks for a brief moment
+                canAttack = false;
+                StartCoroutine(ComboCooldown());
             }
-            else if (comboCount == 2)
-            {
-                anim.SetTrigger("AirKick");
-            }
-
-            comboCount = (comboCount + 1) % 3; // Increment combo count and wrap around
-
-            lastAttackTime = Time.time;
-
-            // Disable further attacks for a brief moment
-            canAttack = false;
-            StartCoroutine(ComboCooldown());
+            
         }
 
         // Attack
         if (canAttack && (Input.GetMouseButtonDown(1) || Input.GetButtonDown("Square")) && !tacticalMode && !usingAbility)
         {
-            if (Time.time - lastAttackTime > 1f)
-            {
-                // Reset combo count if it's been too long since the last attack
-                comboCount = 0;
-            }
 
-            if (comboCount == 0)
+            if (!swordStyle) // Default attack style
             {
-                anim.SetTrigger("LowKick");
+                if (Time.time - lastAttackTime > 1f)
+                {
+                    // Reset combo count if it's been too long since the last attack
+                    comboCount = 0;
+                }
+
+                if (comboCount == 0)
+                {
+                    anim.SetTrigger("LowKick");
+                }
+                else if (comboCount == 1)
+                {
+                    anim.SetTrigger("MidKick"); // Trigger the second punch animation
+                }
+                else if (comboCount == 2)
+                {
+                    anim.SetTrigger("HighKick");
+                }
+
+                comboCount = (comboCount + 1) % 3; // Increment combo count and wrap around
+
+                lastAttackTime = Time.time;
+
+                // Disable further attacks for a brief moment
+                canAttack = false;
+                StartCoroutine(ComboCooldown());
             }
-            else if (comboCount == 1)
+            else // Sword attack style
             {
-                anim.SetTrigger("MidKick"); // Trigger the second punch animation
+                if (Time.time - lastAttackTime > 1f)
+                {
+                    // Reset combo count if it's been too long since the last attack
+                    comboCount = 0;
+                }
+
+                if (comboCount == 0)
+                {
+                    anim.SetTrigger("LowKick");
+                }
+                else if (comboCount == 1)
+                {
+                    anim.SetTrigger("MidKick"); // Trigger the second punch animation
+                }
+                else if (comboCount == 2)
+                {
+                    anim.SetTrigger("HighKick");
+                }
+
+                comboCount = (comboCount + 1) % 3; // Increment combo count and wrap around
+
+                lastAttackTime = Time.time;
+
+                // Disable further attacks for a brief moment
+                canAttack = false;
+                StartCoroutine(ComboCooldown());
             }
-            else if (comboCount == 2)
-            {
-                anim.SetTrigger("HighKick");
-            }
-
-            comboCount = (comboCount + 1) % 3; // Increment combo count and wrap around
-
-            lastAttackTime = Time.time;
-
-            // Disable further attacks for a brief moment
-            canAttack = false;
-            StartCoroutine(ComboCooldown());
+           
         }
 
         if (Input.GetKeyDown(KeyCode.Tab) || Input.GetButtonDown("R3"))
@@ -1024,6 +1111,17 @@ public class TacticalMode : MonoBehaviour
     {
 
         KamehamehaObject.SetActive(false);
+    }
+
+    public void HitEventSword()
+    {
+        VFXDir = 5;
+        SwordCollision.SetActive(true);
+    }
+    public void HitDisableSword()
+    {
+
+        SwordCollision.SetActive(false);
     }
 
     public void CancelAction()
