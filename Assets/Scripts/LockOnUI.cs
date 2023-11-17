@@ -10,8 +10,19 @@ public class LockOnUI : MonoBehaviour
     // Assign the target (locked-on enemy) for this UI element
     public void SetTarget(Transform newTarget)
     {
-        target = newTarget;
+        if (newTarget != null)
+        {
+            target = newTarget;
+            Debug.Log("Target set: " + target.name);
+            gameObject.SetActive(true); // Ensure the UI GameObject is activated
+        }
+        else
+        {
+            Debug.LogWarning("Received null target.");
+            gameObject.SetActive(false); // Ensure the UI GameObject is deactivated if the target is null
+        }
     }
+
 
     // LateUpdate is called once per frame, after Update
     void LateUpdate()
@@ -23,6 +34,11 @@ public class LockOnUI : MonoBehaviour
 
             // Make the UI always face the camera with the offset
             transform.LookAt(Camera.main.transform.position + lookAtOffset);
+        }
+        else
+        {
+            // If the target is null, disable the UI element
+            gameObject.SetActive(false);
         }
     }
 }

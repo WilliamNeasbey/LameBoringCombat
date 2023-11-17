@@ -1215,6 +1215,8 @@ public class TacticalMode : MonoBehaviour
             return;
         }
 
+        bool previousLockState = isLockedOn; // Store the previous lock-on state
+
         isLockedOn = !isLockedOn; // Toggle lock-on state
 
         if (isLockedOn)
@@ -1230,7 +1232,6 @@ public class TacticalMode : MonoBehaviour
                 lockOnUITarget.SetTarget(lockedOnTarget);
             }
         }
-
         else
         {
             // Handle when lock-on is disabled
@@ -1242,10 +1243,62 @@ public class TacticalMode : MonoBehaviour
             }
         }
 
-        // Update your existing target system with the new lockedTargetIndex
-        UpdateExistingTargetSystem(lockedTargetIndex);
+        if (previousLockState != isLockedOn || !isLockedOn)
+        {
+            // Update the existing target system with the new lockedTargetIndex
+            UpdateExistingTargetSystem(lockedTargetIndex);
+        }
+
+        if (isLockedOn)
+        {
+            Transform lockedOnTarget = GetLockedOnTargetTransform(targetIndex);
+
+            SetCharacterViewToLockedTarget(targetIndex);
+
+            if (lockOnUITarget != null)
+            {
+                lockOnUITarget.SetTarget(lockedOnTarget);
+            }
+        }
+        else
+        {
+            playerCharacter.rotation = originalCharacterRotation;
+
+            if (lockOnUITarget != null)
+            {
+                lockOnUITarget.SetTarget(null);
+            }
+        }
+        UpdateLockOnUI();
     }
 
+    private void UpdateLockOnUI()
+    {
+        if (isLockedOn)
+        {
+            Transform lockedOnTarget = GetLockedOnTargetTransform(targetIndex);
+
+            if (lockedOnTarget != null && lockOnUITarget != null)
+            {
+                lockOnUITarget.SetTarget(lockedOnTarget);
+            }
+            else
+            {
+                // Handle when there is no locked-on target
+                if (lockOnUITarget != null)
+                {
+                    lockOnUITarget.SetTarget(null);
+                }
+            }
+        }
+        else
+        {
+            if (lockOnUITarget != null)
+            {
+                lockOnUITarget.SetTarget(null);
+            }
+        }
+    }
 
 
 
