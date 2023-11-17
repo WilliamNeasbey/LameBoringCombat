@@ -61,9 +61,12 @@ public class CharacterMovement : MonoBehaviour
 	// Update is called once per frame
 	void Update()
 	{
-		if (gameScript.usingAbility)
-			return;
-		InputMagnitude();
+        if (gameScript.usingAbility || Input.GetKey(KeyCode.Q))
+        {
+            ApplyGravity(); // Apply gravity even when the "Q" key is held
+            return;
+        }
+        InputMagnitude();
 
 		// Check for dashing
 		if (Input.GetKeyDown(KeyCode.LeftShift) && !isDashing && Time.time >= dashCooldownTimer)
@@ -228,11 +231,15 @@ public class CharacterMovement : MonoBehaviour
 		isDashing = false;
 	}
 
-
-
-
-
-
-
+    void ApplyGravity()
+    {
+        // Apply gravity to the character's vertical velocity
+        if (!isGrounded)
+        {
+            verticalVel -= gravity * Time.deltaTime;
+            moveVector = new Vector3(0, verticalVel * 0.2f, 0) * Time.deltaTime;
+            controller.Move(moveVector);
+        }
+    }
 
 }

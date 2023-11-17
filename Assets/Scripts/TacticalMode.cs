@@ -442,7 +442,7 @@ public class TacticalMode : MonoBehaviour
             ChargeKi();
             camImpulseSource.m_ImpulseDefinition.m_AmplitudeGain = 0.3f; // Value of the camera shake
             camImpulseSource.GenerateImpulse();
-            movement.enabled = false;
+            //movement.enabled = false;
             canAttack = false;
         }
         else
@@ -826,7 +826,7 @@ public class TacticalMode : MonoBehaviour
             KIchargingSound.Play();
             kiChargingParticle.SetActive(true);
             canAttack = false;
-            characterMovement.enabled = false;
+            //characterMovement.enabled = false;
             Debug.Log("Movement script disabled.");
         }
 
@@ -847,7 +847,7 @@ public class TacticalMode : MonoBehaviour
             anim.SetBool("chargingKI", false); // Reset animation bool
             KIchargingSound.Stop(); // Disable the KI charging sound
             kiChargingParticle.SetActive(false);
-            characterMovement.enabled = true;
+           // characterMovement.enabled = true;
             canAttack = true;
         }
     }
