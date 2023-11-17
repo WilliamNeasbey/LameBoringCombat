@@ -57,9 +57,10 @@ public class CharacterMovement : MonoBehaviour
 		controller = this.GetComponent<CharacterController>();
 		gameScript = GetComponent<TacticalMode>();
 	}
+  
 
-	// Update is called once per frame
-	void Update()
+    // Update is called once per frame
+    void Update()
 	{
         if (gameScript.usingAbility || Input.GetKey(KeyCode.Q))
         {
@@ -68,8 +69,12 @@ public class CharacterMovement : MonoBehaviour
         }
         InputMagnitude();
 
-		// Check for dashing
-		if (Input.GetKeyDown(KeyCode.LeftShift) && !isDashing && Time.time >= dashCooldownTimer)
+        // Check if the character is grounded using multiple methods
+        isGrounded = IsGroundedMultipleChecks();
+
+
+        // Check for dashing
+        if (Input.GetKeyDown(KeyCode.LeftShift) && !isDashing && Time.time >= dashCooldownTimer)
 		{
 			StartCoroutine(Dash());
 			dashCooldownTimer = Time.time + dashCooldown;
@@ -109,30 +114,29 @@ public class CharacterMovement : MonoBehaviour
 		}
 	}
 
-	void Jump()
-	{
-		if (jumpCount == 0)
-		{
-			// First jump
-			
-			verticalVel = jumpForce; // Set the initial jump force (adjust as needed)
-			jumpCount++;
-			anim.SetTrigger("JumpTrigger");
-		}
-		else if (jumpCount == 1)
-		{
-			// Second jump
-			
-			verticalVel = jumpForce; // Set the jump force for the second jump (adjust as needed)
-			jumpCount++;
-			anim.SetTrigger("SecondJumpTrigger");
-			canJump = false; // Disable jumping until grounded again
-		}
-	}
+    void Jump()
+    {
+        if (jumpCount == 0 && isGrounded) // Ensure the character is grounded before jumping
+        {
+            // First jump
+            verticalVel = jumpForce; // Set the initial jump force (adjust as needed)
+            jumpCount++;
+            anim.SetTrigger("JumpTrigger");
+        }
+        else if (jumpCount == 1 && !isGrounded) // Check if it's the second jump and not grounded
+        {
+            // Second jump
+            verticalVel = jumpForce; // Set the jump force for the second jump (adjust as needed)
+            jumpCount++;
+            anim.SetTrigger("SecondJumpTrigger");
+            canJump = false; // Disable jumping until grounded again
+        }
+    }
 
 
 
-	void PlayerMoveAndRotation(float InputX, float InputZ)
+
+    void PlayerMoveAndRotation(float InputX, float InputZ)
 	{
 
 		var camera = Camera.main;
@@ -230,6 +234,21 @@ public class CharacterMovement : MonoBehaviour
 
 		isDashing = false;
 	}
+
+    bool IsGroundedMultipleChecks()
+    {
+        bool grounded = controller.isGrounded;
+
+        // Perform a raycast downward from the player's position
+        float rayDistance = 0.3f; // Adjust this distance as needed
+        grounded |= Physics.Raycast(transform.position, Vector3.down, rayDistance);
+
+        // Perform a sphere cast to detect the ground
+        float sphereRadius = 0.1f; // Adjust this radius as needed
+        grounded |= Physics.SphereCast(transform.position, sphereRadius, Vector3.down, out _, rayDistance);
+
+        return grounded;
+    }
 
     void ApplyGravity()
     {
