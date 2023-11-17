@@ -222,9 +222,23 @@ public class TacticalMode : MonoBehaviour
             if (targets.Count > 0 && !tacticalMode && !usingAbility)
             {
                 targetIndex = NearestTargetToCenter();
-                Vector3 targetPosition = targets[targetIndex].position;
-                targetPosition.y = transform.position.y; // Keep the same height level
+                Transform lockedOnTarget = targets[targetIndex];
+                Vector3 targetPosition = lockedOnTarget.position;
+                targetPosition.y = transform.position.y;
                 transform.LookAt(targetPosition);
+
+                if (lockOnUITarget != null)
+                {
+                    lockOnUITarget.SetTarget(lockedOnTarget);
+                }
+            }
+        }
+        else
+        {
+            // ...
+            if (lockOnUITarget != null)
+            {
+                lockOnUITarget.SetTarget(null);
             }
         }
 
@@ -1207,57 +1221,38 @@ public class TacticalMode : MonoBehaviour
         if (targets.Count == 0)
         {
             isLockedOn = false;
-            anim.SetBool("LockOnAnimation", false); // Set LockOnAnimation to false
+            anim.SetBool("LockOnAnimation", false);
             if (lockOnUITarget != null)
             {
-                lockOnUITarget.SetTarget(null); // Unset the target for the UI Image
+                lockOnUITarget.SetTarget(null);
             }
             return;
         }
 
         bool previousLockState = isLockedOn; // Store the previous lock-on state
 
-        isLockedOn = !isLockedOn; // Toggle lock-on state
+        isLockedOn = !isLockedOn;
 
         if (isLockedOn)
         {
-            // Determine the targetIndex here
-            Transform lockedOnTarget = GetLockedOnTargetTransform(targetIndex);
-
-            // Set the character's view to the locked target
-            SetCharacterViewToLockedTarget(targetIndex);
-
-            if (lockOnUITarget != null)
+            int newIndex = NearestTargetToCenter();
+            if (newIndex != -1)
             {
-                lockOnUITarget.SetTarget(lockedOnTarget);
+                Transform lockedOnTarget = GetLockedOnTargetTransform(newIndex);
+                targetIndex = newIndex;
+                isLockedOn = true;
+
+                SetCharacterViewToLockedTarget(targetIndex);
+
+                if (lockOnUITarget != null)
+                {
+                    lockOnUITarget.SetTarget(lockedOnTarget);
+                }
             }
-        }
-        else
-        {
-            // Handle when lock-on is disabled
-            playerCharacter.rotation = originalCharacterRotation;
-
-            if (lockOnUITarget != null)
+            else
             {
-                lockOnUITarget.SetTarget(null); // Unset the target for the UI Image
-            }
-        }
-
-        if (previousLockState != isLockedOn || !isLockedOn)
-        {
-            // Update the existing target system with the new lockedTargetIndex
-            UpdateExistingTargetSystem(lockedTargetIndex);
-        }
-
-        if (isLockedOn)
-        {
-            Transform lockedOnTarget = GetLockedOnTargetTransform(targetIndex);
-
-            SetCharacterViewToLockedTarget(targetIndex);
-
-            if (lockOnUITarget != null)
-            {
-                lockOnUITarget.SetTarget(lockedOnTarget);
+                isLockedOn = false;
+                anim.SetBool("LockOnAnimation", false);
             }
         }
         else
@@ -1269,8 +1264,15 @@ public class TacticalMode : MonoBehaviour
                 lockOnUITarget.SetTarget(null);
             }
         }
+
+        if (previousLockState != isLockedOn || !isLockedOn)
+        {
+            UpdateExistingTargetSystem(lockedTargetIndex);
+        }
+
         UpdateLockOnUI();
     }
+
 
     private void UpdateLockOnUI()
     {
