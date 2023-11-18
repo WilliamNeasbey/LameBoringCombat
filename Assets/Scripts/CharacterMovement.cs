@@ -86,7 +86,7 @@ public class CharacterMovement : MonoBehaviour
 		// Set the "IsFalling" parameter in the Animator
 		//anim.SetBool("IsFalling", !isGrounded);
 
-		isGrounded = controller.isGrounded;
+		//isGrounded = controller.isGrounded;
 
 		if (isGrounded)
 		{
@@ -104,8 +104,17 @@ public class CharacterMovement : MonoBehaviour
 
 		controller.Move(moveVector);
 
-		// Update the "Velocity" parameter in the Animator
-		//anim.SetFloat("Velocity", Velocity);
+		// Update vertical velocity based on gravity
+		if (isGrounded)
+		{
+			jumpCount = 0; // Reset jump count when grounded
+			canJump = true; // Allow jumping when grounded
+			verticalVel = 0; // Reset vertical velocity
+		}
+		else
+		{
+			ApplyGravity();
+		}
 
 		// Handle jumping
 		if (canJump && Input.GetButtonDown("Jump"))
@@ -114,29 +123,29 @@ public class CharacterMovement : MonoBehaviour
 		}
 	}
 
-    void Jump()
-    {
-        if (jumpCount == 0 && isGrounded) // Ensure the character is grounded before jumping
-        {
-            // First jump
-            verticalVel = jumpForce; // Set the initial jump force (adjust as needed)
-            jumpCount++;
-            anim.SetTrigger("JumpTrigger");
-        }
-        else if (jumpCount == 1 && !isGrounded) // Check if it's the second jump and not grounded
-        {
-            // Second jump
-            verticalVel = jumpForce; // Set the jump force for the second jump (adjust as needed)
-            jumpCount++;
-            anim.SetTrigger("SecondJumpTrigger");
-            canJump = false; // Disable jumping until grounded again
-        }
-    }
+	void Jump()
+	{
+		if (canJump)
+		{
+			if (isGrounded)
+			{
+				verticalVel = jumpForce * 0.1f; // Apply a more significant force to the vertical velocity
+				jumpCount++;
+				anim.SetTrigger("JumpTrigger");
+			}
+			else if (!isGrounded && jumpCount == 1)
+			{
+				verticalVel = jumpForce * 0.1f; // Apply a more significant force for the second jump
+				jumpCount++;
+				anim.SetTrigger("SecondJumpTrigger");
+				canJump = false; // Disable jumping until grounded again
+			}
+		}
+	}
 
 
 
-
-    void PlayerMoveAndRotation(float InputX, float InputZ)
+	void PlayerMoveAndRotation(float InputX, float InputZ)
 	{
 
 		var camera = Camera.main;
