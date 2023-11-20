@@ -86,13 +86,13 @@ public class CharacterMovement : MonoBehaviour
 		// Set the "IsFalling" parameter in the Animator
 		//anim.SetBool("IsFalling", !isGrounded);
 
-		isGrounded = controller.isGrounded;
+		//isGrounded = controller.isGrounded;
 
 		if (isGrounded)
 		{
 			jumpCount = 0; // Reset jump count when grounded
 			canJump = true; // Allow jumping when grounded
-			verticalVel = 0; // Reset vertical velocity
+			//verticalVel = 0; // Reset vertical velocity
 		}
 		else
 		{
