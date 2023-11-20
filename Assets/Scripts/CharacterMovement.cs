@@ -63,7 +63,7 @@ public class CharacterMovement : MonoBehaviour
     void Update()
 	{
 		// Display the jumpCount value in the debug log
-		Debug.Log("Jump Count: " + jumpCount);
+		//Debug.Log("Jump Count: " + jumpCount);
 		
 
 		if (gameScript.usingAbility || Input.GetKey(KeyCode.Q))
@@ -107,7 +107,7 @@ public class CharacterMovement : MonoBehaviour
 		{
 			// Apply gravity to verticalVel when not grounded
 			verticalVel -= gravity * Time.deltaTime;
-			Debug.Log("Is Grounded: " + isGrounded);
+			//Debug.Log("Is Grounded: " + isGrounded);
 			jumpCount = 1;
 		}
 

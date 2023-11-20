@@ -52,7 +52,7 @@ public class TacticalMode : MonoBehaviour
     private float barrierActiveTime = 0f;
     private bool isChargingKi = false;
     public LockOnUI lockOnUITarget;
-
+    public GameObject NotEnoughKiUI;
 
     [Header("Time Stats")]
     public float slowMotionTime = .005f;
@@ -64,6 +64,7 @@ public class TacticalMode : MonoBehaviour
     public bool usingAbility;
     public bool dashing;
     private bool isChargingKI = false; // Flag to track KI charging state
+
     
     //dashing crap
     private bool isDashing = false; private Vector3 dashStartPosition;
@@ -394,6 +395,10 @@ public class TacticalMode : MonoBehaviour
         {
             if (atbCount > 0 && !tacticalMode)
                 SetTacticalMode(true);
+            else
+            {
+                StartCoroutine(ShowAndHideNotEnoughKiUI());
+            }
         }
 
         if (Input.GetKeyDown(KeyCode.Escape))
@@ -569,6 +574,8 @@ public class TacticalMode : MonoBehaviour
         else
         {
             Debug.Log("Not enough ATB for Hadouken.");
+            StartCoroutine(ShowAndHideNotEnoughKiUI());
+
         }
 
     }
@@ -620,6 +627,8 @@ public class TacticalMode : MonoBehaviour
         else
         {
             Debug.Log("Not enough ATB for Kikoken.");
+            StartCoroutine(ShowAndHideNotEnoughKiUI());
+
         }
     }
 
@@ -667,6 +676,8 @@ public class TacticalMode : MonoBehaviour
         else
         {
             Debug.Log("Not enough ATB for Hadouken.");
+            StartCoroutine(ShowAndHideNotEnoughKiUI());
+
         }
     }
 
@@ -693,6 +704,8 @@ public class TacticalMode : MonoBehaviour
         {
             // Display a message or perform some action to indicate that the player doesn't have enough ATB.
             Debug.Log("Not enough ATB for LightningKicks.");
+            StartCoroutine(ShowAndHideNotEnoughKiUI());
+
         }
     }
 
@@ -720,6 +733,8 @@ public class TacticalMode : MonoBehaviour
         {
             // Display a message or perform some action to indicate that the player doesn't have enough ATB.
             Debug.Log("Not enough ATB for LightningKicks.");
+            StartCoroutine(ShowAndHideNotEnoughKiUI());
+
         }
     }  
     
@@ -747,6 +762,8 @@ public class TacticalMode : MonoBehaviour
         {
             // Display a message or perform some action to indicate that the player doesn't have enough ATB.
             Debug.Log("Not enough ATB for LightningKicks.");
+            StartCoroutine(ShowAndHideNotEnoughKiUI());
+
         }
     }
 
@@ -776,6 +793,8 @@ public class TacticalMode : MonoBehaviour
         else
         {
             Debug.Log("Not enough ATB for the Heal spell.");
+            StartCoroutine(ShowAndHideNotEnoughKiUI());
+
         }
     }
 
@@ -805,6 +824,8 @@ public class TacticalMode : MonoBehaviour
         else
         {
             Debug.Log("Not enough ATB for the Barrier.");
+            StartCoroutine(ShowAndHideNotEnoughKiUI());
+
         }
     }
 
@@ -1405,6 +1426,15 @@ public class TacticalMode : MonoBehaviour
         {
             rb.AddForce(appliedForce);
         }
+    }
+
+    IEnumerator ShowAndHideNotEnoughKiUI()
+    {
+        NotEnoughKiUI.SetActive(true); // Enable the UI
+
+        yield return new WaitForSeconds(1f); // Wait for 1 second
+
+        NotEnoughKiUI.SetActive(false); // Disable the UI after 1 second
     }
 
 }
