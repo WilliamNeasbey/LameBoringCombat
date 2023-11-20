@@ -129,19 +129,21 @@ public class CharacterMovement : MonoBehaviour
 		{
 			if (isGrounded)
 			{
-				verticalVel = jumpForce * 0.1f; // Apply a more significant force to the vertical velocity
+				verticalVel = jumpForce; // Apply the jump force directly to the vertical velocity
 				jumpCount++;
 				anim.SetTrigger("JumpTrigger");
 			}
 			else if (!isGrounded && jumpCount == 1)
 			{
-				verticalVel = jumpForce * 0.1f; // Apply a more significant force for the second jump
+				verticalVel = jumpForce; // Apply the jump force for the second jump
 				jumpCount++;
 				anim.SetTrigger("SecondJumpTrigger");
 				canJump = false; // Disable jumping until grounded again
 			}
 		}
 	}
+
+
 
 
 
