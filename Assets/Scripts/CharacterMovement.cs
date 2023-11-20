@@ -57,70 +57,43 @@ public class CharacterMovement : MonoBehaviour
 		controller = this.GetComponent<CharacterController>();
 		gameScript = GetComponent<TacticalMode>();
 	}
-  
 
-    // Update is called once per frame
-    void Update()
+
+	// Update is called once per frame
+	void Update()
 	{
-        if (gameScript.usingAbility || Input.GetKey(KeyCode.Q))
-        {
-            ApplyGravity(); // Apply gravity even when the "Q" key is held
-            return;
-        }
-        InputMagnitude();
-
-        // Check if the character is grounded using multiple methods
-        isGrounded = IsGroundedMultipleChecks();
-
-
-        // Check for dashing
-        if (Input.GetKeyDown(KeyCode.LeftShift) && !isDashing && Time.time >= dashCooldownTimer)
+		if (gameScript.usingAbility || Input.GetKey(KeyCode.Q))
 		{
-			StartCoroutine(Dash());
-			dashCooldownTimer = Time.time + dashCooldown;
+			ApplyGravity(); // Apply gravity even when the "Q" key is held
+			return;
 		}
+		InputMagnitude();
 
-		// Check if the character is grounded with tolerance
-		//isGrounded = CheckIfGroundedWithTolerance();
-
-		// Set the "IsFalling" parameter in the Animator
-		//anim.SetBool("IsFalling", !isGrounded);
-
-		//isGrounded = controller.isGrounded;
+		// Check if the character is grounded using multiple methods
+		isGrounded = IsGroundedMultipleChecks();
 
 		if (isGrounded)
 		{
-			jumpCount = 0; // Reset jump count when grounded
-			canJump = true; // Allow jumping when grounded
-			verticalVel = 0; // Reset vertical velocity
+			// Reset jump count and allow jumping when grounded
+			jumpCount = 0;
+			canJump = true;
+			verticalVel = 0; // Reset vertical velocity when grounded
 		}
 		else
 		{
-			// Apply gravity to verticalVel when not grounded
-			verticalVel -= gravity * Time.deltaTime;
-		}
-
-		moveVector = new Vector3(0, verticalVel * 0.2f, 0) * Time.deltaTime;
-
-		controller.Move(moveVector);
-
-		// Update vertical velocity based on gravity
-		if (isGrounded)
-		{
-			jumpCount = 0; // Reset jump count when grounded
-			canJump = true; // Allow jumping when grounded
-			verticalVel = 0; // Reset vertical velocity
-		}
-		else
-		{
+			// Apply gravity when not grounded
 			ApplyGravity();
 		}
 
-		// Handle jumping
-		if (canJump && Input.GetButtonDown("Jump"))
+		// Handle jumping only when allowed and grounded
+		if (canJump && isGrounded && Input.GetButtonDown("Jump"))
 		{
 			Jump();
 		}
+
+		// Apply vertical movement based on the calculated vertical velocity
+		moveVector = new Vector3(0, verticalVel * 0.2f, 0) * Time.deltaTime;
+		controller.Move(moveVector);
 	}
 
 	void Jump()
@@ -143,8 +116,11 @@ public class CharacterMovement : MonoBehaviour
 		}
 	}
 
-
-
+	void ApplyGravity()
+	{
+		// Apply gravity to the character's vertical velocity
+		verticalVel -= gravity * Time.deltaTime;
+	}
 
 
 	void PlayerMoveAndRotation(float InputX, float InputZ)
@@ -261,15 +237,6 @@ public class CharacterMovement : MonoBehaviour
         return grounded;
     }
 
-    void ApplyGravity()
-    {
-        // Apply gravity to the character's vertical velocity
-        if (!isGrounded)
-        {
-            verticalVel -= gravity * Time.deltaTime;
-            moveVector = new Vector3(0, verticalVel * 0.2f, 0) * Time.deltaTime;
-            controller.Move(moveVector);
-        }
-    }
+  
 
 }
