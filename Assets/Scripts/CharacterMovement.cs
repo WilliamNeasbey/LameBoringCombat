@@ -34,7 +34,7 @@ public class CharacterMovement : MonoBehaviour
 
 	public float gravity = 9.81f;
 	public float verticalVel;
-	private int jumpCount = 0;
+	public int jumpCount = 0;
 	private bool canJump = true;
 	public float jumpForce = 10f;
 
@@ -62,7 +62,10 @@ public class CharacterMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
 	{
-        if (gameScript.usingAbility || Input.GetKey(KeyCode.Q))
+		// Display the jumpCount value in the debug log
+		Debug.Log("Jump Count: " + jumpCount);
+
+		if (gameScript.usingAbility || Input.GetKey(KeyCode.Q))
         {
             ApplyGravity(); // Apply gravity even when the "Q" key is held
             return;
@@ -92,7 +95,10 @@ public class CharacterMovement : MonoBehaviour
 		{
 			jumpCount = 0; // Reset jump count when grounded
 			canJump = true; // Allow jumping when grounded
+			//for some reason commenting out the vertcalVel makes the jump work when the grounded check works but stops the second jump from happening
+			
 			//verticalVel = 0; // Reset vertical velocity
+
 		}
 		else
 		{
@@ -112,31 +118,44 @@ public class CharacterMovement : MonoBehaviour
 		{
 			Jump();
 		}
+		
+		if (canJump && jumpCount == 1 && Input.GetButtonDown("Jump"))
+		{
+			Jump2();
+		}
 	}
 
-    void Jump()
-    {
-        if (jumpCount == 0 && isGrounded) // Ensure the character is grounded before jumping
-        {
-            // First jump
-            verticalVel = jumpForce; // Set the initial jump force (adjust as needed)
-            jumpCount++;
-            anim.SetTrigger("JumpTrigger");
-        }
-        else if (jumpCount == 1 && !isGrounded) // Check if it's the second jump and not grounded
-        {
-            // Second jump
-            verticalVel = jumpForce; // Set the jump force for the second jump (adjust as needed)
-            jumpCount++;
-            anim.SetTrigger("SecondJumpTrigger");
-            canJump = false; // Disable jumping until grounded again
-        }
-    }
+	void Jump()
+	{
+		if (jumpCount == 0 && isGrounded) // Ensure the character is grounded before jumping
+		{
+			// First jump
+			verticalVel = jumpForce; // Set the initial jump force (adjust as needed)
+			jumpCount++;
+			Debug.Log("Jump count after first jump: " + jumpCount);
+			anim.SetTrigger("JumpTrigger");
+		}
+		
+	}
+	void Jump2()
+	{
+		if (!isGrounded && canJump) // Check if it's the second jump and not grounded
+		{
+			// Second jump
+			verticalVel = jumpForce; // Set the jump force for the second jump (adjust as needed)
+			jumpCount++;
+			Debug.Log("Jump count after second jump: " + jumpCount);
+			anim.SetTrigger("SecondJumpTrigger");
+			canJump = false; // Disable jumping until grounded again
+		}
+
+	}
 
 
 
 
-    void PlayerMoveAndRotation(float InputX, float InputZ)
+
+	void PlayerMoveAndRotation(float InputX, float InputZ)
 	{
 
 		var camera = Camera.main;
