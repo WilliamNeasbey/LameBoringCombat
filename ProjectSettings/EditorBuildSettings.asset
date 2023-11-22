@@ -5,7 +5,7 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Titlescreen.unity
     guid: 5a7634ecabf8548438ad350e8f017fe2
   - enabled: 1
@@ -29,22 +29,22 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/ArenaStage.unity
     guid: 892ab6cbef410ee44ad71b784f78c394
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/LevelSelectTemp.unity
     guid: 294d792347a582142a85c04dc227fa0a
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Lobby1.unity
     guid: bbe7db194e7a2ef41b7c03652ce2449e
   - enabled: 0
     path: Assets/Scenes/CharacterSelect.unity
     guid: b7544d5a30d9eed449267cef7699537b
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/TutorialStage.unity
     guid: 8d8857fab6baece47a85d74dab1a354d
   - enabled: 0
     path: Assets/Scenes/SurvivalTest.unity
     guid: 7400eb6fdea4a1e4fbecc051372db48f
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/SurvivalOnePiece.unity
     guid: 86047e96cefbe5d43ab74f9f3a190752
   m_configObjects:
