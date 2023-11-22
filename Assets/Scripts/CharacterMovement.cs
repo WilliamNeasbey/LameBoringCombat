@@ -48,6 +48,9 @@ public class CharacterMovement : MonoBehaviour
 	public float dashCooldown = 2.0f;
 	private float dashCooldownTimer = 0.0f;
 
+	// For mobile controls
+	public Joystick joystick;
+
 	// Use this for initialization
 	void Start()
 	{
@@ -71,7 +74,8 @@ public class CharacterMovement : MonoBehaviour
             ApplyGravity(); // Apply gravity even when the "Q" key is held
             return;
         }
-        InputMagnitude();
+		
+		InputMagnitude();
 
         // Check if the character is grounded using multiple methods
         isGrounded = IsGroundedMultipleChecks();
@@ -195,6 +199,7 @@ public class CharacterMovement : MonoBehaviour
 
 	void InputMagnitude()
 	{
+		
 		// Calculate the character's speed
 		Speed = new Vector2(InputX, InputZ).sqrMagnitude;
 
