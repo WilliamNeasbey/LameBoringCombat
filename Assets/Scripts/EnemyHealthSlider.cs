@@ -18,7 +18,11 @@ public class EnemyHealthSlider : MonoBehaviour
             return;
         }
 
-        // Set the maximum value of the Slider to match the player's max health
+        
+        // Get the initial max health value from the attached enemy script
+        maxHealth = EnemyHealthScript.health;
+
+        // Set the maximum value of the Slider to match the enemy's max health
         healthSlider.maxValue = maxHealth;
     }
 
