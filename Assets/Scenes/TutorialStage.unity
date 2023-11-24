@@ -3726,6 +3726,7 @@ MonoBehaviour:
   dashSpeed: 10
   dashDuration: 0.5
   dashCooldown: 2
+  joystick: {fileID: 0}
 --- !u!1 &173202593
 GameObject:
   m_ObjectHideFlags: 0
@@ -19517,7 +19518,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &608795202
 RectTransform:
   m_ObjectHideFlags: 0
@@ -20445,6 +20446,7 @@ MonoBehaviour:
   dashSpeed: 10
   dashDuration: 0.5
   dashCooldown: 2
+  joystick: {fileID: 0}
 --- !u!4 &653359684 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 8d6bb0967a9efd34e87e00fd231ec1c2, type: 3}

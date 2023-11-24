@@ -46,6 +46,10 @@ public class EnemyScript : MonoBehaviour
 
     private PointCounter pointCounter;
 
+    private WaveSpawner waveSpawner;
+
+    private float newHealth;
+
     private void Awake()
     {
         timeBetweenAttacks = Random.Range(0.2f, 0.5f); // Adjusted time between attacks to be quicker
@@ -57,6 +61,9 @@ public class EnemyScript : MonoBehaviour
         anim = GetComponent<Animator>();
         playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
         allyTransform = GameObject.FindGameObjectWithTag("Ally").transform;
+
+        // Get a reference to the WaveSpawner script
+        waveSpawner = GameObject.FindObjectOfType<WaveSpawner>();
     }
 
 
@@ -145,6 +152,7 @@ public class EnemyScript : MonoBehaviour
             // Set the flag to true to indicate that the dance animation has been triggered
             hasDanced = true;
         }
+        
     }
 
 
@@ -380,6 +388,12 @@ public class EnemyScript : MonoBehaviour
     {
 
         LeftFistObject.SetActive(false);
+    }
+
+    public void UpdateHealth(float updatedHealth)
+    {
+        health = updatedHealth;
+        Debug.Log("Enemy health updated: " + health); // Check if this log is printed
     }
 
 

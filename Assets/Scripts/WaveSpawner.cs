@@ -17,6 +17,8 @@ public class WaveSpawner : MonoBehaviour
     private float countdown = 2f;
     private bool isWaveActive = false;
 
+    private int startingEnemyHealth = 20;
+
     void Start()
     {
         roundText.text = "Round: " + currentRound;
@@ -59,8 +61,13 @@ public class WaveSpawner : MonoBehaviour
         {
             currentRound++;
             roundText.text = "Round: " + currentRound;
+            UpdateEnemyHealthForRound();
             yield return SpawnWave();
+            
         }
+        
+
+        
     }
 
     IEnumerator SpawnWave()
@@ -95,11 +102,20 @@ public class WaveSpawner : MonoBehaviour
         {
             // Instantiate the enemy prefab at the chosen spawn point
             GameObject enemy = Instantiate(enemyPrefab, spawnPoint.position, spawnPoint.rotation);
-            // You can handle your enemy spawning logic here
+            EnemyScript enemyScript = enemy.GetComponent<EnemyScript>(); // Get the EnemyScript component
+
+            if (enemyScript != null)
+            {
+                // Update the enemy's health when spawning
+                float newHealth = startingEnemyHealth + (currentRound * 10);
+                enemyScript.UpdateHealth(newHealth);
+            }
+
             return enemy;
         }
         return null;
     }
+
 
     Transform GetActiveSpawnPoint()
     {
@@ -132,4 +148,21 @@ public class WaveSpawner : MonoBehaviour
             // Wave completed, you can proceed to the next wave or perform other actions here
         }
     }
+
+    void UpdateEnemyHealthForRound()
+    {
+        // Calculate new health based on the current round or wave
+        float newHealth = startingEnemyHealth + (currentRound * 10);
+
+        // Find all enemies and update their health
+        EnemyScript[] enemies = GameObject.FindObjectsOfType<EnemyScript>();
+        foreach (EnemyScript enemy in enemies)
+        {
+            // Apply the new health to each enemy
+            enemy.UpdateHealth(newHealth);
+        }
+    }
+
+
 }
+
