@@ -17,7 +17,7 @@ public class WaveSpawner : MonoBehaviour
     private float countdown = 2f;
     private bool isWaveActive = false;
 
-    private int startingEnemyHealth = 20;
+    private int startingEnemyHealth = 30;
 
     void Start()
     {
@@ -106,15 +106,23 @@ public class WaveSpawner : MonoBehaviour
 
             if (enemyScript != null)
             {
-                // Update the enemy's health when spawning
-                float newHealth = startingEnemyHealth + (currentRound * 10);
-                enemyScript.UpdateHealth(newHealth);
+                // Update the enemy's health when spawning, considering round 5 onwards
+                if (currentRound >= 5)
+                {
+                    float newHealth = startingEnemyHealth + ((currentRound - 5) * 10);
+                    enemyScript.UpdateHealth(newHealth);
+                }
+                else
+                {
+                    enemyScript.UpdateHealth(startingEnemyHealth); // Set default health for rounds below 5
+                }
             }
 
             return enemy;
         }
         return null;
     }
+
 
 
     Transform GetActiveSpawnPoint()
@@ -151,17 +159,21 @@ public class WaveSpawner : MonoBehaviour
 
     void UpdateEnemyHealthForRound()
     {
-        // Calculate new health based on the current round or wave
-        float newHealth = startingEnemyHealth + (currentRound * 10);
-
-        // Find all enemies and update their health
-        EnemyScript[] enemies = GameObject.FindObjectsOfType<EnemyScript>();
-        foreach (EnemyScript enemy in enemies)
+        //the spawnenemy function actually sets the enemies health now
+        if (currentRound >= 5) // Check if the current round is greater than or equal to 5
         {
-            // Apply the new health to each enemy
-            enemy.UpdateHealth(newHealth);
+            // Calculate new health based on the current round or wave
+            float newHealth = startingEnemyHealth + ((currentRound - 5) * 10); // Offset by 5 rounds
+
+            // Find all enemies and update their health
+            EnemyScript[] enemies = GameObject.FindObjectsOfType<EnemyScript>();
+            foreach (EnemyScript enemy in enemies)
+            {
+                enemy.UpdateHealth(newHealth);
+            }
         }
     }
+
 
 
 }
