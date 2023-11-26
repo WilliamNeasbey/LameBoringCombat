@@ -4632,6 +4632,7 @@ MonoBehaviour:
   isAiming: 0
   usingAbility: 0
   dashing: 0
+  pauseMenu: {fileID: 0}
   atbSlider: 0
   filledAtbValue: 100
   atbCount: 0
@@ -4760,6 +4761,7 @@ MonoBehaviour:
   dashSpeed: 10
   dashDuration: 0.5
   dashCooldown: 2
+  joystick: {fileID: 0}
 --- !u!1 &173202593
 GameObject:
   m_ObjectHideFlags: 0
@@ -28183,6 +28185,7 @@ MonoBehaviour:
   dashSpeed: 10
   dashDuration: 0.5
   dashCooldown: 2
+  joystick: {fileID: 0}
 --- !u!4 &653359684 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 8d6bb0967a9efd34e87e00fd231ec1c2, type: 3}
@@ -28289,6 +28292,7 @@ MonoBehaviour:
   isAiming: 0
   usingAbility: 0
   dashing: 0
+  pauseMenu: {fileID: 0}
   atbSlider: 0
   filledAtbValue: 100
   atbCount: 0
@@ -36241,7 +36245,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: c63852cb0cb78434396165c00839986f, type: 3}
+  m_audioClip: {fileID: 8300000, guid: bdfdd290ceee68a4f9e243915c69a619, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 0.056
   m_Pitch: 1
