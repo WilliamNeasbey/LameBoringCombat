@@ -64,8 +64,8 @@ public class TacticalMode : MonoBehaviour
     public bool usingAbility;
     public bool dashing;
     private bool isChargingKI = false; // Flag to track KI charging state
+    public GameObject pauseMenu;
 
-    
     //dashing crap
     private bool isDashing = false; private Vector3 dashStartPosition;
     private Vector3 dashEndPosition;
@@ -506,6 +506,12 @@ public class TacticalMode : MonoBehaviour
             // Reset barrier active time and drain rate when the barrier is deactivated
             barrierActiveTime = 0f;
             barrierDrainRate = defaultBarrierDrainRate;
+        }
+
+        //pause menu
+        if (!tacticalMode && Input.GetKeyDown(KeyCode.Escape))
+        {
+            OpenPauseMenu();
         }
 
     }
@@ -1435,6 +1441,18 @@ public class TacticalMode : MonoBehaviour
         yield return new WaitForSeconds(1f); // Wait for 1 second
 
         NotEnoughKiUI.SetActive(false); // Disable the UI after 1 second
+    }
+
+    void OpenPauseMenu()
+    {
+        Time.timeScale = 0f; // Freezes the game
+        pauseMenu.SetActive(true); // Show the pause menu
+    }
+
+    public void ClosePauseMenu()
+    {
+        Time.timeScale = 1f; // Unfreezes the game
+        pauseMenu.SetActive(false); // Hide the pause menu
     }
 
 }
