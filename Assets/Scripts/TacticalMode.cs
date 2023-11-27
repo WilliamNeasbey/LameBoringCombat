@@ -53,6 +53,8 @@ public class TacticalMode : MonoBehaviour
     private bool isChargingKi = false;
     public LockOnUI lockOnUITarget;
     public GameObject NotEnoughKiUI;
+    public GameObject MouseOn; // Reference to the Mouse toggle on
+    public GameObject MouseOff; // Reference to the Mouse toggle off
 
     [Header("Time Stats")]
     public float slowMotionTime = .005f;
@@ -1447,12 +1449,16 @@ public class TacticalMode : MonoBehaviour
     {
         Time.timeScale = 0f; // Freezes the game
         pauseMenu.SetActive(true); // Show the pause menu
+        MouseOn.SetActive(true);
+        MouseOff.SetActive(false);
     }
 
     public void ClosePauseMenu()
     {
         Time.timeScale = 1f; // Unfreezes the game
         pauseMenu.SetActive(false); // Hide the pause menu
+        MouseOn.SetActive(false);
+        MouseOff.SetActive(true);
     }
 
 }

@@ -64,8 +64,8 @@ public class LoseConditionSurvivalMode : MonoBehaviour
         Cameras.SetActive(true);
         HitSound.SetActive(true);
         Wincondition.SetActive(true);
-        MouseOn.SetActive(false);
-        MouseOff.SetActive(true);
+        //MouseOn.SetActive(false);
+       // MouseOff.SetActive(true);
 
         // Ensure the score texts are hidden initially
         scoreText.gameObject.SetActive(false);
