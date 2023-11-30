@@ -605,7 +605,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 689bb1cb0ee1e7a49bb047c81087229f, type: 3}
       propertyPath: m_TagString
-      value: Untagged
+      value: Ragdoll
       objectReference: {fileID: 0}
     - target: {fileID: 1082271958561512970, guid: 689bb1cb0ee1e7a49bb047c81087229f, type: 3}
       propertyPath: m_Layer
