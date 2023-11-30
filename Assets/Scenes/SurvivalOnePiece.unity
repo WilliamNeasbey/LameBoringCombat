@@ -4176,11 +4176,14 @@ MonoBehaviour:
   barrierDrainRate: 50
   lockOnUITarget: {fileID: 781071183}
   NotEnoughKiUI: {fileID: 1879030129}
+  MouseOn: {fileID: 0}
+  MouseOff: {fileID: 0}
   slowMotionTime: 0.005
   tacticalMode: 0
   isAiming: 0
   usingAbility: 0
   dashing: 0
+  pauseMenu: {fileID: 0}
   atbSlider: 0
   filledAtbValue: 100
   atbCount: 0
@@ -22213,15 +22216,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6332190415429669905, guid: 1e5fd67c67322804fa670601dafedac1, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.10210201
+      value: 0.102102
       objectReference: {fileID: 0}
     - target: {fileID: 6332190415429669905, guid: 1e5fd67c67322804fa670601dafedac1, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.05206171
+      value: -0.05206169
       objectReference: {fileID: 0}
     - target: {fileID: 6332190415429669905, guid: 1e5fd67c67322804fa670601dafedac1, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.005350941
+      value: 0.005350938
       objectReference: {fileID: 0}
     - target: {fileID: 6332190415429669906, guid: 1e5fd67c67322804fa670601dafedac1, type: 3}
       propertyPath: m_Lens.m_SensorSize.x
@@ -24260,11 +24263,14 @@ MonoBehaviour:
   barrierDrainRate: 10
   lockOnUITarget: {fileID: 0}
   NotEnoughKiUI: {fileID: 0}
+  MouseOn: {fileID: 0}
+  MouseOff: {fileID: 0}
   slowMotionTime: 0.005
   tacticalMode: 0
   isAiming: 0
   usingAbility: 0
   dashing: 0
+  pauseMenu: {fileID: 0}
   atbSlider: 0
   filledAtbValue: 100
   atbCount: 0
