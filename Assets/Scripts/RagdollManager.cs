@@ -9,7 +9,7 @@ public struct RagdollCleanupJob : IJob
 {
     public NativeList<int> ragdollInstanceIDs;
     public int maxRagdolls;
-
+    public bool shouldCleanup;
     private Dictionary<int, GameObject> instanceIDToObjectMap;
 
     public void Initialize(Dictionary<int, GameObject> instanceIDMap)
@@ -76,23 +76,21 @@ public class RagdollManager : MonoBehaviour
     public float checkInterval = 10f; // Time interval to check for ragdolls
     public int maxRagdolls = 69; // Maximum number of ragdolls allowed
 
-    private NativeList<int> ragdollInstanceIDs;
-    private JobHandle ragdollCleanupJobHandle;
-    private RagdollCleanupJob ragdollCleanupJob;
-    private float nextCheckTime;
+    public NativeList<int> ragdollInstanceIDs;
+    public bool shouldCleanup;
     private Dictionary<int, GameObject> instanceIDToObjectMap;
 
     private void OnEnable()
     {
         ragdollInstanceIDs = new NativeList<int>(Allocator.Persistent);
         instanceIDToObjectMap = new Dictionary<int, GameObject>();
-        nextCheckTime = Time.time + checkInterval; // Set initial check time
         InvokeRepeating(nameof(CheckRagdolls), 0f, checkInterval);
     }
 
     private void OnDisable()
     {
-        ragdollCleanupJobHandle.Complete();
+        CancelInvoke(nameof(CheckRagdolls));
+        CleanupRagdolls(); // Ensure to clean up ragdolls before disabling
         ragdollInstanceIDs.Dispose();
     }
 
@@ -123,26 +121,31 @@ public class RagdollManager : MonoBehaviour
             }
         }
 
-        if (Time.time >= nextCheckTime)
+        if (ragdollCount >= maxRagdolls || shouldCleanup)
         {
-            Debug.Log($"Checking for objects with the Ragdoll layer. Found {ragdollCount} objects.");
-            nextCheckTime = Time.time + checkInterval;
-
-            if (!ragdollCleanupJobHandle.IsCompleted)
-            {
-                ragdollCleanupJobHandle.Complete();
-            }
-
-            ragdollCleanupJob = new RagdollCleanupJob
-            {
-                ragdollInstanceIDs = ragdollInstanceIDs,
-                maxRagdolls = maxRagdolls
-            };
-            ragdollCleanupJob.Initialize(instanceIDToObjectMap);
-
-            ragdollCleanupJobHandle = ragdollCleanupJob.Schedule();
+            CleanupRagdolls();
         }
 
-        Debug.Log($"Time until the next check: {nextCheckTime - Time.time:F2} seconds.");
+        Debug.Log($"Time until the next check: {checkInterval:F2} seconds.");
+    }
+
+    private void CleanupRagdolls()
+    {
+        Debug.Log("Cleanup initiated.");
+
+        RagdollCleanupJob cleanupJob = new RagdollCleanupJob
+        {
+            ragdollInstanceIDs = ragdollInstanceIDs,
+            maxRagdolls = maxRagdolls,
+            shouldCleanup = shouldCleanup
+        };
+
+        // Initialize the instanceIDToObjectMap in the job
+        cleanupJob.Initialize(instanceIDToObjectMap);
+
+        cleanupJob.Execute(); // Manually execute the cleanup job
+
+        Debug.Log("Cleanup executed.");
     }
 }
+

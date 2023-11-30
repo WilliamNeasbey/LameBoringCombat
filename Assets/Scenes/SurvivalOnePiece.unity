@@ -22685,11 +22685,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6332190414834607267, guid: 1e5fd67c67322804fa670601dafedac1, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.052150436
+      value: -0.05215045
       objectReference: {fileID: 0}
     - target: {fileID: 6332190414834607267, guid: 1e5fd67c67322804fa670601dafedac1, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.004403081
+      value: 0.0044030827
       objectReference: {fileID: 0}
     - target: {fileID: 6332190414834607268, guid: 1e5fd67c67322804fa670601dafedac1, type: 3}
       propertyPath: field of view
@@ -22761,15 +22761,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6332190415429669905, guid: 1e5fd67c67322804fa670601dafedac1, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.10210202
+      value: 0.10210201
       objectReference: {fileID: 0}
     - target: {fileID: 6332190415429669905, guid: 1e5fd67c67322804fa670601dafedac1, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.052061714
+      value: -0.05206171
       objectReference: {fileID: 0}
     - target: {fileID: 6332190415429669905, guid: 1e5fd67c67322804fa670601dafedac1, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.0053509423
+      value: 0.005350941
       objectReference: {fileID: 0}
     - target: {fileID: 6332190415429669906, guid: 1e5fd67c67322804fa670601dafedac1, type: 3}
       propertyPath: m_Lens.m_SensorSize.x
@@ -22869,11 +22869,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6332190416511611305, guid: 1e5fd67c67322804fa670601dafedac1, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.05215043
+      value: -0.052150436
       objectReference: {fileID: 0}
     - target: {fileID: 6332190416511611305, guid: 1e5fd67c67322804fa670601dafedac1, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.0044030803
+      value: 0.0044030813
       objectReference: {fileID: 0}
     - target: {fileID: 6332190416511611306, guid: 1e5fd67c67322804fa670601dafedac1, type: 3}
       propertyPath: m_Lens.m_SensorSize.x
@@ -37652,7 +37652,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   checkInterval: 2
-  maxRagdolls: 2
+  maxRagdolls: 69
+  shouldCleanup: 0
 --- !u!4 &1043306907
 Transform:
   m_ObjectHideFlags: 0
