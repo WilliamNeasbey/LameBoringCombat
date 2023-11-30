@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using Unity.Jobs;
+using Unity.Collections;
+using Unity.Burst;
 
 public class EnemyScript : MonoBehaviour
 {
@@ -127,6 +130,7 @@ public class EnemyScript : MonoBehaviour
                     transform.rotation = Quaternion.LookRotation(moveDirection);
                 }
             }
+
             // Check if the enemy is in a hit stun state
             if (isHitStun)
             {
@@ -192,29 +196,7 @@ public class EnemyScript : MonoBehaviour
     }
 
 
-    private void AvoidOtherEnemies()
-    {
-        // Find all enemies with the "Enemy" tag
-        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
-
-        foreach (GameObject enemy in enemies)
-        {
-            if (enemy != gameObject) // Skip the current enemy
-            {
-                // Calculate the distance to the other enemy
-                float distanceToEnemy = Vector3.Distance(transform.position, enemy.transform.position);
-
-                if (distanceToEnemy < minDistanceToOtherEnemies)
-                {
-                    // Calculate a direction away from the other enemy
-                    Vector3 avoidDirection = (transform.position - enemy.transform.position).normalized;
-
-                    // Move the enemy away from the other enemy
-                    transform.Translate(avoidDirection * moveSpeed * Time.deltaTime, Space.World);
-                }
-            }
-        }
-    }
+   
 
 
     private void AttackPlayer()
@@ -396,5 +378,49 @@ public class EnemyScript : MonoBehaviour
         Debug.Log("Enemy health updated: " + health); // Check if this log is printed
     }
 
+    [BurstCompile]
+    struct AvoidanceJob : IJobParallelFor
+    {
+        public NativeArray<Vector3> enemyPositions;
+        public Vector3 currentEnemyPosition;
 
+        public void Execute(int index)
+        {
+            if (index >= enemyPositions.Length)
+                return;
+
+            if (index != enemyPositions.Length) // Avoid checking the current enemy against itself
+            {
+                Vector3 avoidDirection = (currentEnemyPosition - enemyPositions[index]).normalized;
+                // Perform avoidance calculations
+                // Update currentEnemyPosition accordingly if needed
+            }
+        }
+    }
+
+    [BurstCompile] 
+    private void AvoidOtherEnemies()
+    {
+        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+
+        NativeArray<Vector3> enemyPositions = new NativeArray<Vector3>(enemies.Length, Allocator.TempJob);
+
+        for (int i = 0; i < enemies.Length; i++)
+        {
+            enemyPositions[i] = enemies[i].transform.position;
+        }
+
+        AvoidanceJob job = new AvoidanceJob()
+        {
+            enemyPositions = enemyPositions,
+            currentEnemyPosition = transform.position
+        };
+
+        JobHandle jobHandle = job.Schedule(enemies.Length, 64);
+
+        jobHandle.Complete();
+
+        enemyPositions.Dispose();
+    }
 }
+
