@@ -6,6 +6,7 @@ using UnityEngine.VFX;
 using Cinemachine;
 using UnityEngine.Rendering;
 using DG.Tweening;
+using GameAnalyticsSDK;
 
 [System.Serializable] public class GameEvent : UnityEvent { }
 [System.Serializable] public class TacticalModeEvent : UnityEvent<bool> { }
@@ -67,6 +68,7 @@ public class TacticalMode : MonoBehaviour
     public bool dashing;
     private bool isChargingKI = false; // Flag to track KI charging state
     public GameObject pauseMenu;
+    private bool canOpenPauseMenu = true;
 
     //dashing crap
     private bool isDashing = false; private Vector3 dashStartPosition;
@@ -167,6 +169,20 @@ public class TacticalMode : MonoBehaviour
     private bool isTeleportOnCooldown = false;
     private float lastTeleportTime = 0f;
 
+    [Space]
+    [Header("Stats to track")]
+    private int SwordsOfSpartaUsed;
+    private int KamehamehaUsed;
+    private int KikokenUsed;
+    private int BreakItDownUsed;
+    private int HealUsed;
+    private int BarrierUsed;
+    private int RoadHouseUsed;
+    private int LightningKicksUsed;
+    private int TriedUsingSpecialMoveWithoutEnoughKi;
+    private int Died;
+    private int GotHit;
+
     private void Start()
     {
         originalCharacterRotation = playerCharacter.rotation;
@@ -180,6 +196,7 @@ public class TacticalMode : MonoBehaviour
         camImpulseSource = Camera.main.GetComponent<CinemachineImpulseSource>();
         characterMovement = GetComponent<CharacterMovement>();
         defaultBarrierDrainRate = barrierDrainRate;
+        GameAnalytics.Initialize();
     }
 
     void Update()
@@ -192,11 +209,13 @@ public class TacticalMode : MonoBehaviour
         {
             // Disable the CharacterMovement script
             movement.enabled = false;
+            canOpenPauseMenu = false;
         }
         else
         {
             // Enable the CharacterMovement script
             movement.enabled = true;
+            canOpenPauseMenu = true;
         }
 
         // Check if the player's health is depleted
@@ -511,9 +530,11 @@ public class TacticalMode : MonoBehaviour
         }
 
         //pause menu
-        if (!tacticalMode && Input.GetKeyDown(KeyCode.Escape))
+        if (!tacticalMode && Input.GetKeyDown(KeyCode.Escape) && canOpenPauseMenu)
         {
-            OpenPauseMenu();
+            OpenPauseMenu(); // Open the pause menu
+            canOpenPauseMenu = false; // Prevent opening the pause menu immediately
+            StartCoroutine(EnablePauseMenu());
         }
 
     }
@@ -558,7 +579,7 @@ public class TacticalMode : MonoBehaviour
         }
     }
     */
-
+   
     public void SwordsOfSparta()
     {
         if (atbSlider >= 200)
@@ -571,9 +592,11 @@ public class TacticalMode : MonoBehaviour
 
                    isSwordsOfSpartaActive = true;
         swordsOfSpartaObject.SetActive(true);
+            SwordsOfSpartaUsed++;
+            GameAnalytics.NewDesignEvent("SwordsOfSpartaUsed", SwordsOfSpartaUsed);
 
-        // Play the Swords of Sparta activation sound
-        if (swordsOfSpartaActivationSound != null)
+            // Play the Swords of Sparta activation sound
+            if (swordsOfSpartaActivationSound != null)
             swordsOfSpartaActivationSound.Play();
 
         // Disable the Swords of Sparta object after the specified duration
@@ -600,9 +623,9 @@ public class TacticalMode : MonoBehaviour
 
     public void Kikoken()
     {
-        if (atbSlider >= 100)
+        if (atbSlider >= 200)
         {
-            ModifyATB(-100);
+            ModifyATB(-200);
             StartCoroutine(AbilityCooldown());
             SetTacticalMode(false);
 
@@ -629,6 +652,9 @@ public class TacticalMode : MonoBehaviour
             if (KikokenSound != null)
                 KikokenSound.Play();
 
+            KikokenUsed++;
+            GameAnalytics.NewDesignEvent("KikokenUsed", KikokenUsed);
+
             // Wait for a short delay to synchronize with the animation
             StartCoroutine(PerformKikokenWithDelay());
         }
@@ -654,9 +680,9 @@ public class TacticalMode : MonoBehaviour
     public void Hadouken()
     {
         //This is actually the kamehameha
-        if (atbSlider >= 200)
+        if (atbSlider >= 300)
         {
-            ModifyATB(-200);
+            ModifyATB(-300);
 
             StartCoroutine(AbilityCooldown());
 
@@ -680,6 +706,8 @@ public class TacticalMode : MonoBehaviour
             PlayVFX(abilityVFX, false);
             LightColor(groundLight, abilityColot, .3f);
             KamehamehaSound.Play();
+            KamehamehaUsed++;
+            GameAnalytics.NewDesignEvent("KamehamehaUsed", KamehamehaUsed);
         }
         else
         {
@@ -707,6 +735,9 @@ public class TacticalMode : MonoBehaviour
             // Polish
             PlayVFX(abilityVFX, false);
             LightColor(groundLight, abilityColot, .3f);
+
+            LightningKicksUsed++;
+            GameAnalytics.NewDesignEvent("LightningKicksUsed", LightningKicksUsed);
         }
         else
         {
@@ -736,6 +767,9 @@ public class TacticalMode : MonoBehaviour
             PlayVFX(abilityVFX, false);
             LightColor(groundLight, abilityColot, .3f);
             RoadHouseSound.Play();
+
+            RoadHouseUsed++;
+            GameAnalytics.NewDesignEvent("RoadHouseUsed", RoadHouseUsed);
         }
         else
         {
@@ -765,6 +799,9 @@ public class TacticalMode : MonoBehaviour
             PlayVFX(abilityVFX, false);
             LightColor(groundLight, abilityColot, .3f);
             RoadHouseSound.Play();
+
+            BreakItDownUsed++;
+            GameAnalytics.NewDesignEvent("BreakItDownUsed", BreakItDownUsed);
         }
         else
         {
@@ -777,10 +814,10 @@ public class TacticalMode : MonoBehaviour
 
     public void Heal()
     {
-        if (atbSlider >= 100)
+        if (atbSlider >= 300)
         {
             // Deduct ATB points
-            ModifyATB(-100);
+            ModifyATB(-300);
             SetTacticalMode(false);
             // Calculate the amount to heal
             float healAmount = Mathf.Min(50, 100 - health); // Heal up to 50 or until reaching 100 health
@@ -797,6 +834,9 @@ public class TacticalMode : MonoBehaviour
 
             // Deactivate the particles after 2 seconds
             StartCoroutine(DeactivateHealingParticlesAfterDelay(2.0f));
+
+            HealUsed++;
+            GameAnalytics.NewDesignEvent("HealUsed", HealUsed);
         }
         else
         {
@@ -811,6 +851,8 @@ public class TacticalMode : MonoBehaviour
         if (!isBarrierActive)
         {
             ActivateBarrier();
+            BarrierUsed++;
+            GameAnalytics.NewDesignEvent("BarrierUsed", BarrierUsed);
         }
         else
         {
@@ -1025,6 +1067,7 @@ public class TacticalMode : MonoBehaviour
         DOVirtual.Float(on ? 0 : 1, on ? 1 : 0, .3f, SlowmotionPostProcessing).SetUpdate(true);
 
         OnTacticalTrigger.Invoke(on);
+        
     }
 
     public void SelectTarget(int index)
@@ -1404,6 +1447,10 @@ public class TacticalMode : MonoBehaviour
         {
             anim.SetTrigger("Hit");
             health -= 10;
+
+            GotHit++;
+            GameAnalytics.NewDesignEvent("GotHit", GotHit);
+
             if (health <= 0f)
             {
                 Die();
@@ -1428,6 +1475,9 @@ public class TacticalMode : MonoBehaviour
 
         // Get all rigidbodies in the ragdoll
         Rigidbody[] ragdollRigidbodies = ragdoll.GetComponentsInChildren<Rigidbody>();
+        
+        Died++;
+        GameAnalytics.NewDesignEvent("Died", Died);
 
         // Apply the force to each rigidbody in the ragdoll
         foreach (Rigidbody rb in ragdollRigidbodies)
@@ -1438,6 +1488,9 @@ public class TacticalMode : MonoBehaviour
 
     IEnumerator ShowAndHideNotEnoughKiUI()
     {
+        TriedUsingSpecialMoveWithoutEnoughKi++;
+        GameAnalytics.NewDesignEvent("TriedUsingSpecialMoveWithoutEnoughKi", TriedUsingSpecialMoveWithoutEnoughKi);
+
         NotEnoughKiUI.SetActive(true); // Enable the UI
 
         yield return new WaitForSeconds(1f); // Wait for 1 second
@@ -1459,6 +1512,12 @@ public class TacticalMode : MonoBehaviour
         pauseMenu.SetActive(false); // Hide the pause menu
         MouseOn.SetActive(false);
         MouseOff.SetActive(true);
+    }
+
+    IEnumerator EnablePauseMenu()
+    {
+        yield return new WaitForSeconds(0.5f); // Wait for half a second
+        canOpenPauseMenu = true; // Enable the pause menu activation
     }
 
 }

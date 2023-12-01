@@ -1,6 +1,8 @@
+using GameAnalyticsSDK;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
 
 public class CharacterMovement : MonoBehaviour
 {
@@ -51,6 +53,8 @@ public class CharacterMovement : MonoBehaviour
 	// For mobile controls
 	public Joystick joystick;
 
+	private int numberOftimesQPressed;
+
 	// Use this for initialization
 	void Start()
 	{
@@ -59,7 +63,8 @@ public class CharacterMovement : MonoBehaviour
 		cam = Camera.main;
 		controller = this.GetComponent<CharacterController>();
 		gameScript = GetComponent<TacticalMode>();
-	}
+        GameAnalytics.Initialize();
+    }
   
 
     // Update is called once per frame
@@ -72,6 +77,9 @@ public class CharacterMovement : MonoBehaviour
 		if (gameScript.usingAbility || Input.GetKey(KeyCode.Q))
         {
             ApplyGravity(); // Apply gravity even when the "Q" key is held
+            
+			//numberOftimesQPressed++;
+           // GameAnalytics.NewDesignEvent("numberOftimesQPressed", numberOftimesQPressed);
             return;
         }
 		
