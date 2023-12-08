@@ -2,8 +2,8 @@ using UnityEngine;
 
 public class TeleportOutOfBounds : MonoBehaviour
 {
-    [SerializeField] private GameObject player;
-    [SerializeField] private Transform respawnPoint;
+     public GameObject player;
+     public Transform respawnPoint;
 
     private void OnTriggerStay(Collider other)
     {
@@ -15,5 +15,6 @@ public class TeleportOutOfBounds : MonoBehaviour
 
             Debug.Log("Player teleported to respawn point.");
         }
-    }
+    } 
+   
 }
