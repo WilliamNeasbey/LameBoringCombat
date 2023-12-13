@@ -11,8 +11,8 @@ public class Leaderboard : MonoBehaviour
     [SerializeField]
     private List<TextMeshProUGUI> scores;
 
-    private string publicLeaderboardKey = "e7f53c0e17e3c7af2c7b6af298d9fd014350f5428f95d0d17cdd68dd2f62ceb5";
-
+    public string publicLeaderboardKey = "e7f53c0e17e3c7af2c7b6af298d9fd014350f5428f95d0d17cdd68dd2f62ceb5";
+    //Secret key because I lost the old one for some reason 30b3d48ef62d6fec0d8014888fb8937ec065e5445e4c29b1911200efb9f60ad3c796ee3417e4ded5a865157308e5c5143ea89a0f7a8e8908df7bf6ab89733191d7cd158a8489cf4b7de783803d8419fe70a373c73208f87a8da69d7ce459c243764059bf38dfab7f63f6ea8fd138cf9aa75480d9d371ab0f6c823d81da6e1bf8
     private void Start()
     {
         GetLeaderboard();
@@ -39,7 +39,9 @@ public class Leaderboard : MonoBehaviour
              //username character limit
             // username.Substring(0, 15);
              GetLeaderboard();
+             LeaderboardCreator.ResetPlayer();
          });
+        
     }
 
 }
