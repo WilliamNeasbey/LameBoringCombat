@@ -14946,7 +14946,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8206078249199750625}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 71f74d9b04e6183429decc4145c07e7f, type: 3}
   m_Name: 
@@ -14971,10 +14971,12 @@ MonoBehaviour:
   StopAnimTime: 0.15
   gravity: 70
   verticalVel: 0
+  jumpCount: 0
   jumpForce: 40
   dashSpeed: 10
   dashDuration: 0.5
   dashCooldown: 2
+  joystick: {fileID: 0}
 --- !u!95 &6385124395274515714
 Animator:
   serializedVersion: 5
@@ -14983,7 +14985,7 @@ Animator:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8206078249199750625}
-  m_Enabled: 0
+  m_Enabled: 1
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: 8cabd14a7cb6812478dba281d651ccc7, type: 2}
   m_CullingMode: 0
@@ -15011,29 +15013,6 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
-  Velocity: 5
-  active: 1
-  InputX: 0
-  InputZ: 0
-  desiredMoveDirection: {x: 0, y: 0, z: 0}
-  blockRotationPlayer: 0
-  desiredRotationSpeed: 0.1
-  anim: {fileID: 0}
-  Speed: 0
-  allowPlayerRotation: 0.1
-  playerCamera: {fileID: 2781933287203801652}
-  controller: {fileID: 0}
-  OriginalVelocity: 0
-  networkAnimator: {fileID: 0}
-  HorizontalAnimSmoothTime: 0.2
-  VerticalAnimTime: 0.2
-  StartAnimTime: 0.3
-  StopAnimTime: 0.15
-  gravity: 70
-  jumpForce: 40
-  dashSpeed: 10
-  dashDuration: 0.5
-  dashCooldown: 2
 --- !u!143 &8998085691132543709
 CharacterController:
   m_ObjectHideFlags: 0
@@ -15086,8 +15065,10 @@ MonoBehaviour:
       m_Calls: []
   characterMovement: {fileID: 0}
   weapon: {fileID: 8733795273351519283}
+  sword: {fileID: 0}
   Kamehameha: {fileID: 0}
   WeaponObject: {fileID: 2742283147823223829}
+  SwordCollision: {fileID: 0}
   KamehamehaObject: {fileID: 0}
   rightFist: {fileID: 6365149480689437198}
   RightFistObject: {fileID: 699004071026277192}
@@ -15106,11 +15087,15 @@ MonoBehaviour:
   barrierCost: 50
   barrierDrainRate: 50
   lockOnUITarget: {fileID: 0}
+  NotEnoughKiUI: {fileID: 0}
+  MouseOn: {fileID: 0}
+  MouseOff: {fileID: 0}
   slowMotionTime: 0.005
   tacticalMode: 0
   isAiming: 0
   usingAbility: 0
   dashing: 0
+  pauseMenu: {fileID: 0}
   atbSlider: 0
   filledAtbValue: 100
   atbCount: 0
@@ -15139,6 +15124,7 @@ MonoBehaviour:
   zoomSpeed: 10
   slowMotionVolume: {fileID: 0}
   VFXDir: 5
+  Sword: {fileID: 0}
   KamehamehaSound: {fileID: 0}
   RoadHouseSound: {fileID: 0}
   KIchargingSound: {fileID: 0}
@@ -17662,10 +17648,5 @@ PrefabInstance:
 --- !u!4 &2781933286386384383 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6332190416626160495, guid: 1e5fd67c67322804fa670601dafedac1, type: 3}
-  m_PrefabInstance: {fileID: 8177160574640565904}
-  m_PrefabAsset: {fileID: 0}
---- !u!20 &2781933287203801652 stripped
-Camera:
-  m_CorrespondingSourceObject: {fileID: 6332190414834607268, guid: 1e5fd67c67322804fa670601dafedac1, type: 3}
   m_PrefabInstance: {fileID: 8177160574640565904}
   m_PrefabAsset: {fileID: 0}
